@@ -1,0 +1,50 @@
+<h4 style="padding:10px">{{degreeTitle}}</h4>
+<table class="table">
+	<tbody>
+		<tr>
+			<td>
+				Institution
+			</td>
+			<td>
+				<select ng-model="institutionName" ng-options="institution._id as institution._id for institution in institutions"></select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Degree
+			</td>
+			<td>
+				<select name="degree" ng-model="degree">
+					<option value="A.S.">A.S.</option>
+					<option value="B.S.">B.S.</option>
+					<option value="M.S.">M.S.</option>
+					<option value="D.S.">D.S.</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Field
+			</td>
+			<td>
+				<input type="text" ng-model="field">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Graduation Date
+			</td>
+			<td>
+				<input type="date" ng-model="graduationDate">
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+			<td>
+				<button class="btn btn-sm btn-primary" ng-click="ok()">Add</button>
+				<button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button>
+			</td>
+		</tr>
+	</tbody>
+</table>

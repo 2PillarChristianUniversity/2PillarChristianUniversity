@@ -1,0 +1,52 @@
+<h4 style="padding:10px">{{ministryTitle}}</h4>
+<table class="table">
+	<tbody>
+		<tr>
+			<td>
+				Ministry
+			</td>
+			<td>
+				<select ng-options="ministry._id as ministry._id for ministry in ministries" ng-model="ministryName"></select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Supervisor
+			</td>
+			<td>
+				<input type="text" ng-model="ministrySupervisor">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Supervisor Title
+			</td>
+			<td>
+				<input type="text" ng-model="ministrySupervisorTitle">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Supervisor Phone Number
+			</td>
+			<td>
+				<input type="text" ng-model="ministrySupervisorPhoneNumber">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Description
+			</td>
+			<td>
+				<input type="text" ng-model="ministryDescription">
+			</td>
+		</tr>
+		<td>
+		</td>
+		<td>
+			<button class="btn btn-sm btn-primary" ng-click="ok()">Add</button>
+			<button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button>
+		</td>
+		</tr>
+	</tbody>
+</table>

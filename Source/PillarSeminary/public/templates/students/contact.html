@@ -1,0 +1,61 @@
+<h4 style="padding:10px">{{contactTitle}}</h4>
+<table class="table">
+	<tbody>
+		<tr>
+			<td>
+				First Name
+			</td>
+			<td>
+				<input type="text" ng-model="firstName">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Middle Name
+			</td>
+			<td>
+				<input type="text" ng-model="middleName">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Last Name
+			</td>
+			<td>
+				<input type="text" ng-model="lastName">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Email
+			</td>
+			<td>
+				<input type="email" ng-model="email">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Phone
+			</td>
+			<td>
+				<input type="text" ng-model="phoneNumber">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Relationship
+			</td>
+			<td>
+				<input type="text" ng-model="relationship">
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+			<td>
+				<button class="btn btn-sm btn-primary" ng-click="ok()">Add</button>
+				<button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
