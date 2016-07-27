@@ -1,7 +1,6 @@
 var bodyparser = require('body-parser');
 var express = require('express');
 var jwt = require('express-jwt');
-var path = require('path');
 
 var courses = require('./routes/courses');
 var groups = require('./routes/groups');
@@ -10,7 +9,6 @@ var ministries = require('./routes/ministries');
 var students = require('./routes/students');
 
 var port = 3000;
-
 var app = express();
 
 var jwtCheck = jwt({
@@ -28,8 +26,7 @@ app.use('/api', institutions);
 app.use('/api', ministries);
 app.use('/api', students);
 
-// app.use(express.static(__dirname + '/client'));
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(__dirname + '/public'));
 
 app.listen(port, function () {
 	console.log('Running on port ' + port);
