@@ -20,6 +20,11 @@ angular.module('smsApp', [
 				templateUrl: 'templates/students/details.html',
 				requiresLogin: true
 			})
+			.when('/addStudent', {
+				controller: 'AddStudentsCtrl',
+				templateUrl: 'templates/students/addStudent.html',
+				requiresLogin: true
+			})
 			.when('/students', {
 				controller: 'StudentListCtrl',
 				templateUrl: 'templates/students/index.html',

@@ -1,0 +1,62 @@
+<div ng-include="'/templates/navigation.html'"></div>
+<h3>Add Student</h3>
+<div class="contaner">
+	<div class="row">
+		<div class="col-lg-5">
+			<form class="form-herizontal">
+			  <div class="form-group">
+			    <label for="id">Student ID</label>
+			    <input type="number" class="form-control" id="id" placeholder="000000">
+			  </div>
+			  <div class="form-group">
+			    <label for="email">Email</label>
+			    <input type="email" class="form-control" id="email" placeholder="Email">
+			  </div>
+			  <div class="form-group">
+			    <label for="first_name">First Name</label>
+			    <input type="text" class="form-control" id="first_name" placeholder="First Name">
+			  </div>
+			  <div class="form-group">
+			    <label for="middle_name">Middle Name</label>
+			    <input type="text" class="form-control" id="middle_name" placeholder="Middle Name">
+			  </div>
+			  <div class="form-group">
+			    <label for="last_name">Last Name</label>
+			    <input type="text" class="form-control" id="last_name" placeholder="Last Name">
+			  </div>
+			  <div class="form-group" ">
+			    <label for="birthdate">BirthDate ID</label>
+			        <div uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="options"></div>
+			  </div>
+			  <div class="form-group">
+			    <label for="gender">Gender</label>
+			    <input type="text" class="form-control" id="gender" placeholder="000000">
+			  </div>
+			  <div class="form-group">
+			    <label for="phone_number">Phone Number</label>
+			    <input type="number" class="form-control" id="phone_number" placeholder="000000">
+			  </div>
+			  <div class="form-group">
+			    <label for="address">Address Line1</label>
+			    <input type="text" class="form-control" id="address" placeholder="">
+			  </div>
+			  <div class="form-group">
+			    <label for="city">City </label>
+			    <input type="text" class="form-control" id="city" placeholder="">
+			  </div>
+			    <div class="form-group">
+			    <label for="state">State </label>
+			    <input type="text" class="form-control" id="state" placeholder="">
+			  </div>
+		    	<div class="form-group">
+			    <label for="zip_code">Zip Code </label>
+			    <input type="text" class="form-control" id="zip_code" placeholder="">
+			  </div>
+			
+			  <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+		<div class="col-lg-7"></div>
+	</div>
+	
+</div>

@@ -178,4 +178,55 @@ angular.module('smsApp-studentsList', ['ngRoute'])
 					);
 			});
 		};
+	})
+	.controller('AddStudentsCtrl', function ($scope, $routeParams, $uibModal, Student, Institution, Ministry, uibDateParser) {
+	  $scope.today = function() {
+	    $scope.dt = new Date();
+	  };
+	  $scope.today();
+
+	  $scope.options = {
+	    customClass: getDayClass,
+	    minDate: new Date(),
+	    showWeeks: true
+	  };
+
+
+	  $scope.setDate = function(year, month, day) {
+	    $scope.dt = new Date(year, month, day);
+	  };
+		$scope.addContact = function (isContact) {
+			var modalInstance = $uibModal.open({
+				animation: true,
+				templateUrl: 'templates/students/addStudent.html',
+				controller: function ($scope, $uibModalInstance, contact) {
+					if (isContact) {
+						$scope.contactTitle = 'Add Emergency Contact';
+					} else {
+						$scope.contactTitle = 'Add Reference';
+					}
+					$scope.ok = function () {
+						$scope.contact = {
+							"firstName": $scope.firstName,
+							"middleName": $scope.middleName,
+							"lastName": $scope.lastName,
+							"email": $scope.email,
+							"phoneNumber": $scope.phoneNumber,
+							"relationship": $scope.relationship
+						};
+						$uibModalInstance.close($scope.contact);
+					};
+
+					$scope.cancel = function () {
+						$uibModalInstance.dismiss('cancel');
+					};
+				},
+				size: 'sm',
+				resolve: {
+					contact: function () {
+						return $scope.contact;
+					}
+				}
+			});
+		}
 	});
