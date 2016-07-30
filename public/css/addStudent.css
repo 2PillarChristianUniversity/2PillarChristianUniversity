@@ -1,0 +1,12 @@
+  #birthdate li {
+      display: inline-block;
+  }
+
+  #birthdate li input {
+      width: 64px;
+      text-indent: 3px;
+  }
+
+  #birthdate {
+      padding-left: 0px;
+  }

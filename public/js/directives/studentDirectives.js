@@ -15,4 +15,5 @@ angular.module('smsApp-students', ['smsApp-studentsList'])
         })
       }
     }
-  });
+  })
+;
