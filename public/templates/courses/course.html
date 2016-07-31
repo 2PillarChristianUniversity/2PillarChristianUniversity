@@ -1,0 +1,37 @@
+<h4 style="padding:10px">Add Course</h4>
+<table class="table">
+  <tbody>
+    <tr>
+      <td>
+        Course Name
+      </td>
+      <td>
+        <input type="text" name="name" ng-model='name'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Start Date
+      </td>
+      <td>
+        <input type="date" name="startDate" ng-model='startDate'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        End Date
+      </td>
+      <td>
+        <input type="date" ng-model='endDate'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td>
+        <button class="btn btn-sm btn-primary" ng-click="ok()">Add</button>
+        <button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
