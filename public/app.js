@@ -5,6 +5,7 @@ angular.module('smsApp', [
 	'smsApp-home',
 	'smsApp-students',
 	'smsApp-professors',
+	'smsApp-courses',
 	'angular-storage',
 	'angular-jwt',
 	'ui.bootstrap'
@@ -30,7 +31,12 @@ angular.module('smsApp', [
 				controller: 'StudentListCtrl',
 				templateUrl: 'templates/students/index.html',
 				requiresLogin: true
-			})			
+			})
+			.when('/courses', {
+				controller: 'CourselistCtrl',
+				templateUrl: 'templates/courses/index.html',
+				requiresLogin: true
+			})	
 			.when('/professors', {
 				controller: 'ProfessorCtrl',
 				templateUrl: 'templates/professors/index.html',

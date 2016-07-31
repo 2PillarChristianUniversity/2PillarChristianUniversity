@@ -42,6 +42,17 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
             res.json({ course: course });
         });
     });
+
+    router.put('/course', function (req, res) {
+        db.collection('Courses').insert(req.body, function (error, course) {
+            if (error) {
+                return res.
+                    status(400).
+                    json({ error: "Can't insert course..." });
+            }
+            res.json({ course: course });
+        });
+    });
 });
 
 module.exports = router;
