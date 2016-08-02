@@ -27,6 +27,11 @@ angular.module('smsApp', [
 				templateUrl: 'templates/students/addStudent.html',
 				requiresLogin: true
 			})
+			.when('/addProfessor', {
+				controller: 'AddProfessorsCtrl',
+				templateUrl: 'templates/professors/addProfessor.html',
+				requiresLogin: true
+			})
 			.when('/students', {
 				controller: 'StudentListCtrl',
 				templateUrl: 'templates/students/index.html',
@@ -38,7 +43,7 @@ angular.module('smsApp', [
 				requiresLogin: true
 			})	
 			.when('/professors', {
-				controller: 'ProfessorCtrl',
+				controller: 'ProfessorListCtrl',
 				templateUrl: 'templates/professors/index.html',
 				requiresLogin: true
 			})

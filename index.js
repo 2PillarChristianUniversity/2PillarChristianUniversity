@@ -3,6 +3,7 @@ var express = require('express');
 var jwt = require('express-jwt');
 
 var courses = require('./routes/courses');
+var professors = require('./routes/professors');
 var groups = require('./routes/groups');
 var institutions = require('./routes/institutions');
 var ministries = require('./routes/ministries');
@@ -25,6 +26,7 @@ app.use('/api', groups);
 app.use('/api', institutions);
 app.use('/api', ministries);
 app.use('/api', students);
+app.use('/api', professors);
 
 app.use(express.static(__dirname + '/public'));
 
