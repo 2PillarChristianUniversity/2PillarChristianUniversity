@@ -10,3 +10,12 @@
   #birthdate {
       padding-left: 0px;
   }
+.modal-warning {
+  background: #ffcc75;
+  border-radius: 5px;
+  padding: 5px;
+}
+.modal-warning .modal-footer {
+  border: 0px;
+  padding: 15px
+}

@@ -1,5 +1,6 @@
 angular.module('smsApp-studentsList', ['ngRoute'])
 	.controller('StudentListCtrl', function ($scope, $location, Student) {
+
 		$scope.search = function () {
 			if ($scope.searchName) {
 				Student.searchName($scope.searchName).success(function (response) {
@@ -179,34 +180,45 @@ angular.module('smsApp-studentsList', ['ngRoute'])
 			});
 		};
 	})
-	.controller('AddStudentsCtrl', function ($scope, $routeParams, $uibModal, Student, Institution, Ministry) {
-		
+	.controller('AddStudentsCtrl', function ($scope, $routeParams, $uibModal, Student, Institution, Ministry) {		
 		$scope.student = {
-			_id: "",
-			email: "",
-			firstName: "",
-			middleName: "",
-			lastName: "",
-			birthDate: "",
+		// 	_id: "",
+		// 	email: "",
+		// 	firstName: "",
+		// 	middleName: "",
+		// 	lastName: "",
+		// 	birthDate: "",
 			gender: "M",
-			phoneNumber: "",
-			addressLine1: "",
-			city: "",
-			state: "",
-			zipCode: "",
+		// 	phoneNumber: "",
+		// 	addressLine1: "",
+		// 	city: "",
+		// 	state: "",
+		// 	zipCode: "",
 		};
-
+		
 		$scope.addStudent = function (event) {
 			 Student.insert($scope.student)
 					.then(
-					function (response) {
+					function (response) {				
 						
-						alert("Insert student success...");
 					},
 					function (response) {
-						alert("Can't insert student...");
-					}
-					);
+						var modalInstance = $uibModal.open({
+						animation: true,
+						title: 'Efor',
+						templateUrl: 'templates/alert/warning.html',
+						controller: function ($scope, $uibModalInstance) {
+								$scope.errorTitle = 'ERROR';
+								$scope.errorContent = "Can't insert student...";
+								$scope.ok = function () {
+									$uibModalInstance.dismiss();
+								}
+
+							},
+							size: 'sm'
+						});
+
+					});
 
 		}
 	 

@@ -1,23 +1,22 @@
 angular.module('smsApp-coursesList', ['ngRoute'])
   .controller('CourselistCtrl', function ($scope, $location, $uibModal, Course) {
     //  get all list course in db
-
     Course.all().success(function (response) {
-      $scope.courses = response.courses;
-     
+      $scope.courses = response.courses;     
     });
 
     $scope.addCourse = function (isCourse) {
       var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'templates/courses/course.html',
-            controller: function ($scope, $uibModalInstance, Course) {      
+            controller: function ($scope, $uibModalInstance, Course) {   
+
+
+
               
-              // var lnt = $scope.courses.lenght + 1;
               $scope.ok = function () {
                 console.log($scope.courses);
                 $scope.course = {
-                  "_id": '',
                   "name": $scope.name,
                   "startDate": $scope.startDate,
                   "endDate": $scope.endDate

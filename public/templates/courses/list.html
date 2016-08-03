@@ -1,5 +1,7 @@
 <h2>Courses List:</h2>
 <button type="button" class="btn btn-primary" ng-click="addCourse(false)">New Course</button>
+<br/>
+<br>
 <table class="table table-bordered table-hover" id="courseTable" ng-show="courses.length">
   <thead>
     <tr>
@@ -13,8 +15,8 @@
     <tr style="cursor: pointer;" ng-repeat="course in courses" >
       <td>{{course._id}}</td>
       <td>{{course.name}}</td>
-      <td>{{course.startDate}}</td>
-      <td>{{course.endDate}}</td>
+      <td>{{course.startDate | date}}</td>
+      <td>{{course.endDate | date }}</td>
      
     </tr>
   </tbody>
