@@ -6,18 +6,21 @@
   "dependencies": {
     "body-parser": "*",
     "crypto": "*",
-    "debug": "*",
+    "debug": "^2.2.0",
     "express": "*",
     "express-jwt": "*",
-    "googleapis": "*",
     "google-auth-library": "*",
+    "googleapis": "*",
     "mongodb": "*"
   },
   "devDependencies": {
+    "express-validation": "^1.0.0",
+    "express-validator": "^2.20.8",
     "mocha": "*",
     "superagent": "*"
   },
-  "scripts": {
+  "scripts": {    
+  "start": "node index.js",
     "test": "mocha test.js"
   },
   "author": "DeYung Q. Le"
