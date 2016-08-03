@@ -1,13 +1,17 @@
-var bodyparser = require('body-parser');
-var express = require('express');
-var jwt = require('express-jwt');
 
-var courses = require('./routes/courses');
-var professors = require('./routes/professors');
-var groups = require('./routes/groups');
-var institutions = require('./routes/institutions');
-var ministries = require('./routes/ministries');
-var students = require('./routes/students');
+var util = require('util'),
+    express = require('express'),
+    bodyparser = require('body-parser'),
+    jwt = require('express-jwt'),
+    expressValidator = require('express-validator');
+
+var courses = require('./routes/courses'),
+    groups = require('./routes/groups'),
+    professors = require('./routes/professors'),
+    institutions = require('./routes/institutions'),
+    ministries = require('./routes/ministries'),
+    students = require('./routes/students');
+// var debug = require('debug')('app4');
 
 var port = 3000;
 var app = express();
@@ -18,7 +22,7 @@ var jwtCheck = jwt({
 });
 
 app.use(bodyparser.json());
-
+app.use(expressValidator());
 //app.use('/api', jwtCheck);
 
 app.use('/api', courses);
