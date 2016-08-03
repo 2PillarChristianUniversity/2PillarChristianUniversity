@@ -1,3 +1,4 @@
+
 var util = require('util'),
     express = require('express'),
     bodyparser = require('body-parser'),
@@ -6,10 +7,12 @@ var util = require('util'),
 
 var courses = require('./routes/courses'),
     groups = require('./routes/groups'),
+    professors = require('./routes/professors'),
     institutions = require('./routes/institutions'),
     ministries = require('./routes/ministries'),
     students = require('./routes/students');
 var debug = require('debug')('app4');
+
 var port = 3000;
 var app = express();
 
@@ -27,6 +30,7 @@ app.use('/api', groups);
 app.use('/api', institutions);
 app.use('/api', ministries);
 app.use('/api', students);
+app.use('/api', professors);
 
 app.use(express.static(__dirname + '/public'));
 
