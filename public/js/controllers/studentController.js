@@ -1,6 +1,10 @@
 angular.module('smsApp-studentsList', ['ngRoute'])
 	.controller('StudentListCtrl', function ($scope, $location, Student) {
 
+		Student.all().success(function (response) {
+			$scope.students = response.students;
+		});
+
 		$scope.search = function () {
 			if ($scope.searchName) {
 				Student.searchName($scope.searchName).success(function (response) {
