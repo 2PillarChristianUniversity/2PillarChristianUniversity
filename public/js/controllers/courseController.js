@@ -9,32 +9,23 @@ angular.module('smsApp-coursesList', ['ngRoute'])
       var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'templates/courses/course.html',
-            controller: function ($scope, $uibModalInstance, Course) {   
-
-
-
+            controller: function ($scope, $uibModalInstance, course) { 
+              $scope.startDate = new Date();
+              $scope.endDate = new Date();
+              $scope.startAt =  new Date(2010, 11, 28, 08, 00);
+              $scope.endAt =  new Date(2010, 11, 28, 10, 00);
               
               $scope.ok = function () {
-                console.log($scope.courses);
                 $scope.course = {
-                  "name": $scope.name,
-                  "startDate": $scope.startDate,
-                  "endDate": $scope.endDate
-                };
-
-                if($scope.name != null && $scope.startDate != null && $scope.endDate != null) {
-                  Course.insert($scope.course)
-                  .then(
-                  function (response) {
-                    $uibModalInstance.close($scope.course);
-                  },
-                  function (response) {
-                    console.log(response);
-                  });
-                      
-                  
-                }            
-              };
+                    "name": $scope.name,
+                    "startDate": $scope.startDate,
+                    "endDate": $scope.endDate,
+                    "startAt": $scope.startAt,
+                    "endAt": $scope.endAt
+                  };
+                
+                $uibModalInstance.close($scope.course);
+              }
 
               $scope.cancel = function () {
                 $uibModalInstance.dismiss('cancel');
@@ -47,7 +38,21 @@ angular.module('smsApp-coursesList', ['ngRoute'])
               }
             }
           });
-    }
 
+        modalInstance.result.then(function (course) {
+            Course.insert(course)
+            .then(
+            function (response) {
+               Course.all().success(function (response) {
+                  $scope.courses = response.courses;     
+                });
+                console.log(response);
+            },
+            function (response) {
+              console.log(response);
+            });
 
-      });
+        });
+      }
+
+  });

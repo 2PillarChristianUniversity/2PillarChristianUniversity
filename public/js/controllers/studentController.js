@@ -57,6 +57,8 @@ angular.module('smsApp-studentsList', ['ngRoute'])
 					}
 				}
 			});
+
+			
 			modalInstance.result.then(function (degree) {
 				if (isGraduate) {
 					if (!$scope.student.graduateDegrees) {

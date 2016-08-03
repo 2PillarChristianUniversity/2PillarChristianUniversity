@@ -9,6 +9,8 @@
       <th>Name</th>
       <th>Start Date</th>
       <th>End Date</th>
+      <th>Start At</th>
+      <th>End At</th>
     </tr>
   </thead>
   <tbody>
@@ -17,7 +19,8 @@
       <td>{{course.name}}</td>
       <td>{{course.startDate | date}}</td>
       <td>{{course.endDate | date }}</td>
-     
+      <td>{{course.startAt | date: 'hh:mm:ss a'}}</td>
+      <td>{{course.endAt | date: 'hh:mm:ss a'}}</td>     
     </tr>
   </tbody>
 </table>

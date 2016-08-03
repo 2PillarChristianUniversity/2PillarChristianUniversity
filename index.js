@@ -11,7 +11,7 @@ var courses = require('./routes/courses'),
     institutions = require('./routes/institutions'),
     ministries = require('./routes/ministries'),
     students = require('./routes/students');
-var debug = require('debug')('app4');
+// var debug = require('debug')('app4');
 
 var port = 3000;
 var app = express();
