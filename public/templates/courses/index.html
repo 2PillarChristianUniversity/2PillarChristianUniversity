@@ -1,4 +1,22 @@
 <div ng-include="'/templates/navigation.html'"></div>
 <div class="container">
 <course-list></course-list>
+<table class="table table-bordered table-hover" id="courseTable" ng-show="courses.length" ng-controller="showList">
+	<thead>
+		<tr>
+			<th>course ID</th>
+			<th>Name</th>
+			<th>Start Date</th>
+			<th>End Date</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr style="cursor: pointer;" ng-repeat="course in courses" ng-click="courseDetails(course._id)">
+			<td>{{course._id}}</td>
+			<td>{{course.name}}, {{course.firstName}} {{course.middleName}}</td>
+			<td>{{course.startDate | date}}</td>
+			<td>{{course.endDate | date}}</td>
+		</tr>
+	</tbody>
+</table>
 </div>

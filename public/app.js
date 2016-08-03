@@ -22,6 +22,11 @@ angular.module('smsApp', [
 				templateUrl: 'templates/students/details.html',
 				requiresLogin: true
 			})
+			.when('/professor/:Id', {
+				controller: 'ProfessorDetailsCtrl',
+				templateUrl: 'templates/professors/details.html',
+				requiresLogin: true
+			})
 			.when('/addStudent', {
 				controller: 'AddStudentsCtrl',
 				templateUrl: 'templates/students/addStudent.html',
