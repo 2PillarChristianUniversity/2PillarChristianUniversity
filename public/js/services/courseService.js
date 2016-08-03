@@ -15,6 +15,9 @@ angular.module('smsApp-studentsList')
             },
             create: function (course) {
                 return $http({ method: "POST", url: "/api/course", data: course });
+            },
+            insert: function (course) {
+                return $http({ method: "PUT", url: "/api/course", data: course });
             }
         };
     });

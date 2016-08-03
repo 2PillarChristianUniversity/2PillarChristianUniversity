@@ -5,8 +5,9 @@ var router = express.Router();
 var mongoCfg = require('../mongo_cfg');
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function (err, db) {
-    router.get('/course/id/:id', function (req, res) {
-        db.collection('Courses').findOne({ _id: new ObjectID(req.params.id) }, function (error, course) {
+    router.get('/course/id/:id', function (req, res) {  
+
+         db.collection('Courses').findOne({ _id: new ObjectID(req.params.id) }, function (error, course) {
             if (error) {
                 return res.
                     status(500).
@@ -17,12 +18,12 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     status(404).
                     json({ error: 'Not found' });
             }
-            res.json({ course: course });
+            res.json({ courses: course});
         });
     });
 
     router.get('/courses/', function (req, res) {
-        db.collection('Courses').find({}).toArray(function (error, courses) {
+        db.collection('Courses').find({}).toArray(function (error, courses) {            
             if (error) {
                 return res.
                     status(500).
@@ -38,6 +39,29 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                 return res.
                     status(500).
                     json({ error: error.toString() });
+            }
+            res.json({ course: course });
+        });
+    });
+
+    router.put('/course', function (req, res) {
+       // check validator
+        // req.check('name', "Cant't be blank!.").isNull();
+        // var error = req.validationErrors();
+        // if(error) {
+        //     return res.
+        //             status(400).
+        //             json({ error: "Can't insert course..." });
+        // }
+        // return res.
+        //             status(200).
+                    // json({ error: req.body });
+
+        db.collection('Courses').insert(req.body, function (error, course) {
+            if (error) {
+                return res.
+                    status(400).
+                    json({ error: "Can't insert course..." });
             }
             res.json({ course: course });
         });

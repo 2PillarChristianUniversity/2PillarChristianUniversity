@@ -67,6 +67,17 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 			res.json({ student: student });
 		});
 	});
+	router.put('/student', function (req, res) {
+		db.collection('Students').insert(req.body, function (error, student) {
+			if (error) {
+				return res.
+					status(400).
+					json({ error: "Can't insert student..." });
+			}
+			res.json({ student: student });
+		});
+	});
+
 });
 
 module.exports = router;
