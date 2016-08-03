@@ -19,8 +19,8 @@
     "mocha": "*",
     "superagent": "*"
   },
-  "scripts": {    
-  "start": "node index.js",
+  "scripts": {
+    "start": "node index.js",
     "test": "mocha test.js"
   },
   "author": "DeYung Q. Le"
