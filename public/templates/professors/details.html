@@ -1,0 +1,276 @@
+<div ng-include="'/templates/navigation.html'"></div>
+<h3>Professor Details</h3>
+
+<uib-tabset active="active">
+	<uib-tab index="0" heading="Personal">
+		<table class="table table-hover">
+			<tbody>
+				<tr>
+					<td>
+						Professor ID:
+					</td>
+					<td>
+						<p>{{professor._id}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Email:
+					</td>
+					<td>
+						<p>{{professor.email}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						First Name:
+					</td>
+					<td>
+						<p>{{professor.firstName}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Middle Name:
+					</td>
+					<td>
+						<p>{{professor.middleName}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Last Name:
+					</td>
+					<td>
+						<p>{{professor.lastName}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Birth Date:
+					</td>
+					<td>
+						<p>{{professor.birthDate | date}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Gender:
+					</td>
+					<td>
+						<p>{{professor.gender}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Phone Number:
+					</td>
+					<td>
+						<p>{{professor.phoneNumber}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Address:
+					</td>
+					<td>
+						<p>{{professor.addressLine1}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						City:
+					</td>
+					<td>
+						<p>{{professor.city}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						State:
+					</td>
+					<td>
+						<p>{{professor.state}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Zip:
+					</td>
+					<td>
+						<p>{{professor.zipCode}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Application Date:
+					</td>
+					<td>
+						<p>{{professor.applicationDate | date}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Acceptance Notification Date:
+					</td>
+					<td>
+						<p>{{professor.acceptanceNotificationDate | date}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Graduation Date:
+					</td>
+					<td>
+						<p>{{professor.graduationDate | date}}</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</uib-tab>
+	<uib-tab index="1" heading="Education">
+		<h4>Undergraduate Degrees</h4>
+		<table class="table table-hover">
+			<thead>
+				<th>Institution</th>
+				<th>Degree</th>
+				<th>Field</th>
+				<th>Graduation Date</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="degree in professor.undergraduateDegrees">
+					<td>
+						<p>{{degree.institutionName}}</p>
+					</td>
+					<td>
+						<p>{{degree.degree}}</p>
+					</td>
+					<td>
+						<p>{{degree.field}}</p>
+					</td>
+					<td>
+						<p>{{degree.graduationDate | date}}</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<button class="btn btn-xs btn-primary" ng-click="addDegree(false)">Add Degree</button>
+		<h4>Graduate Degrees</h4>
+		<table class="table table-hover">
+			<thead>
+				<th>Institution</th>
+				<th>Degree</th>
+				<th>Field</th>
+				<th>Graduation Date</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="degree in professor.graduateDegrees">
+					<td>
+						<p>{{degree.institutionName}}</p>
+					</td>
+					<td>
+						<p>{{degree.degree}}</p>
+					</td>
+					<td>
+						<p>{{degree.field}}</p>
+					</td>
+					<td>
+						<p>{{degree.graduationDate | date}}</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<button class="btn btn-xs btn-primary" ng-click="addDegree(true)">Add Degree</button>
+	</uib-tab>
+	<uib-tab index="2" heading="Ministry">
+		<table class="table table-hover">
+			<thead>
+				<th>Ministry</th>
+				<th>Supervisor</th>
+				<th>Supervisor's Title</th>
+				<th>Supervisor's Phone Number</th>
+				<th>Description</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="ministry in professor.ministries">
+					<td>
+						<p>{{ministry.ministryName}}</p>
+					</td>
+					<td>
+						<p>{{ministry.ministrySupervisor}}</p>
+					</td>
+					<td>
+						<p>{{ministry.ministrySupervisorTitle}}</p>
+					</td>
+					<td>
+						<p>{{ministry.ministrySupervisorPhoneNumber}}</p>
+					</td>
+					<td>
+						<p>{{ministry.ministryDescription}}</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<button class="btn btn-xs btn-primary" ng-click="addMinistry()">Add Ministry</button>
+	</uib-tab>
+	<uib-tab index="3" heading="Contacts">
+		<h4>Emergency Contacts</h4>
+		<table class="table table-hover">
+			<thead>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Phone</th>
+				<th>Relationship</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="contact in professor.emergencyContacts">
+					<td>
+						<p>{{contact.firstName}} {{contact.middleName}} {{contact.lastName}}</p>
+					</td>
+					<td>
+						<p>{{contact.email}}</p>
+					</td>
+					<td>
+						<p>{{contact.phoneNumber}}</p>
+					</td>
+					<td>
+						<p>{{contact.relationship}}</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<button class="btn btn-xs btn-primary" ng-click="addContact(true)">Add Contact</button>
+		<h4>References</h4>
+		<table class="table table-hover">
+			<thead>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Phone</th>
+				<th>Relationship</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="reference in professor.references">
+					<td>
+						<p>{{reference.firstName}} {{reference.middleName}} {{reference.lastName}}</p>
+					</td>
+					<td>
+						<p>{{reference.email}}</p>
+					</td>
+					<td>
+						<p>{{reference.phoneNumber}}</p>
+					</td>
+					<td>
+						<p>{{reference.relationship}}</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<button class="btn btn-xs btn-primary" ng-click="addContact(false)">Add Reference</button>
+	</uib-tab>
+	<uib-tab index="4" heading="Financial">
+
+	</uib-tab>
+	<uib-tab index="5" heading="Courses">
+
+	</uib-tab>
+</uib-tabset>

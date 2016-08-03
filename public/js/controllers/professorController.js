@@ -1,4 +1,4 @@
-angular.module('smsApp-professors', ['ngRoute'])
+angular.module('smsApp-professorsList', ['ngRoute'])
   .controller('ProfessorListCtrl', function ($scope, $location, Professor) {
     $scope.search = function () {
 			if ($scope.searchName) {

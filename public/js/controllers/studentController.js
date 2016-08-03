@@ -16,6 +16,8 @@ angular.module('smsApp-studentsList', ['ngRoute'])
 		$scope.studentDetails = function (studentID) {
 			$location.path('/student/' + studentID);
 		};
+
+		
 	})
 	.controller('StudentDetailsCtrl', function ($scope, $routeParams, $uibModal, Student, Institution, Ministry) {
 		Student.get($routeParams.Id).success(function (response) {

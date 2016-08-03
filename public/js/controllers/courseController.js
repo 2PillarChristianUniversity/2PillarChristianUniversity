@@ -14,6 +14,13 @@ angular.module('smsApp-coursesList', ['ngRoute', 'ngMaterial'])
       return day === 0 || day === 6;
     }
 
+    $scope.showList = function () {
+      Course.all().success(function (response){
+        $scope.courses = response.courses;
+      });
+
+    };
+
 // create course with popup modal 
 $scope.addCourse = function (isCourse) {
   var modalInstance = $uibModal.open({
