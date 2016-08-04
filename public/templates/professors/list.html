@@ -1,27 +1,34 @@
 <div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
-	<b>Professor ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
-	<b>Name</b> <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Professor Name">
-	<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
+	<div class="col-lg-1">
+		<a href="#/addProfessor" class="btn btn-primary">Add Professors</a>
+	</div>
+	<div class="col-lg-10">
+		<b>Professor ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
+		<b>Name</b> <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Professor Name">
+		<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
+	</div>
+	<br>
+	<br>
+	<table class="table table-bordered table-hover" id="professorTable" ng-show="professors.length">
+		<thead>
+			<tr>
+				<th>Professor ID</th>
+				<th>Name</th>
+				<th>Gender</th>
+				<th>Birth Date</th>
+				<th>Email</th>
+				<th>Number</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="cursor: pointer;" ng-repeat="professor in professors" ng-click="professorDetails(professor._id)">
+				<td>{{professor._id}}</td>
+				<td>{{professor.lastName}}, {{professor.firstName}} {{professor.middleName}}</td>
+				<td>{{professor.gender}}</td>
+				<td>{{professor.birthDate | date}}</td>
+				<td>{{professor.email}}</td>
+				<td>{{professor.phoneNumber}}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
-<table class="table table-bordered table-hover" id="professorTable" ng-show="professors.length">
-	<thead>
-		<tr>
-			<th>Professor ID</th>
-			<th>Name</th>
-			<th>Gender</th>
-			<th>Birth Date</th>
-			<th>Email</th>
-			<th>Number</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr style="cursor: pointer;" ng-repeat="professor in professors" ng-click="professorDetails(professor._id)">
-			<td>{{professor._id}}</td>
-			<td>{{professor.lastName}}, {{professor.firstName}} {{professor.middleName}}</td>
-			<td>{{professor.gender}}</td>
-			<td>{{professor.birthDate | date}}</td>
-			<td>{{professor.email}}</td>
-			<td>{{professor.phoneNumber}}</td>
-		</tr>
-	</tbody>
-</table>
