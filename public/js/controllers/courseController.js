@@ -5,12 +5,6 @@ angular.module('smsApp-coursesList', ['ngRoute'])
       $scope.courses = response.courses;     
     });
 
-    $scope.showList = function () {
-      Course.all().success(function (response){
-        $scope.courses = response.courses;
-      });
-    };
-
 // create course with popup modal 
     $scope.addCourse = function (isCourse) {
       var modalInstance = $uibModal.open({
@@ -60,5 +54,9 @@ angular.module('smsApp-coursesList', ['ngRoute'])
 
         });
       }
+
+      // edit course 
+
+
 
   });

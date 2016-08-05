@@ -1,0 +1,18 @@
+{
+  "name": "public",
+  "homepage": "https://github.com/2PillarChristianUniversity/2PillarChristianUniversity",
+  "authors": [
+    "Jusitn Tong <ltvquocanh@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

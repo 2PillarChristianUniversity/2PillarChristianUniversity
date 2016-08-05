@@ -9,26 +9,28 @@
 	</div>
 	<br>
 	<br>
-	<table class="table table-bordered table-hover" id="studentTable" ng-show="students.length">
-		<thead>
-			<tr>
-				<th>Student ID</th>
-				<th>Name</th>
-				<th>Gender</th>
-				<th>Birth Date</th>
-				<th>Email</th>
-				<th>Number</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr style="cursor: pointer;" ng-repeat="student in students" ng-click="studentDetails(student._id)">
-				<td>{{student._id}}</td>
-				<td>{{student.lastName}}, {{student.firstName}} {{student.middleName}}</td>
-				<td>{{student.gender}}</td>
-				<td>{{student.birthDate | date}}</td>
-				<td>{{student.email}}</td>
-				<td>{{student.phoneNumber}}</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="container">
+		<table  dt-column-defs="dtColumnDefs" datatable="ng" class=" row-border hover table table-striped table-bordered" id="studentTable" ng-show="students.length">
+			<thead>
+				<tr>
+					<th>Student ID</th>
+					<th>Name</th>
+					<th>Gender</th>
+					<th>Birth Date</th>
+					<th>Email</th>
+					<th>Number</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr style="cursor: pointer;" ng-repeat="student in students" ng-click="studentDetails(student._id)">
+					<td>{{student._id}}</td>
+					<td>{{student.lastName}}, {{student.firstName}} {{student.middleName}}</td>
+					<td>{{student.gender}}</td>
+					<td>{{student.birthDate | date}}</td>
+					<td>{{student.email}}</td>
+					<td>{{student.phoneNumber}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>	
 </div>
