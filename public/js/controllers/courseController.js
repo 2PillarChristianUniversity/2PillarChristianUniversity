@@ -1,4 +1,4 @@
-angular.module('smsApp-coursesList', ['ngRoute'])
+angular.module('smsApp-coursesList', ['ngRoute', 'datatables', 'ngResource'])
   .controller('CourselistCtrl', function ($scope, $location, $uibModal, Course) {
     //  get all list course in db
     Course.all().success(function (response) {

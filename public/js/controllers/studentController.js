@@ -4,16 +4,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource'])
 		Student.all().success(function (response) {
 			$scope.students = response.students;
 
-			$scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withPaginationType('full_numbers')
-        .withDisplayLength(10)
-        .withDOM('pitrfl');
-    $scope.dtColumnDefs = [
-        DTColumnDefBuilder.newColumnDef(0),
-        DTColumnDefBuilder.newColumnDef(1).notVisible(),
-        DTColumnDefBuilder.newColumnDef(2).notSortable()
-    ];
-
 		});
 
 		$scope.search = function () {

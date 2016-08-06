@@ -1,8 +1,7 @@
 <h2>Courses List:</h2>
 <button type="button" class="btn btn-primary" ng-click="addCourse(false)">New Course</button>
-<br/>
-<br>
-<table class="table table-bordered table-hover" id="courseTable" ng-show="courses.length">
+
+<table datatable="ng" class="table table-bordered table-hover" id="courseTable" ng-show="courses.length">
   <thead>
     <tr>
       <th>Course ID</th>
