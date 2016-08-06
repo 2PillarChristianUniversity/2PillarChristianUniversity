@@ -1,8 +1,7 @@
 <h2>Courses List:</h2>
 <button type="button" class="btn btn-primary" ng-click="addCourse(false)">New Course</button>
-<br/>
-<br>
-<table class="table table-bordered table-hover" id="courseTable" ng-show="courses.length">
+
+<table datatable="ng" class="table table-bordered table-hover" id="courseTable" ng-show="courses.length">
   <thead>
     <tr>
       <th>Course ID</th>
@@ -24,7 +23,22 @@
       <td>{{course.startAt | date: 'hh:mm:ss a'}}</td>
       <td>{{course.endAt | date: 'hh:mm:ss a'}}</td>     
       <td>
-        remove |  edit | Enroll | delete | Assign
+        <a href="#" title="Edit">
+         Edit
+        </a>
+        <a href="#" title="Delete">
+          Delete
+        </a>
+        <a href="#" title="Enroll">
+          
+        </a>
+        <a href="#" title="Enroll">
+          Enroll 
+        </a>
+        <a href="#" title="Assign">
+          Assign
+        </a>
+       
       </td>
       <th>Professor A</th>
     </tr>

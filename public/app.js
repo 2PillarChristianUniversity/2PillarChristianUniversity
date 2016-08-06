@@ -8,7 +8,8 @@ angular.module('smsApp', [
 	'smsApp-courses',
 	'angular-storage',
 	'angular-jwt',
-	'ui.bootstrap'
+	'ui.bootstrap',
+	'datatables'
 ])
 	.config(function ($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider) {
 		$routeProvider
