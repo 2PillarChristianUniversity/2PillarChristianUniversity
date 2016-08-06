@@ -88,7 +88,7 @@ angular.module('smsApp', [
 		};
 
 		$httpProvider.interceptors.push('jwtInterceptor');
-	}).run(function ($rootScope, auth, store, jwtHelper, $location) {
+	}).run(function ($rootScope, auth, store, jwtHelper, $location, Student) {
 		$rootScope.$on('$locationChangeStart', function () {
 			var token = store.get('token');
 			if (token) {
@@ -101,7 +101,12 @@ angular.module('smsApp', [
 				}
 				if (auth.isAuthenticated) {
 					$rootScope.auth = auth;
+					// Student.all().success(function(response){
+					// 	console.log(response);
+
+					// });
 				}
+
 				console.log(auth);
 			}
 		});

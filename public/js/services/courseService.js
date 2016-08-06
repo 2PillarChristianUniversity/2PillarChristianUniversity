@@ -18,6 +18,9 @@ angular.module('smsApp-studentsList')
             },
             insert: function (course) {
                 return $http({ method: "PUT", url: "/api/course", data: course });
+            },
+            delete: function (id) {
+                return $http({method: "DELETE", url: "/api/course/id/" + id });
             }
         };
     });

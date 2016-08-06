@@ -1,10 +1,10 @@
 angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource'])
 	.controller('StudentListCtrl', function ($scope, $location, Student, $resource, DTOptionsBuilder, DTColumnDefBuilder) {
 
-		Student.all().success(function (response) {
-			$scope.students = response.students;
+		// Student.all().success(function (response) {
+		// 	$scope.students = response.students;
 
-		});
+		// });
 
 		$scope.search = function () {
 			if ($scope.searchName) {

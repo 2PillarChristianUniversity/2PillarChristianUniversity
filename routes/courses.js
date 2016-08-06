@@ -66,6 +66,18 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
             res.json({ course: course });
         });
     });
+
+    router.delete('/course/id/:id', function (req, res) {
+        console.log(req.params);
+        db.collection('Courses').deleteOne({_id: req.params.id.toString}, function (error, course) {
+             if (error) {
+                return res.
+                    status(400).
+                    json({ error: "Can't delete course..." });
+            }
+            res.json({ msg: "Delete success." });
+        })
+    })
 });
 
 module.exports = router;
