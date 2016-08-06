@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha test.js"
+    "test": "mocha test2.js"
   },
   "author": "DeYung Q. Le"
 }
