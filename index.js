@@ -4,13 +4,19 @@ var util = require('util'),
     bodyparser = require('body-parser'),
     jwt = require('express-jwt'),
     expressValidator = require('express-validator');
-
 var courses = require('./routes/courses'),
     groups = require('./routes/groups'),
     professors = require('./routes/professors'),
     institutions = require('./routes/institutions'),
     ministries = require('./routes/ministries'),
     students = require('./routes/students');
+//     var autoIncrement = require("mongodb-autoincrement");
+
+// function createAutoId(index) {
+//     var number = 6;
+//     return Array(number-String(index).length+1).join('0')+index;
+// }
+
 // var debug = require('debug')('app4');
 
 var port = 3000;
@@ -21,9 +27,11 @@ var jwtCheck = jwt({
 	audience: 'lHP3mrqgd5JYC2bnL6tF6w604DtIxjvj'
 });
 
+
+
 app.use(bodyparser.json());
 app.use(expressValidator());
-app.use('/api', jwtCheck);
+// app.use('/api', jwtCheck);
 
 app.use('/api', courses);
 app.use('/api', groups);

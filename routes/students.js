@@ -7,7 +7,7 @@ var mongoCfg = require('../mongo_cfg');
 
 function createAutoId(index) {
 	var number = 6;
-	return Array(number-String(index).length+1).join('0')+index;
+	return Array(number-String(index).length + 1).join('0') + index;
 }
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function (err, db) {
@@ -57,7 +57,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 			if (error) {
 				return res.
 					status(500).
-					json({ error: error.toString() });
+					json({ error: error });
 			}
 			res.json({ students: students });
 		});
@@ -73,11 +73,12 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 			res.json({ student: student });
 		});
 	});
-	router.put('/student', function (req, res) {
+
+	router.put('/student', function (req, res) {		
 		var colName = 'Students';
 		db.collection(colName, {strict:true}, function(err, collection) { // check exists collection
 			if(err != null) { // if exists
-				studentsCol._id = createAutoId(1);
+				req.body._id = createAutoId(1);
 				db.collection(colName).createIndex( { "email": 1 }, { unique: true } )
 				db.collection(colName).insert(req.body, function (error, student) {
 					if (error) {
@@ -88,8 +89,9 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 					res.json({ student: student });
 				});
 			}
+
 			autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
-				studentsCol._id = createAutoId(autoIndex);
+				req.body._id = createAutoId(autoIndex);
 				db.collection(colName).insert(req.body, function (error, student) {
 					if (error) {
 						return res.
