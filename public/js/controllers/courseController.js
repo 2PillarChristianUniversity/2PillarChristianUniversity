@@ -53,10 +53,12 @@ angular.module('smsApp-coursesList', ['ngRoute', 'datatables', 'ngResource'])
             });
 
         });
+      } 
+
+      // remove couse by id 
+      $scope.removeCourse = function (id) {
+        
       }
-
-      // edit course 
-
 
 
   });

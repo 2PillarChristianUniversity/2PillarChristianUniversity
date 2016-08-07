@@ -64,8 +64,9 @@ angular.module('smsApp', [
 			.otherwise('/home');
 
 		authProvider.init({
-			domain: 'pillarseminarysms.auth0.com',
-			clientID: 'lHP3mrqgd5JYC2bnL6tF6w604DtIxjvj',
+			// domain: 'pillarseminarysms.auth0.com',
+			domain: 'justintong.auth0.com',
+			clientID: '4f3JCR8Bp6PpNruh4WSrqGijapKol6m7',
 			loginUrl: '/login'
 		});
 
