@@ -1,5 +1,9 @@
 angular.module('smsApp-professorsList', ['ngRoute'])
   .controller('ProfessorListCtrl', function ($scope, $location, Professor) {
+    Professor.all().success(function (response) {
+			$scope.professors = response.professors;
+		});
+
     $scope.search = function () {
 			if ($scope.searchName) {
 				Professor.searchName($scope.searchName).success(function (response) {
@@ -15,6 +19,10 @@ angular.module('smsApp-professorsList', ['ngRoute'])
 
 		$scope.professorDetails = function (professorID) {
 			$location.path('/professor/' + professorID);
+		};
+
+		$scope.professorDelete = function (Professor) {
+			Professor.delete();
 		};
 	})
 	.controller('ProfessorDetailsCtrl', function ($scope, $routeParams, $uibModal, Professor, Institution, Ministry) {
@@ -179,32 +187,46 @@ angular.module('smsApp-professorsList', ['ngRoute'])
 			});
 		};
 	})
-	.controller('AddProfessorsCtrl', function ($scope, $routeParams, $uibModal, Professor, Institution, Ministry) {
+	.controller('AddProfessorsCtrl', function ($scope, $routeParams, $location, $uibModal, Professor, Institution, Ministry) {
 		
 		$scope.professor = {
-			_id: "",
-			email: "",
-			firstName: "",
-			middleName: "",
-			lastName: "",
-			birthDate: "",
+			// _id: "",
+			// email: "",
+			// firstName: "",
+			// middleName: "",
+			// lastName: "",
+			// birthDate: "",
 			gender: "M",
-			phoneNumber: "",
-			addressLine1: "",
-			city: "",
-			state: "",
-			zipCode: "",
+			// phoneNumber: "",
+			// addressLine1: "",
+			// city: "",
+			// state: "",
+			// zipCode: "",
 		};
 
-		$scope.addProfessor = function (event) {
+		$scope.addProfessor = function (professorID) {
 			 Professor.insert($scope.professor)
 					.then(
-					function (response) {
-						
+					function (response) {						
 						alert("Insert professor success...");
+						$location.path('/professor/' + professorID);
 					},
 					function (response) {
 						alert("Can't insert professor...");
+						var modalInstance = $uibModal.open({
+						animation: true,
+						title: 'Efor',
+						templateUrl: 'templates/alert/warning.html',
+						controller: function ($scope, $uibModalInstance) {
+								$scope.errorTitle = 'ERROR';
+								$scope.errorContent = "Can't insert professor...";
+								$scope.ok = function () {
+									$uibModalInstance.dismiss();
+								}
+
+							},
+							size: 'sm'
+						});
 					}
 					);
 

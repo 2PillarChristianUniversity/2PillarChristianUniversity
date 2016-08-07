@@ -22,6 +22,9 @@ angular.module('smsApp-studentsList', ['ngRoute'])
 			$location.path('/student/' + studentID);
 		};
 
+		$scope.studentDelete = function (Student) {
+			Student.remove();
+		};
 		
 	})
 	.controller('StudentDetailsCtrl', function ($scope, $routeParams, $uibModal, Student, Institution, Ministry) {
