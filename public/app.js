@@ -8,7 +8,8 @@ angular.module('smsApp', [
 	'smsApp-courses',
 	'angular-storage',
 	'angular-jwt',
-	'ui.bootstrap'
+	'ui.bootstrap',
+	'datatables'
 ])
 	.config(function ($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider) {
 		$routeProvider
@@ -87,7 +88,7 @@ angular.module('smsApp', [
 		};
 
 		$httpProvider.interceptors.push('jwtInterceptor');
-	}).run(function ($rootScope, auth, store, jwtHelper, $location) {
+	}).run(function ($rootScope, auth, store, jwtHelper, $location, Student) {
 		$rootScope.$on('$locationChangeStart', function () {
 			var token = store.get('token');
 			if (token) {

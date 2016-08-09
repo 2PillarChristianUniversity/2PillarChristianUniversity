@@ -1,8 +1,9 @@
-angular.module('smsApp-studentsList', ['ngRoute'])
-	.controller('StudentListCtrl', function ($scope, $location, Student) {
+angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource'])
+	.controller('StudentListCtrl', function ($scope, $location, Student, $resource, DTOptionsBuilder, DTColumnDefBuilder) {
 
 		Student.all().success(function (response) {
 			$scope.students = response.students;
+
 		});
 
 		$scope.search = function () {
@@ -191,7 +192,7 @@ angular.module('smsApp-studentsList', ['ngRoute'])
 			});
 		};
 	})
-	.controller('AddStudentsCtrl', function ($scope, $routeParams, $uibModal, Student, Institution, Ministry) {		
+	.controller('AddStudentsCtrl', function ($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry) {		
 		$scope.student = {
 		// 	_id: "",
 		// 	email: "",
@@ -211,7 +212,7 @@ angular.module('smsApp-studentsList', ['ngRoute'])
 			 Student.insert($scope.student)
 					.then(
 					function (response) {				
-						
+						$location.path('/students');
 					},
 					function (response) {
 						var modalInstance = $uibModal.open({
@@ -228,10 +229,8 @@ angular.module('smsApp-studentsList', ['ngRoute'])
 							},
 							size: 'sm'
 						});
+			});
 
-					});
-
-		}
-	 
+		} 
 	
 	});

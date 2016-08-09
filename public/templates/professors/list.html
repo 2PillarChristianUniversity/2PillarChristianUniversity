@@ -1,6 +1,6 @@
 <div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
 	<div class="col-lg-1">
-		<a href="#/addProfessor" class="btn btn-primary">Add Professors</a>
+		<button type="button" class="btn btn-primary" ng-click="addProfessor(false)">New Professor</button>
 	</div>
 	<div class="col-lg-10">
 		<b>Professor ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
@@ -9,7 +9,10 @@
 	</div>
 	<br>
 	<br>
-	<table class="table table-bordered table-hover" id="professorTable" ng-show="professors.length" >
+	<br>
+	<br>
+
+	<table datatable="ng" class="table table-bordered table-hover" id="professorTable" ng-show="professors.length" >
 		<thead>
 			<tr>
 				<th>Professor ID</th>
@@ -24,13 +27,13 @@
 		<tbody>
 			<tr style="cursor: pointer;" ng-repeat="professor in professors" >
 				<td ng-click="professorDetails(professor._id)">{{professor._id}}</td>
-				<td >{{professor.lastName}}, {{professor.firstName}} {{professor.middleName}}</td>
-				<td>{{professor.gender}}</td>
-				<td>{{professor.birthDate | date}}</td>
-				<td>{{professor.email}}</td>
-				<td>{{professor.phoneNumber}}</td>
+				<td ng-click="professorDetails(professor._id)">{{professor.lastName}}, {{professor.firstName}} {{professor.middleName}}</td>
+				<td ng-click="professorDetails(professor._id)">{{professor.gender}}</td>
+				<td ng-click="professorDetails(professor._id)">{{professor.birthDate | date}}</td>
+				<td ng-click="professorDetails(professor._id)">{{professor.email}}</td>
+				<td ng-click="professorDetails(professor._id)">{{professor.phoneNumber}}</td>
 				<td>
-			        <button type="submit" class="btn btn-primary" ng-click="professorDelete()">Delete</button>
+			        <button type="submit" class="btn btn-primary" ng-click="professorDelete(professor._id)">Delete</button>
 			    </td>
 			</tr>
 		</tbody>

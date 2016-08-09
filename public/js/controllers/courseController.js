@@ -1,15 +1,9 @@
-angular.module('smsApp-coursesList', ['ngRoute'])
-  .controller('CourselistCtrl', function ($scope, $location, $uibModal, Course) {
+angular.module('smsApp-coursesList', ['ngRoute', 'datatables', 'ngResource'])
+  .controller('CourselistCtrl', function ($scope, $routeParams, $location, $uibModal, Course) {
     //  get all list course in db
     Course.all().success(function (response) {
       $scope.courses = response.courses;     
     });
-
-    $scope.showList = function () {
-      Course.all().success(function (response){
-        $scope.courses = response.courses;
-      });
-    };
 
 // create course with popup modal 
     $scope.addCourse = function (isCourse) {
@@ -60,5 +54,21 @@ angular.module('smsApp-coursesList', ['ngRoute'])
 
         });
       }
+
+      // edit course 
+      $scope.courseDelete = function (professorID) {
+        Course.delete(professorID)
+        .then(
+            function (response) {
+              Course.all().success(function (response) {
+                $scope.courses = response.courses;     
+              });              
+            },
+            function (response) {
+              console.log(response);
+            });
+    };
+
+
 
   });

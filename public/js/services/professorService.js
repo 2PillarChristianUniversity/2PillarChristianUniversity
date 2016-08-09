@@ -19,8 +19,8 @@ angular.module('smsApp-studentsList')
             insert: function (professor) {
                 return $http({ method: "PUT", url: "/api/professor", data: professor });
             },
-            delete: function (professor) {
-                return $http({ method: "DELETE", url: "/api/professor", data: professor });
+            delete: function (id) {
+                return $http({ method: "DELETE", url: "/api/professor/id/" + id });
             }
         };
     });
