@@ -10,24 +10,20 @@ var courses = require('./routes/courses'),
     institutions = require('./routes/institutions'),
     ministries = require('./routes/ministries'),
     students = require('./routes/students');
-//     var autoIncrement = require("mongodb-autoincrement");
 
-// function createAutoId(index) {
-//     var number = 6;
-//     return Array(number-String(index).length+1).join('0')+index;
-// }
-
-// var debug = require('debug')('app4');
 
 var port = 3000;
 var app = express();
 
+// var jwtCheck = jwt({
+// 	secret: new Buffer('Gsf23XaFgeIXxjKOt8hJ18ODyddubZNWHmuDlBuuiwOfKaOgsa1O6YWAadbtIkuM', 'base64'),
+// 	audience: 'lHP3mrqgd5JYC2bnL6tF6w604DtIxjvj'
+// });
+
 var jwtCheck = jwt({
-	secret: new Buffer('Gsf23XaFgeIXxjKOt8hJ18ODyddubZNWHmuDlBuuiwOfKaOgsa1O6YWAadbtIkuM', 'base64'),
-	audience: 'lHP3mrqgd5JYC2bnL6tF6w604DtIxjvj'
+    secret: new Buffer('uF28M9a41r8-s5ZL-Zc1yv1GYv_o7sOj-AKJyb480iyvnS-5MLS4sFQEs4UvV5s2', 'base64'),
+    audience: '4f3JCR8Bp6PpNruh4WSrqGijapKol6m7'
 });
-
-
 
 app.use(bodyparser.json());
 app.use(expressValidator());

@@ -10,3 +10,6 @@
 .no-padding-bottom {
   padding-bottom: 0px !important;
 }
+.notifications .notifications-container {
+  top: 50px;
+}

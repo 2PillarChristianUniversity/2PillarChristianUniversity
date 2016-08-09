@@ -90,20 +90,31 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 				});
 			}
 
-			autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
-				req.body._id = createAutoId(autoIndex);
-				db.collection(colName).insert(req.body, function (error, student) {
-					if (error) {
-						return res.
-							status(400).
-							json({ error: "Can't insert student..." });
-					}
-					res.json({ student: student });
-				});
+			db.collection(colName).findOne({ email: req.body.email }, function (error, course) {
+				if(error) {
+					return res.
+						status(400).
+						json({ error: "Can't insert student..." });
+				}
+				if(course) {
+					return res.status(403)
+	          				.json({ error: "This email is already being used" });            
+				} else {
+					autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
+						req.body._id = createAutoId(autoIndex);
+						db.collection(colName).insert(req.body, function (error, student) {
+							if (error) {
+								return res.
+									status(400).
+									json({ error: "Can't insert student..." });
+							}
+							res.json({ student: student });
+						});
+					});
+				}
 			});
 		});
 	});
-
 });
 
 module.exports = router;
