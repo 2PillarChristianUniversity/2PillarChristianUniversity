@@ -14,5 +14,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "ng-notifications-bar": "^0.0.16",
+    "angular-datatables": "^0.5.4"
+  }
 }

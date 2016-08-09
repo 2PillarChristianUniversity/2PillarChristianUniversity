@@ -9,9 +9,11 @@ angular.module('smsApp', [
 	'angular-storage',
 	'angular-jwt',
 	'ui.bootstrap',
-	'datatables'
+	'datatables',
+	'ngNotificationsBar',
+	'ngSanitize'
 ])
-	.config(function ($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider) {
+	.config(function ($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider, notificationsConfigProvider) {
 		$routeProvider
 			.when('/home', {
 				controller: 'HomeCtrl',
@@ -89,6 +91,18 @@ angular.module('smsApp', [
 		};
 
 		$httpProvider.interceptors.push('jwtInterceptor');
+
+		// auto hide
+		notificationsConfigProvider.setAutoHide(true);
+		// delay before hide
+		notificationsConfigProvider.setHideDelay(3000);
+		// support HTML
+		notificationsConfigProvider.setAcceptHTML(false);
+		// Set an animation for hiding the notification
+		notificationsConfigProvider.setAutoHideAnimation('fadeOutNotifications');
+		// delay between animation and removing the nofitication
+		notificationsConfigProvider.setAutoHideAnimationDelay(1200);
+
 	}).run(function ($rootScope, auth, store, jwtHelper, $location, Student) {
 		$rootScope.$on('$locationChangeStart', function () {
 			var token = store.get('token');

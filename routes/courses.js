@@ -86,7 +86,8 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     json({ error: "server Error" });
             }
             if (course) {
-                res.json({ msg: "Exist" });
+                return res.status(203)
+                .json({ msg: "This email is already being used" });
             }
 
             res.json({ msg: "Not found." });
