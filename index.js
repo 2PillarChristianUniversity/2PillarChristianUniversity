@@ -9,7 +9,8 @@ var courses = require('./routes/courses'),
     professors = require('./routes/professors'),
     institutions = require('./routes/institutions'),
     ministries = require('./routes/ministries'),
-    students = require('./routes/students');
+    students = require('./routes/students'),
+    semesters = require('./routes/semesters');
 
 
 var port = 3000;
@@ -31,6 +32,7 @@ app.use(expressValidator());
 
 app.use('/api', courses);
 app.use('/api', groups);
+app.use('/api', semesters);
 app.use('/api', institutions);
 app.use('/api', ministries);
 app.use('/api', students);
