@@ -33,6 +33,7 @@
 				<td ng-click="professorDetails(professor._id)">{{professor.email}}</td>
 				<td ng-click="professorDetails(professor._id)">{{professor.phoneNumber}}</td>
 				<td>
+					<button type="submit" class="btn btn-primary" ng-click="professorEdit(professor._id)">Edit</button>
 			        <button type="submit" class="btn btn-primary" ng-click="professorDelete(professor._id)">Delete</button>
 			    </td>
 			</tr>
