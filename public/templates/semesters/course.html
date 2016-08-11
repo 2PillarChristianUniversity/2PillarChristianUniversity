@@ -1,0 +1,85 @@
+<form class="form-herizontal" ng-submit='courseSubmit()'>
+    <div class="modal-header">
+        <h3>{{courseTitle}}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="semester">Semester</label>
+            <input type="text" class="form-control" id="semester" disabled ng-model='semesterName'>
+        </div>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" ng-model='name'>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Start Date </label>
+            <input type="date" class="form-control" id="startDate" required ng-model='startDate'>
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date </label>
+            <input type="date" class="form-control" id="endDate" required ng-model='endDate'>
+        </div>
+        <div class="form-group">
+            <label for="duration">Duration </label>
+            <input type="text" class="form-control" id="duration" required ng-model='duration'>
+        </div>
+        <div class="form-group">
+            <label for="noMember">No Members </label>
+            <input type="text" class="form-control" id="noMember" required ng-model='noMember'>
+        </div>
+        <div class="form-group">
+            <table class="table table-bordered table-striped ">
+                <caption>
+                    <label>Days</label>
+                </caption>
+                <tr>
+                    <th>Date</th>
+                    <th>Start Time</th>
+                    <th>Actions</th>
+                </tr>
+                <tr ng-repeat="day in scheduleDates">
+                    <td>
+                        <select name="repeatSelect" ng-model="day.day">
+                            <option ng-selected="{{day.day}}" ng-repeat="option in weekdays" value="{{option.id}}">{{option.name}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="time" id="time" name="input" ng-model="day.time" />
+                    </td>
+                    <td><a href="javascript:void(0)" ng-click="scheduleDates.splice($index, 1)" aria-label="Remove">remove</a></td>
+                </tr>
+            </table>
+            <div class="form-group text-right">
+                <a href="javascript:void(0)" ng-click="scheduleDates.push({})">add day</a>
+            </div>
+        </div>
+        <div class="form-group">
+            <table class="table table-bordered table-striped ">
+                <caption>
+                    <label>Days Off </label>
+                </caption>
+                <tr>
+                    <th>From Days</th>
+                    <th>To Days</th>
+                    <th>Actions</th>
+                </tr>
+                <tr ng-repeat="dOff in dateOff">
+                    <td>
+                        <input type="date" id="dateOffStart" name="dateOffStart" ng-model="dOff.dateOffStart" />
+                    </td>
+                    <td>
+                        <input type="date" id="dateOffEnd" name="dateOffEnd" ng-model="dOff.dateOffEnd" />
+                    </td>
+                    <td><a href="javascript:void(0)" ng-click="dateOff.splice($index, 1)" aria-label="Remove">remove</a></td>
+                </tr>
+            </table>
+            <div class="form-group text-right">
+                <a href="javascript:void(0)" ng-click="dateOff.push({})">add day</a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</form>

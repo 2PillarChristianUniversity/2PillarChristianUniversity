@@ -79,7 +79,32 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    
+    router.delete('/course/id/:id', function (req, res) {
+        db.collection('Courses').deleteOne({_id: req.params.id.toString}, function (error, course) {
+             if (error) {
+                return res.
+                    status(400).
+                    json({ error: "Can't delete course..." });
+            }
+            res.json({ msg: "Delete success." });
+        });
+    })
+
+    router.post('/course/emailExist', function (req, res) {
+        db.collection('Courses').findOne({email: 'sagasg'}, function (error, course) {
+             if (error) {
+                return res.
+                    status(400).
+                    json({ error: "server Error" });
+            }
+            if (course) {
+                return res.status(203)
+                .json({ msg: "This email is already being used" });
+            }
+
+            res.json({ msg: "Not found." });
+        })
+    })
 });
 
 module.exports = router;

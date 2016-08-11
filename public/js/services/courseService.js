@@ -21,8 +21,9 @@ angular.module('smsApp-studentsList')
             },
             delete: function (id) {
                 return $http({method: "DELETE", url: "/api/course/id/" + id });
-            }
-
-
+            },
+            checkEmailExist: function (email) {
+                return $http({method: 'POST', url: "/api/course/emailExist", data: email })
+            } 
         };
     });

@@ -6,12 +6,16 @@ angular.module('smsApp', [
 	'smsApp-students',
 	'smsApp-professors',
 	'smsApp-courses',
+	'smsApp-semesters',
 	'angular-storage',
 	'angular-jwt',
 	'ui.bootstrap',
-	'datatables'
+	'datatables',
+	'ngNotificationsBar',
+	'ngSanitize'
+
 ])
-	.config(function ($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider) {
+	.config(function ($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider, notificationsConfigProvider) {
 		$routeProvider
 			.when('/home', {
 				controller: 'HomeCtrl',
@@ -43,9 +47,9 @@ angular.module('smsApp', [
 				templateUrl: 'templates/students/index.html',
 				requiresLogin: true
 			})
-			.when('/courses', {
-				controller: 'CourselistCtrl',
-				templateUrl: 'templates/courses/index.html',
+			.when('/semesters', {
+				controller: 'SemesterListCtrl',
+				templateUrl: 'templates/semesters/index.html',
 				requiresLogin: true
 			})	
 			.when('/professors', {
@@ -64,8 +68,9 @@ angular.module('smsApp', [
 			.otherwise('/home');
 
 		authProvider.init({
-			domain: 'pillarseminarysms.auth0.com',
-			clientID: 'lHP3mrqgd5JYC2bnL6tF6w604DtIxjvj',
+			// domain: 'pillarseminarysms.auth0.com',
+			domain: 'justintong.auth0.com',
+			clientID: '4f3JCR8Bp6PpNruh4WSrqGijapKol6m7',
 			loginUrl: '/login'
 		});
 
@@ -88,6 +93,16 @@ angular.module('smsApp', [
 		};
 
 		$httpProvider.interceptors.push('jwtInterceptor');
+		// auto hide
+		notificationsConfigProvider.setAutoHide(true);
+		// delay before hide
+		notificationsConfigProvider.setHideDelay(3000);
+		// support HTML
+		notificationsConfigProvider.setAcceptHTML(false);
+		// Set an animation for hiding the notification
+		notificationsConfigProvider.setAutoHideAnimation('fadeOutNotifications');
+		// delay between animation and removing the nofitication
+		notificationsConfigProvider.setAutoHideAnimationDelay(1200);
 	}).run(function ($rootScope, auth, store, jwtHelper, $location, Student) {
 		$rootScope.$on('$locationChangeStart', function () {
 			var token = store.get('token');
@@ -101,7 +116,12 @@ angular.module('smsApp', [
 				}
 				if (auth.isAuthenticated) {
 					$rootScope.auth = auth;
+					// Student.all().success(function(response){
+					// 	console.log(response);
+
+					// });
 				}
+
 				console.log(auth);
 			}
 		});

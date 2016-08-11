@@ -121,7 +121,7 @@ angular.module('smsApp-professorsList', ['ngRoute', 'datatables', 'ngResource'])
               $uibModalInstance.dismiss('cancel');
             };
           },
-          size: 'sm',
+          size: 'md',
           resolve: {
             professor: function () {
               return $scope.professor;
