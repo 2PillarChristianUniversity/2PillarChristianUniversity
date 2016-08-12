@@ -8,3 +8,8 @@
   cd to root folder project  like "2PillarChristianUniversity"
   run npm start
   
+
+3. if cannot run install bower 
+	sudo apt-get install nodejs-legacy
+
+	 DEBUG=PillarSeminary:* npm start

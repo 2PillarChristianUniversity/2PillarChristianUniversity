@@ -11,7 +11,18 @@
             <br>
             <br>
             <div class="panel panel-default" ng-repeat="semester in semesters">
-                <div class="panel-heading">{{semester.name}}</div>
+                <div class="panel-heading">{{semester.name}} 
+                    <span style="float:right">
+                        <a href="javascript:void(0)">
+                            edit
+                        </a>
+                        |
+                        <a href="javascript:void(0)" ng-click="removeSemester(semester._id)">
+                            delete
+                            </a>
+                    </span>
+                </div>   
+                    
                 <div class="panel-body">
                     <button ng-click="addCourse(semester._id, semester.name)">Add Course</button>
                     <br>

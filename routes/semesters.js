@@ -27,7 +27,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 ;
 
     router.get('/semesters/', function (req, res) {
-        db.collection(colName).find({}).toArray(function (error, semester) {            
+        db.collection(colName).find().sort( { "name": 1 } ).toArray(function (error, semester) {            
             if (error) {
                 return res.
                     status(500).
@@ -38,8 +38,6 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
     });
 
     router.post('/semester/id/:id', function (req, res) {
-        console.log(req.params.id);
-        console.log(req.body);
         db.collection(colName).update({ _id: req.params.id}, req.body, function (error, semester) {
             if (error) {
                 return res.
