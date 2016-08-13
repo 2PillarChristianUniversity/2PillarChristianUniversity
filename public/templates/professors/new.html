@@ -55,8 +55,10 @@
         Gender
         </td>
         <td>
-         <input type="radio" ng-model="gender" value="M" checked="checked"/>male
-         <input type="radio" ng-model="gender" value="F" />female<br />
+        <select ng-model="gender">
+          <option value="M">male</option>
+          <option value="F">female</option>
+        </select>
         </td>
       </tr>
       <tr>

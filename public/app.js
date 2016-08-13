@@ -7,6 +7,7 @@ angular.module('smsApp', [
 	'smsApp-professors',
 	'smsApp-courses',
 	'smsApp-semesters',
+	'smsApp-institutions',
 	'angular-storage',
 	'angular-jwt',
 	'ui.bootstrap',
@@ -32,6 +33,11 @@ angular.module('smsApp', [
 				templateUrl: 'templates/professors/details.html',
 				requiresLogin: true
 			})
+			.when('/institution/:Id', {
+				controller: 'InstitutionDetailsCtrl',
+				templateUrl: 'templates/institutions/details.html',
+				requiresLogin: true
+			})
 			.when('/addStudent', {
 				controller: 'AddStudentsCtrl',
 				templateUrl: 'templates/students/addStudent.html',
@@ -55,6 +61,11 @@ angular.module('smsApp', [
 			.when('/professors', {
 				controller: 'ProfessorListCtrl',
 				templateUrl: 'templates/professors/index.html',
+				requiresLogin: true
+			})
+			.when('/institutions', {
+				controller: 'InstitutionListCtrl',
+				templateUrl: 'templates/institutions/index.html',
 				requiresLogin: true
 			})
 			.when('/login', {

@@ -1,6 +1,6 @@
 <div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
 	<div class="col-lg-1">
-		<button type="button" class="btn btn-primary" ng-click="addProfessor(false)">New Professor</button>
+		<button type="button" class="btn btn-primary" ng-click="addProfessor()">New Professor</button>
 	</div>
 	<div class="col-lg-10">
 		<b>Professor ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
@@ -33,8 +33,8 @@
 				<td ng-click="professorDetails(professor._id)">{{professor.email}}</td>
 				<td ng-click="professorDetails(professor._id)">{{professor.phoneNumber}}</td>
 				<td>
-					<button type="submit" class="btn btn-primary" ng-click="professorEdit(professor._id)">Edit</button>
-			        <button type="submit" class="btn btn-primary" ng-click="professorDelete(professor._id)">Delete</button>
+					<a type="submit" title="edit" ng-click="professorEdit(professor._id)">Edit</a>
+			        <a type="submit" title="delete" ng-click="professorDelete(professor._id)">Delete</a>
 			    </td>
 			</tr>
 		</tbody>
