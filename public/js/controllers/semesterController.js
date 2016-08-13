@@ -4,11 +4,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             $scope.semesters = response.semesters;
         });
 
-        $scope.newDate = function () {
-            return new Date();
-        }
-
-        $rootScope.weekdays = [{
+         $rootScope.weekdays = [{
             id: '1',
             name: 'Sunday'
 
