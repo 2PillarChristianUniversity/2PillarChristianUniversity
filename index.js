@@ -1,9 +1,14 @@
 
+var express = require('express');
+var path = require('path');
 var util = require('util'),
-    express = require('express'),
-    bodyparser = require('body-parser'),
     jwt = require('express-jwt'),
     expressValidator = require('express-validator');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');    
+
 var courses = require('./routes/courses'),
     groups = require('./routes/groups'),
     professors = require('./routes/professors'),
@@ -26,7 +31,7 @@ var jwtCheck = jwt({
     audience: '4f3JCR8Bp6PpNruh4WSrqGijapKol6m7'
 });
 
-app.use(bodyparser.json());
+app.use(bodyParser.json());
 app.use(expressValidator());
 
 // app.use('/api', jwtCheck);
