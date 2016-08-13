@@ -1,0 +1,34 @@
+<div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
+	<div class="col-lg-1">
+		<button type="button" class="btn btn-primary" ng-click="addInstitutions()">New Institution</button>
+	</div>
+	<div class="col-lg-10">
+		<b>Institution ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
+		<b>Name</b> <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Institution Name">
+		<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+
+	<table datatable="ng" class="table table-bordered table-hover" id="institutionTable" ng-show="institutions.length" >
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="cursor: pointer;" ng-repeat="institution in institutions" >
+				<td ng-click="institutionDetails(institution._id)">{{institution._id}}</td>
+				<td ng-click="institutionDetails(institution._id)">{{institution.name}}</td>
+				<td>
+					<a type="submit" title="edit" ng-click="institutionEdit(institution._id)">Edit</a>
+			        <a type="submit" title="delete" ng-click="institutionDelete(institution._id)">Delete</a>
+			    </td>
+			</tr>
+		</tbody>
+	</table>
+</div>
