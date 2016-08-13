@@ -24,7 +24,6 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
             res.json({ semester: semester });
         });
     });
-;
 
     router.get('/semesters/', function (req, res) {
         db.collection(colName).find().sort( { "name": 1 } ).toArray(function (error, semester) {            
@@ -85,6 +84,18 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                 });
             });
 
+        });
+    });
+
+    // detele
+    router.delete('/semester/id/:id', function (req, res) {
+        db.collection(colName).deleteOne({ _id: req.params.id }, function (error, professor) {
+             if (error) {
+                return res.
+                    status(400).
+                    json({ error: "Can't delete professor..." });
+            }
+            res.json({ success: "Delete success." });
         });
     });
 
