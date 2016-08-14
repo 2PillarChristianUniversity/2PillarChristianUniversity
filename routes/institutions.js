@@ -39,56 +39,56 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    // router.put('/institution', function (req, res) {
+    router.put('/institution', function (req, res) {
 
-    //     db.collection('Institutions').insert(req.body, function (error, institution) {
-    //         if (error) {
-    //             return res.
-    //                 status(400).
-    //                 json({ error: "Can't insert institution..." });
-    //         }
-    //         res.json({ institution: institution });
-    //     });
-    // });
-
-    router.put('/institution', function(req, res) {        
-        db.collection(colName, {
-            strict: true
-        }, function(err, collection) { // check exists collection
-            if (err != null) { // if exists
-                req.body._id = createAutoId(1);
-                db.collection(colName).insert(req.body, function(error, institution) {
-                    if (error) {
-                        return res.
-                        status(400).
-                        json({
-                            error: "Can't insert institution..."
-                        });
-                    }
-                    res.json({
-                        institution: institution
-                    });
-                });
+        db.collection('Institutions').insert(req.body, function (error, institution) {
+            if (error) {
+                return res.
+                    status(400).
+                    json({ error: "Can't insert institution..." });
             }
-
-            autoIncrement.getNextSequence(db, colName, function(err, autoIndex) {
-                req.body._id = createAutoId(autoIndex);
-                db.collection(colName).insert(req.body, function(error, institution) {
-                    if (error) {
-                        return res.
-                        status(400).
-                        json({
-                            error: "Can't insert institution..."
-                        });
-                    }
-                    res.json({
-                        institution: institution
-                    });
-                });
-            });
-
+            res.json({ institution: institution });
         });
     });
+
+    // router.put('/institution', function(req, res) {        
+    //     db.collection(colName, {
+    //         strict: true
+    //     }, function(err, collection) { // check exists collection
+    //         if (err != null) { // if exists
+    //             req.body._id = createAutoId(1);
+    //             db.collection(colName).insert(req.body, function(error, institution) {
+    //                 if (error) {
+    //                     return res.
+    //                     status(400).
+    //                     json({
+    //                         error: "Can't insert institution..."
+    //                     });
+    //                 }
+    //                 res.json({
+    //                     institution: institution
+    //                 });
+    //             });
+    //         }
+
+    //         autoIncrement.getNextSequence(db, colName, function(err, autoIndex) {
+    //             req.body._id = createAutoId(autoIndex);
+    //             db.collection(colName).insert(req.body, function(error, institution) {
+    //                 if (error) {
+    //                     return res.
+    //                     status(400).
+    //                     json({
+    //                         error: "Can't insert institution..."
+    //                     });
+    //                 }
+    //                 res.json({
+    //                     institution: institution
+    //                 });
+    //             });
+    //         });
+
+    //     });
+    // });
 
     router.post('/institution/id/:id', function (req, res) {
         db.collection('Institutions').update({ _id: req.params.id }, req.body, function (error, institution) {

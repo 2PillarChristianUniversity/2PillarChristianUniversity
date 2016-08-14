@@ -4,7 +4,6 @@
 	</div>
 	<div class="col-lg-10">
 		<b>Institution ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
-		<b>Name</b> <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Institution Name">
 		<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
 	</div>
 	<br>
@@ -16,16 +15,24 @@
 		<thead>
 			<tr>
 				<th>ID</th>
-				<th>Name</th>
-				<th>Actions</th>
+				<th>Phone Number</th>
+				<th>Address Line1</th>
+				<th>City</th>
+				<th>State</th>
+				<th>ZipCode</th>
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr style="cursor: pointer;" ng-repeat="institution in institutions" >
 				<td ng-click="institutionDetails(institution._id)">{{institution._id}}</td>
-				<td ng-click="institutionDetails(institution._id)">{{institution.name}}</td>
+				<td ng-click="institutionDetails(institution._id)">{{institution.phoneNumber}}</td>
+				<td ng-click="institutionDetails(institution._id)">{{institution.addressLine1}}</td>
+				<td ng-click="institutionDetails(institution._id)">{{institution.city}}</td>
+				<td ng-click="institutionDetails(institution._id)">{{institution.state}}</td>
+				<td ng-click="institutionDetails(institution._id)">{{institution.zipCode}}</td>
 				<td>
-					<a type="submit" title="edit" ng-click="institutionEdit(institution._id)">Edit</a>
+					<a type="submit" title="edit" ng-click="editInstitution(institution._id)">Edit</a>
 			        <a type="submit" title="delete" ng-click="institutionDelete(institution._id)">Delete</a>
 			    </td>
 			</tr>

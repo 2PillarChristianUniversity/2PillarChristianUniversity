@@ -1,114 +1,59 @@
-<h4 style="padding:10px">Add Professor</h4>
-<form ng-submit="ok()">
-  <table class="table">
-    <tbody>
-      <tr>
-        <td>
-          Professor Id*
-        </td>
-        <td>
-          <input type="text" required name="_id" ng-model="_id"'>        
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Email*
-        </td>
-        <td>
-          <input type="email" required name="email" ng-model='email'>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          First Name*
-        </td>
-        <td>        
-          <input type="text" required name="firstName" ng-model='firstName'>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Middle Name*
-        </td>
-        <td>
-         <input type="text" required name="middleName" ng-model='middleName'/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Last Name*
-        </td>
-        <td>
-         <input type="text" required name="lastName" ng-model='lastName'/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Birthdate*
-        </td>
-        <td>
-         <input type="date" required name="birthDate" ng-model='birthDate'/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Gender
-        </td>
-        <td>
-        <select ng-model="gender">
-          <option value="M">male</option>
-          <option value="F">female</option>
-        </select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Phone Number*
-        </td>
-        <td>
-         <input type="text" required name="phoneNumber" ng-model='phoneNumber'/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Address Line1
-        </td>
-        <td>
-         <input type="text" name="addressLine1" ng-model='addressLine1'/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        City
-        </td>
-        <td>
-         <input type="text" name="city" ng-model='city'/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        State
-        </td>
-        <td>
-         <input type="text" name="state" ng-model='state'/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Zip Code
-        </td>
-        <td>
-         <input type="text" name="zipCode" ng-model='zipCode' placeholder="XXXXX"/>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-primary" type = "submit">Add</button>
-          <button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</form>  
+<form class="form-herizontal" ng-submit='professorSubmit()'>
+    <div class="modal-header">
+    <h3>{{professorTitle}}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="email">Email*</label>
+            <input type="email" class="form-control" id="email" ng-model='email' required placeholder="Email">
+        </div>
+        <div class="form-group">
+            <label for="first_name">First Name*</label>
+            <input type="text" class="form-control" id="first_name" ng-model='firstName' required placeholder="First Name">
+        </div>
+        <div class="form-group">
+            <label for="middle_name">Middle Name*</label>
+            <input type="text" class="form-control" id="middle_name" ng-model='middleName' required placeholder="Middle Name">
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name*</label>
+            <input type="text" class="form-control" id="last_name" ng-model='lastName' required placeholder="Last Name">
+        </div>
+        <div class="form-group">
+            <label for="birthdate">Birthdate*</label>
+            <input type="date" class="form-control" id="last_name" required ng-model='birthDate'>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select ng-model="gender">
+              <option value="M">male</option>
+              <option value="F">female</option>
+            </select>            
+            <br />
+        </div>
+        <div class="form-group">
+            <label for="phone_number">Phone Number*</label>
+            <input type="text" class="form-control" id="phone_number" required ng-model='phoneNumber'>
+        </div>
+        <div class="form-group">
+            <label for="address">Address Line1</label>
+            <input type="text" class="form-control" id="address" ng-model='addressLine1'>
+        </div>
+        <div class="form-group">
+            <label for="city">City </label>
+            <input type="text" class="form-control" id="city" ng-model='city'>
+        </div>
+        <div class="form-group">
+            <label for="state">State </label>
+            <input type="text" class="form-control" id="state" ng-model='state'>
+        </div>
+        <div class="form-group">
+            <label for="zip_code">Zip Code </label>
+            <input type="text" class="form-control" id="zip_code" ng-model='zipCode'>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</form>
