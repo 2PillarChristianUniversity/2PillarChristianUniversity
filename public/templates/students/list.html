@@ -22,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr style="cursor: pointer;" ng-repeat="student in students" >
+            <tr id="tr_student_{{student._id}}" style="cursor: pointer;" ng-repeat="student in students" >
                 <td ng-click="studentDetails(student._id)">{{student._id}}</td>
                 <td ng-click="studentDetails(student._id)">{{student.lastName}}, {{student.firstName}} {{student.middleName}}</td>
                 <td ng-click="studentDetails(student._id)">{{student.gender}}</td>
