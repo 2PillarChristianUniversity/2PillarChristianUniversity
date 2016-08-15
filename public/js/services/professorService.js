@@ -13,7 +13,7 @@ angular.module('smsApp-studentsList')
             get: function (id) {
                 return $http({ method: "GET", url: "/api/professor/id/" + id });
             },
-            edit: function (id, professor) {
+            update: function (id, professor) {
                 return $http({ method: "POST", url: "/api/professor/id/" + id, data: professor });
             },
             insert: function (professor) {

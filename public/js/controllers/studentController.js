@@ -1,5 +1,8 @@
 angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize'])
-	.controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal, notifications) {
+	.controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal, notifications , $routeParams, $rootScope) {
+		Student.all().success(function (response) {
+			$scope.students = response.students;
+		});
 		$scope.search = function() {
 
 			if ($scope.searchName) {
@@ -17,9 +20,134 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 			$location.path('/student/' + studentID);
 		};
 
-		$scope.studentDelete = function (Student) {
-			Student.remove();
-		};
+		$scope.deleteStudent = function(id) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/alert/confirm.html',
+                controller: function($scope, $uibModalInstance, Student) {
+
+                    $scope.comtent = 'Are you sure you want to delete?'
+
+                    $scope.ok = function() {
+
+                        Student.delete(id)
+                            .then(
+                                function(response) {
+                                    Student.all().success(function(response) {
+                                        $scope.students = response.students;
+                                    });
+
+                                    notifications.showSuccess({
+                                        message: 'Successfully.'
+                                    });
+                                    $uibModalInstance.close(true);
+                                },
+                                function(response) {
+                                    notifications.showError({
+                                        message: response.error
+                                    });
+                                });
+                    }
+
+                    $scope.cancel = function() {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+
+                },
+                size: 'sm',
+                resolve: {
+                    isfinished: function() {
+                        return true
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(result) {
+                if (result == true) {
+                    Student.all().success(function(response) {
+                        $scope.students = response.students;
+                    });
+
+                }
+            });
+    	};
+
+    	$scope.editStudent = function(id) {
+            Student.get(id).success(function(res) {
+                $rootScope.student = res.student;
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: 'templates/students/new.html',
+                    controller: function($scope, $uibModalInstance, Student) {
+                        $scope.studentTitle = 'Edit Student';
+                        $scope.birthDate = new Date($rootScope.student.birthDate);
+                        $scope.email = $rootScope.student.email;
+                        $scope.firstName = $rootScope.student.firstName;
+                        $scope.middleName = $rootScope.student.middleName;
+                        $scope.lastName = $rootScope.student.lastName;
+                        $scope.gender = $rootScope.student.gender;
+                        $scope.phoneNumber = $rootScope.student.phoneNumber;
+                        $scope.addressLine1 = $rootScope.student.addressLine1;
+                        $scope.city = $rootScope.student.city;
+                        $scope.state = $rootScope.student.state;
+                        $scope.zipCode = $rootScope.student.zipCode; 
+                        $scope.graduationDate = $rootScope.student.graduationDate; 
+						$scope.applicationDate = $rootScope.student.applicationDate;
+						$scope.acceptanceNotificationDate = $rootScope.student.acceptanceNotificationDate;                       
+
+                        $scope.studentSubmit = function() {
+                            $rootScope.student.email = $scope.email;
+                            $rootScope.student.firstName = $scope.firstName;
+                            $rootScope.student.middleName = $scope.middleName;
+                            $rootScope.student.lastName = $scope.lastName;
+                            $rootScope.student.birthDate = $scope.birthDate;
+                            $rootScope.student.gender = $scope.gender;
+                            $rootScope.student.phoneNumber = $scope.phoneNumber;
+                            $rootScope.student.addressLine1 = $scope.addressLine1;
+                            $rootScope.student.city = $scope.city;
+                            $rootScope.student.state = $scope.state;
+                            $rootScope.student.zipCode = $scope.zipCode;
+                            $rootScope.student.graduationDate = $scope.graduationDate;
+							$rootScope.student.applicationDate = $scope.applicationDate;
+							$rootScope.student.acceptanceNotificationDate = $scope.acceptanceNotificationDate;
+
+                            Student.update($rootScope.student._id, $rootScope.student)
+                                .then(
+                                    function(response) {
+                                        notifications.showSuccess({
+                                            message: 'successfully.'
+                                        });
+                                        $uibModalInstance.close(true);
+                                    },
+                                    function(response) {
+                                        console.log(response);
+                                    }
+                                );
+
+                        };
+
+                        $scope.cancel = function() {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                    },
+                    size: 'sm',
+                    resolve: {
+                        isfinished: function() {
+                            return true;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(isfinished) {
+                    if (isfinished === true) {
+                        Student.all().success(function(response) {
+                            $scope.students = response.students;
+                        });
+                    }
+                });
+
+            });
+    }; 
 		
 		$scope.addStudents = function() {
 			var modalInstance = $uibModal.open({
@@ -27,6 +155,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 				templateUrl: 'templates/students/new.html',
 				controller: function($scope, $uibModalInstance, Student) {
 					$scope.studentTitle = 'Add Student';
+					$scope.gender = "M";
 
 					$scope.studentSubmit = function() {
 						$scope.student = {

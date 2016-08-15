@@ -25,8 +25,10 @@
         </div>
         <div class="form-group">
             <label for="gender">Gender</label>
-            <input type="radio" ng-model="gender" value="M" />male
-            <input type="radio" ng-model="gender" value="F" />female
+            <select ng-model="gender">
+              <option value="M">male</option>
+              <option value="F">female</option>
+            </select>            
             <br />
         </div>
         <div class="form-group">

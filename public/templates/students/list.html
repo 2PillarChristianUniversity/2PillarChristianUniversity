@@ -1,44 +1,42 @@
-<div class="container" style="padding:10px 30px 10px 10px;">
-    <div class="row">
-        <div class="col-lg-4 no-padding-left">
-            <button class="btn btn-primary" ng-click="addStudents()">Add student</button>
-        </div>
-        <div class="col-lg-8 text-right no-padding-right">
-            <div>
-                <b>Student ID</b>
-                <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
-                <b>Name</b>
-                <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Student Name">
-                <button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
-            </div>
-        </div>
-        <br>
-        <br>
-        <div class="row">
-            <div class="col-lg-12">
-                <table class=" row-border hover table table-striped table-bordered" id="studentTable" ng-show="students.length">
-                    <thead>
-                        <tr>
-                            <th>Student ID</th>
-                            <th>Name</th>
-                            <th>Gender</th>
-                            <th>Birth Date</th>
-                            <th>Email</th>
-                            <th>Number</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="cursor: pointer;" ng-repeat="student in students" ng-click="studentDetails(student._id)">
-                            <td>{{student._id}}</td>
-                            <td>{{student.lastName}}, {{student.firstName}} {{student.middleName}}</td>
-                            <td>{{student.gender}}</td>
-                            <td>{{student.birthDate | date}}</td>
-                            <td>{{student.email}}</td>
-                            <td>{{student.phoneNumber}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
+    <div class="col-lg-1">
+        <button type="button" class="btn btn-primary" ng-click="addStudents()">New Student</button>
     </div>
+    <div class="col-lg-10">
+        <b>Student ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
+        <b>Name</b> <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Student Name">
+        <button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <table datatable="ng" class="table table-bordered table-hover" id="studentTable" ng-show="students.length" >
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Birth Date</th>
+                <th>Email</th>
+                <th>Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="cursor: pointer;" ng-repeat="student in students" >
+                <td ng-click="studentDetails(student._id)">{{student._id}}</td>
+                <td ng-click="studentDetails(student._id)">{{student.lastName}}, {{student.firstName}} {{student.middleName}}</td>
+                <td ng-click="studentDetails(student._id)">{{student.gender}}</td>
+                <td ng-click="studentDetails(student._id)">{{student.birthDate | date}}</td>
+                <td ng-click="studentDetails(student._id)">{{student.email}}</td>
+                <td ng-click="studentDetails(student._id)">{{student.phoneNumber}}</td>
+                <td>
+                    <a type="submit" title="edit" ng-click="editStudent(student._id)">Edit</a>
+                    <a type="submit" title="delete" ng-click="deleteStudent(student._id)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

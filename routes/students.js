@@ -115,6 +115,18 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 			});
 		});
 	});
+
+	router.delete('/student/id/:id', function (req, res) {
+        db.collection('Students').deleteOne({ _id: req.params.id }, function (error, student) {
+             if (error) {
+                return res.
+                    status(400).
+                    json({ error: "Can't delete student..." });
+            }
+            res.json({ msg: "Delete success." });
+        });
+    });
+
 });
 
 module.exports = router;
