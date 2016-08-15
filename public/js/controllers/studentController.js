@@ -81,6 +81,9 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     controller: function($scope, $uibModalInstance, Student) {
                         $scope.studentTitle = 'Edit Student';
                         $scope.birthDate = new Date($rootScope.student.birthDate);
+                        $scope.graduationDate = new Date($rootScope.student.graduationDate);
+                        $scope.applicationDate = new Date($rootScope.student.applicationDate);
+                        $scope.acceptanceNotificationDate = new Date($rootScope.student.acceptanceNotificationDate);
                         $scope.email = $rootScope.student.email;
                         $scope.firstName = $rootScope.student.firstName;
                         $scope.middleName = $rootScope.student.middleName;
@@ -90,10 +93,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         $scope.addressLine1 = $rootScope.student.addressLine1;
                         $scope.city = $rootScope.student.city;
                         $scope.state = $rootScope.student.state;
-                        $scope.zipCode = $rootScope.student.zipCode; 
-                        $scope.graduationDate = $rootScope.student.graduationDate; 
-						$scope.applicationDate = $rootScope.student.applicationDate;
-						$scope.acceptanceNotificationDate = $rootScope.student.acceptanceNotificationDate;                       
+                        $scope.zipCode = $rootScope.student.zipCode;                                             
 
                         $scope.studentSubmit = function() {
                             $rootScope.student.email = $scope.email;
@@ -130,7 +130,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             $uibModalInstance.dismiss('cancel');
                         };
                     },
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         isfinished: function() {
                             return true;

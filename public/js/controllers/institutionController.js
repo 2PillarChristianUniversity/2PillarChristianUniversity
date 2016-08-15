@@ -115,7 +115,7 @@ angular.module('smsApp-institutionsList', ['ngRoute', 'datatables', 'ngResource'
                             $uibModalInstance.dismiss('cancel');
                         };
                     },
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         isfinished: function() {
                             return true;
