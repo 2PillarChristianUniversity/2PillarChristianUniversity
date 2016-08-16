@@ -95,10 +95,17 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     animation: true,
                     templateUrl: 'templates/semesters/new.html',
                     controller: function($scope, $uibModalInstance, Semester) {
+
+                        $scope.parseDate = function (date) {                           
+                            return new Date( Date.parse(date) );
+          
+                        };
+
                         $scope.semesterTitle = 'Add Semester';
                         $scope.startDate = new Date($rootScope.semester.startDate);
                         $scope.endDate = new Date($rootScope.semester.endDate);
                         $scope.name = $rootScope.semester.name;
+
 
                         $scope.semesterSubmit = function() {
                             $rootScope.semester.name = $scope.name;
