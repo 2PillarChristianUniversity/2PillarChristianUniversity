@@ -17,7 +17,7 @@ var courses = require('./routes/courses'),
     students = require('./routes/students'),
     semesters = require('./routes/semesters');
 
-var port = Number(process.env.PORT || 8000);
+var port = Number(process.env.PORT || 3000);
 var app = express();
 
 // var jwtCheck = jwt({

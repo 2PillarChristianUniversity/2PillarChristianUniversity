@@ -28,7 +28,7 @@
     "superagent": "*"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "cd public && bower install && cd .. && node index.js",
     "test": "mocha test2.js"
   },
   "author": "DeYung Q. Le"
