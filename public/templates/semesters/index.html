@@ -1,0 +1,48 @@
+<div ng-include="'/templates/navigation.html'"></div>
+<div class="container">
+    <br>
+    <br>
+    <uib-tabset active="active">
+        <uib-tab index="0" heading="Previous Courses">
+        </uib-tab>
+        <uib-tab index="1" heading="Courses">
+            <br>
+            <button class="btn btn-primary" ng-click="AddSemester()">Add Semester</button>
+            <br>
+            <br>
+            <div class="panel panel-default" ng-repeat="semester in semesters">
+                <div class="panel-heading">{{semester.name}}
+                    <span style="float:right">
+                        <a href="javascript:void(0)" ng-click="editSemester(semester._id)">
+                            Edit
+                        </a>
+                        |
+                        <a href="javascript:void(0)" ng-click="removeSemester(semester._id)">
+                            Delete
+                            </a>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <button ng-click="addCourse(semester._id, semester.name)">Add Course</button>
+                    <br>
+                    <br>
+                    <table class="table">
+                        <thead>
+                            <th>ID</th>
+                            <th>Course Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Actions</th>
+                        </thead>
+                        <tr ng-repeat="course in semester.courseList">
+                            <td>{{course._id}}</td>
+                            <td>{{course.name}}</td>
+                            <td>{{course.startDate | date}}</td>
+                            <td>{{course.endDate | date}}</td>
+                            <td><a href="javascript:void(0)" ng-click="editCourse(semester._id,course._id)">edit</a></td>
+                        </tr>
+                    </table>
+                </div>
+        </uib-tab>
+    </uib-tabset>
+    </div>

@@ -2,7 +2,8 @@ angular.module('smsApp')
 	.controller('LoginCtrl', function ($scope, auth, $rootScope) {
 		$scope.auth = auth;
 
-		$scope.lock = new Auth0Lock('lHP3mrqgd5JYC2bnL6tF6w604DtIxjvj', 'pillarseminarysms.auth0.com');
+		$scope.lock = new Auth0Lock('4f3JCR8Bp6PpNruh4WSrqGijapKol6m7', 'justintong.auth0.com');
+			// $scope.lock = new Auth0Lock('lHP3mrqgd5JYC2bnL6tF6w604DtIxjvj', 'pillarseminarysms.auth0.com');
 
 		$scope.openLogin = function () {
 			$scope.lock.showSignin({

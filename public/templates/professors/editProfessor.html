@@ -1,0 +1,123 @@
+
+    <div class="modal-content">
+    <form ng-submit="ok()">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit professor</h4>
+      </div>
+      <div class="modal-body">
+         
+  <table class="table">
+    <tbody>
+      <tr>
+        <td>
+          ID
+        </td>
+        <td>
+          <input type="text" required name="_id" ng-model='professor._id' disabled>        
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Email
+        </td>
+        <td>
+          <input type="email" required name="email" ng-model='professor.email'>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          First Name
+        </td>
+        <td>        
+          <input type="text" required name="firstName" ng-model='professor.firstName'>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Middle Name
+        </td>
+        <td>
+         <input type="text" required name="middleName" ng-model='professor.middleName'/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Last Name*
+        </td>
+        <td>
+         <input type="text" required name="lastName" ng-model='professor.lastName'/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Birthdate*
+        </td>
+        <td>
+         <input type="date" required name="birthDate" ng-model='professor.birthDate'/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Gender
+        </td>
+        <td>
+         <input type="radio" ng-model="professor.gender" value="M" checked="checked"/>male
+         <input type="radio" ng-model="professor.gender" value="F" />female<br />
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Phone Number*
+        </td>
+        <td>
+         <input type="text" required name="phoneNumber" ng-model='professor.phoneNumber'/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Address Line1
+        </td>
+        <td>
+         <input type="text" name="addressLine1" ng-model='professor.addressLine1'/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        City
+        </td>
+        <td>
+         <input type="text" name="city" ng-model='professor.city'/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        State
+        </td>
+        <td>
+         <input type="text" name="state" ng-model='professor.state'/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Zip Code
+        </td>
+        <td>
+         <input type="text" name="zipCode" ng-model='professor.zipCode' placeholder="XXXXX"/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+ 
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type = "submit">Save</button>
+          <button class="btn btn-sm btn-secondary" ng-click="cancel()">Cancel</button>
+      </div>
+
+      </form> 
+    </div><!-- /.modal-content -->
+
+
+
+
