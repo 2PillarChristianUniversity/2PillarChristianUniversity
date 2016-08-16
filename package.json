@@ -16,7 +16,10 @@
     "google-auth-library": "*",
     "googleapis": "*",
     "mongodb": "*",
-    "mongodb-autoincrement": "*"
+    "mongoose": "*",
+    "mongodb-autoincrement": "*",
+    "express-validation": "^1.0.0",
+    "express-validator": "^2.20.8"
   },
   "devDependencies": {
     "express-validation": "^1.0.0",
