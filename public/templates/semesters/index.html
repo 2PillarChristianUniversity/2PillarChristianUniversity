@@ -3,9 +3,15 @@
     <br>
     <br>
     <uib-tabset active="active">
-        <uib-tab index="0" heading="Previous Courses">
+
+        <uib-tab index="0" heading="Calendar">
+           <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources2"></div>  
         </uib-tab>
-        <uib-tab index="1" heading="Courses">
+
+        <uib-tab index="1" heading="Previous Courses">
+            <semester-treeview></semester-treeview>
+        </uib-tab>
+        <uib-tab index="2" heading="Courses">
             <br>
             <button class="btn btn-primary" ng-click="AddSemester()">Add Semester</button>
             <br>
