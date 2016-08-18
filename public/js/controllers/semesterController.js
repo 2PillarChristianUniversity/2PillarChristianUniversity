@@ -326,9 +326,9 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         // create coures
         $scope.addCourse = function(semesterID, semesterName) {
-            Semester.get(semesterID).success(function(res) {
-                $scope.semester = res.semester;
-            });
+            // Semester.get(semesterID).success(function(res) {
+            //     $scope.semester = res.semester;
+            // });
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'templates/semesters/course.html',
@@ -347,6 +347,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
                     $scope.courseSubmit = function() {
                         $scope.course = {
+                            semesters: '',
                             name: $scope.name,
                             startDate: $scope.startDate,
                             endDate: $scope.endDate,
@@ -374,26 +375,25 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             });
 
             modalInstance.result.then(function(course) {
-                if (!$scope.semester.courseList) {
-                    $scope.semester.courseList = []
-                }
-                course._id = semesterID + '' + $scope.semester.courseList.length;
-                $scope.semester.courseList.push(course);
-                Semester.update($scope.semester._id, $scope.semester)
+                $scope.coures = course;
+                $scope.coures.semesters = semesterID;
+
+                Course.insert($scope.coures)
                     .then(
                         function(response) {
-                            Semester.all().success(function(response) {
-                                $scope.semesters = response.semesters;
-                            });
+                            Course.all().success(function(response) {
+                                $scope.courses = response.courses;
 
+                            });
                             notifications.showSuccess({
                                 message: 'Add Course successfully.'
                             });
                         },
                         function(response) {
                             console.log(response);
-                        }
-                    );
+                        });
+
+                
             });
 
         }

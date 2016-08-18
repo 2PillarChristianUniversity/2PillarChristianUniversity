@@ -33,7 +33,7 @@ var jwtCheck = jwt({
 app.use(bodyParser.json());
 app.use(expressValidator());
 console.log();
-app.use('/api', jwtCheck);
+// app.use('/api', jwtCheck);
 
 
 app.use('/api', courses);
