@@ -3,6 +3,10 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
     ])
     .controller('SemesterListCtrl', function($scope, $rootScope, $routeParams, $location,
         $uibModal, Semester, notifications, Course, $compile, uiCalendarConfig) {
+         Semester.all().success(function(response) {
+                    $scope.semesters = response.semesters;
+                    console.log($scope.semesters);
+                });
 
         // function CalendarCtrl($scope,$compile,uiCalendarConfig) {
         var date = new Date();
@@ -174,10 +178,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
 
         // end calendar
-        Semester.all().success(function(response) {
-            $scope.semesters = response.semesters;
-        });
-
+       
         $rootScope.weekdays = [{
             id: '1',
             name: 'Sunday'

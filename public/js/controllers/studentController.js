@@ -249,7 +249,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                     $scope.student.undergraduateDegrees.push(degree);
                 }
-                Student.create($scope.student._id, $scope.student)
+                Student.update($scope.student._id, $scope.student)
                     .then(
                         function(response) {
                             console.log(response);

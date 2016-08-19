@@ -33,49 +33,26 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
     router.get('/semesters/', function(req, res) {
 
-        var courses =  db.collection('Courses').find({
-            semesters: true
-        });
-
-        var sem = courses.map(function(c) {
-            return c.semesters;
-        });
-        
-        var data = db.collection(colName).find({
-            _id: {
-                $in: sem
+        db.collection(colName).aggregate([{
+            $lookup: {
+                from: "Courses",
+                localField: "_id",
+                foreignField: "semesters",
+                as: "Courses"
             }
-        }).sort({
-            "name": 1
-        });
-        console.log(data);
-        // .toArray(function(error, semester) {
-        //     if (error) {
-        //         return res.
-        //         status(301).
-        //         json({
-        //             error: error.toString()
-        //         });
-        //     } else {
-        //         // for (var i = 0, len = semester.length; i < len; i++) {
-        //         //     // console.log(semester[i]._id);
-        //         //     db.collection('Courses').findOne({
-        //         //         semesters: semester[i]._id
-        //         //     }, function(error, courses) {
-        //         //         if (courses) {
-        //         //             console.log(courses);
-        //         //         }
-
-        //         //     });
-        //         // }
-
-        //     }
-
-
+        }],function(error, semesters) {
+            console.log(semesters);
+            if (error) {
+                return res.
+                status(500).
+                json({
+                    error: error.toString()
+                });
+            }
             res.json({
-                semesters: data
+                semesters: semesters
             });
-        // });
+        });
     });
 
     router.post('/semester/id/:id', function(req, res) {
