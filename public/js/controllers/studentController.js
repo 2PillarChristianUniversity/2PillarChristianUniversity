@@ -199,7 +199,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 		}
 
 	})
-	.controller('StudentDetailsCtrl', function($scope, $routeParams, $uibModal, Student, Institution, Ministry) {
+	.controller('StudentDetailsCtrl', function($scope, $routeParams, $uibModal, Student, Institution, Ministry, $rootScope, notifications) {
+		$rootScope.index = -1;
 		Student.get($routeParams.Id).success(function(response) {
 			$scope.student = response.student;
 		});
@@ -209,14 +210,14 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 				animation: true,
 				templateUrl: 'templates/students/degree.html',
 				controller: function($scope, $uibModalInstance, degree) {
+					Institution.all().success(function(response) {
+						$scope.institutions = response.institutions;
+					});
 					if (isGraduate) {
 						$scope.degreeTitle = 'Add Graduate Degree';
 					} else {
 						$scope.degreeTitle = 'Add Undergraduate Degree';
 					}
-					Institution.all().success(function(response) {
-						$scope.institutions = response.institutions;
-					});
 					$scope.ok = function() {
 						$scope.degree = {
 							"institutionName": $scope.institutionName,
@@ -231,7 +232,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 						$uibModalInstance.dismiss('cancel');
 					};
 				},
-				size: 'sm',
+				size: 'md',
 				resolve: {
 					degree: function() {
 						return $scope.degree;
@@ -252,7 +253,140 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 					}
 					$scope.student.undergraduateDegrees.push(degree);
 				}
-				Student.create($scope.student._id, $scope.student)
+				Student.update($scope.student._id, $scope.student)
+					.then(
+						function(response) {
+							console.log(response);
+						},
+						function(response) {
+							console.log(response);
+						}
+					);
+			});
+		};
+
+		$scope.editMinistry = function(studentID, ministryID) {
+			console.log("Edit ministry index  = " + $scope.index);
+            Student.get(studentID).success(function(res) {
+                $rootScope.student = res.student;
+            });
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: 'templates/students/ministry.html',
+                    controller: function($scope, $uibModalInstance, Ministry, Student) {
+                        Institution.all().success(function(response) {
+							$scope.institutions = response.institutions;
+						});
+                        $scope.ministries = [];
+                        $scope.ministries = $rootScope.student.ministries;
+                        $scope.ministry = null;
+
+
+
+                        for (var i = 0; i < $scope.ministries.length; i++) {
+                            if ($scope.ministries[i]._id == ministryID) {
+                                $scope.ministry = $scope.ministries[i];
+                                $rootScope.index = i;
+                            }
+                        }
+
+                        $scope.ministryTitle = 'Edit Ministry';
+                        $scope.ministryName = $scope.ministry.ministryName;
+                        $scope.ministrySupervisor = $scope.ministry.ministrySupervisor;
+                        $scope.ministrySupervisorTitle = $scope.ministry.ministrySupervisorTitle;
+                        $scope.ministrySupervisorPhoneNumber = $scope.ministry.ministrySupervisorPhoneNumber;
+                        $scope.ministryDescription = $scope.ministry.ministryDescription;
+
+                        $scope.ok = function() {
+                            $scope.ministry = {
+								"ministryName": $scope.ministryName,
+								"ministrySupervisor": $scope.ministrySupervisor,
+								"ministrySupervisorTitle": $scope.ministrySupervisorTitle,
+								"ministrySupervisorPhoneNumber": $scope.ministrySupervisorPhoneNumber,
+								"ministryDescription": $scope.ministryDescription
+							};
+          					$uibModalInstance.close($scope.ministry);
+                    	};
+
+
+                        $scope.cancel = function() {
+						$uibModalInstance.dismiss('cancel');
+					};
+				},
+				size: 'md',
+				resolve: {
+					ministry: function() {
+						return $scope.ministry;
+					}
+				}
+			});
+
+			modalInstance.result.then(function(ministry) {
+				if (!$scope.student.ministries) {
+					$scope.student.ministries = [];
+				}
+				console.log($rootScope.index);
+				$scope.student.ministries.splice($rootScope.index, 1, ministry);
+				Student.update($scope.student._id, $scope.student)
+					.then(
+						function(response) {
+							console.log(response);
+						},
+						function(response) {
+							console.log(response);
+						}
+					);
+			});
+		};           
+		
+		$scope.deleteMinistry = function(studentID, ministryID) {
+            Student.get(studentID).success(function(res) {
+                $rootScope.student = res.student;
+            });
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: 'templates/alert/confirm.html',
+                    controller: function($scope, $uibModalInstance, Course, Semester) {
+                        $scope.comtent = 'Are you sure you want to delete?'
+                        $scope.ministries = [];
+                        $scope.ministries = $rootScope.student.ministries;
+                        $scope.ministry = null;
+
+
+
+                        for (var i = 0; i < $scope.ministries.length; i++) {
+                            if ($scope.ministries[i]._id == ministryID) {
+                                $scope.ministry = $scope.ministries[i];
+                                $rootScope.index = i;
+                            }
+                        }
+
+                        $scope.ok = function() {
+          					$uibModalInstance.close($scope.ministry);
+                    	};
+
+
+                        $scope.cancel = function() {
+						$uibModalInstance.dismiss('cancel');
+					};
+				},
+				size: 'md',
+				resolve: {
+					ministry: function() {
+						return $scope.ministry;
+					}
+				}
+			});
+
+			modalInstance.result.then(function(ministry) {
+				if (!$scope.student.ministries) {
+					$scope.student.ministries = [];
+				}
+				console.log($rootScope.index);
+				$scope.student.ministries.splice($rootScope.index, 1);
+				Student.update($scope.student._id, $scope.student)
 					.then(
 						function(response) {
 							console.log(response);
@@ -270,12 +404,12 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 				templateUrl: 'templates/students/ministry.html',
 				controller: function($scope, $uibModalInstance, ministry) {
 					$scope.ministryTitle = 'Add Ministry';
-					Ministry.all().success(function(response) {
-						$scope.ministries = response.ministries;
+					Institution.all().success(function(response) {
+						$scope.institutions = response.institutions;
 					});
 					$scope.ok = function() {
 						$scope.ministry = {
-							"ministryName": $scope.ministryName,
+							"ministryName": $scope.institutionName,
 							"ministrySupervisor": $scope.ministrySupervisor,
 							"ministrySupervisorTitle": $scope.ministrySupervisorTitle,
 							"ministrySupervisorPhoneNumber": $scope.ministrySupervisorPhoneNumber,
@@ -288,7 +422,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 						$uibModalInstance.dismiss('cancel');
 					};
 				},
-				size: 'sm',
+				size: 'md',
 				resolve: {
 					ministry: function() {
 						return $scope.ministry;
@@ -301,7 +435,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 					$scope.student.ministries = [];
 				}
 				$scope.student.ministries.push(ministry);
-				Student.create($scope.student._id, $scope.student)
+				Student.update($scope.student._id, $scope.student)
 					.then(
 						function(response) {
 							console.log(response);
@@ -339,7 +473,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 						$uibModalInstance.dismiss('cancel');
 					};
 				},
-				size: 'sm',
+				size: 'md',
 				resolve: {
 					contact: function() {
 						return $scope.contact;
@@ -352,7 +486,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 				} else {
 					$scope.student.references.push(contact);
 				}
-				Student.create($scope.student._id, $scope.student)
+				Student.update($scope.student._id, $scope.student)
 					.then(
 						function(response) {
 							console.log(response);
@@ -363,6 +497,141 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 					);
 			});
 		};
+
+		$scope.editContact = function(studentID, contactID) {
+			console.log("Edit ministry index  = " + $scope.index);
+            Student.get(studentID).success(function(res) {
+                $rootScope.student = res.student;
+            });
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: 'templates/students/contact.html',
+                    controller: function($scope, $uibModalInstance, Contact, Student) {
+                        Institution.all().success(function(response) {
+							$scope.institutions = response.institutions;
+						});
+                        $scope.references = [];
+                        $scope.references = $rootScope.student.references;
+                        $scope.ministry = null;
+
+
+
+                        for (var i = 0; i < $scope.references.length; i++) {
+                            if ($scope.references[i]._id == ministryID) {
+                                $scope.ministry = $scope.references[i];
+                                $rootScope.index = i;
+                            }
+                        }
+
+                        $scope.ministryTitle = 'Edit Ministry';
+                        $scope.ministryName = $scope.ministry.ministryName;
+                        $scope.ministrySupervisor = $scope.ministry.ministrySupervisor;
+                        $scope.ministrySupervisorTitle = $scope.ministry.ministrySupervisorTitle;
+                        $scope.ministrySupervisorPhoneNumber = $scope.ministry.ministrySupervisorPhoneNumber;
+                        $scope.ministryDescription = $scope.ministry.ministryDescription;
+
+                        $scope.ok = function() {
+                            $scope.ministry = {
+								"ministryName": $scope.ministryName,
+								"ministrySupervisor": $scope.ministrySupervisor,
+								"ministrySupervisorTitle": $scope.ministrySupervisorTitle,
+								"ministrySupervisorPhoneNumber": $scope.ministrySupervisorPhoneNumber,
+								"ministryDescription": $scope.ministryDescription
+							};
+          					$uibModalInstance.close($scope.ministry);
+                    	};
+
+
+                        $scope.cancel = function() {
+						$uibModalInstance.dismiss('cancel');
+					};
+				},
+				size: 'md',
+				resolve: {
+					ministry: function() {
+						return $scope.ministry;
+					}
+				}
+			});
+
+			modalInstance.result.then(function(ministry) {
+				if (!$scope.student.references) {
+					$scope.student.references = [];
+				}
+				console.log($rootScope.index);
+				$scope.student.references.splice($rootScope.index, 1, ministry);
+				Student.update($scope.student._id, $scope.student)
+					.then(
+						function(response) {
+							console.log(response);
+						},
+						function(response) {
+							console.log(response);
+						}
+					);
+			});
+		};           
+		
+		$scope.deleteMinistry = function(studentID, ministryID) {
+            Student.get(studentID).success(function(res) {
+                $rootScope.student = res.student;
+            });
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: 'templates/alert/confirm.html',
+                    controller: function($scope, $uibModalInstance, Course, Semester) {
+                        $scope.comtent = 'Are you sure you want to delete?'
+                        $scope.ministries = [];
+                        $scope.ministries = $rootScope.student.ministries;
+                        $scope.ministry = null;
+
+
+
+                        for (var i = 0; i < $scope.ministries.length; i++) {
+                            if ($scope.ministries[i]._id == ministryID) {
+                                $scope.ministry = $scope.ministries[i];
+                                $rootScope.index = i;
+                            }
+                        }
+
+                        $scope.ok = function() {
+          					$uibModalInstance.close($scope.ministry);
+                    	};
+
+
+                        $scope.cancel = function() {
+						$uibModalInstance.dismiss('cancel');
+					};
+				},
+				size: 'md',
+				resolve: {
+					ministry: function() {
+						return $scope.ministry;
+					}
+				}
+			});
+
+			modalInstance.result.then(function(ministry) {
+				if (!$scope.student.ministries) {
+					$scope.student.ministries = [];
+				}
+				console.log($rootScope.index);
+				$scope.student.ministries.splice($rootScope.index, 1);
+				Student.update($scope.student._id, $scope.student)
+					.then(
+						function(response) {
+							console.log(response);
+						},
+						function(response) {
+							console.log(response);
+						}
+					);
+			});
+		};
+
+
 	})
 	.controller('AddStudentsCtrl', function ($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry) {		
 		$scope.student = {

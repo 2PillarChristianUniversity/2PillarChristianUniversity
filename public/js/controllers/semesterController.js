@@ -274,6 +274,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $scope.editCourse = function(semesterID, courseID) {
             Semester.get(semesterID).success(function(res) {
                 $rootScope.semester = res.semester;
+                console.log($rootScope.semester.name);
 
                 var modalInstance = $uibModal.open({
                     animation: true,
@@ -287,7 +288,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                                 $scope.course = $scope.courseList[i];
                             }
                         }
-
                         $scope.courseTitle = 'Edit Course';
                         $scope.semesterName = $rootScope.semester.name;
                         $scope.scheduleDates = $scope.course.scheduleDates;

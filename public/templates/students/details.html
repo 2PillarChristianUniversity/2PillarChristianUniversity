@@ -181,6 +181,7 @@
 			</tbody>
 		</table>
 		<button class="btn btn-xs btn-primary" ng-click="addDegree(true)">Add Degree</button>
+		<button class="btn btn-xs btn-primary" ng-click="deleteDegree(degree._id)">Edit Degree</button>
 	</uib-tab>
 	<uib-tab index="2" heading="Ministry">
 		<table class="table table-hover">
@@ -190,6 +191,7 @@
 				<th>Supervisor's Title</th>
 				<th>Supervisor's Phone Number</th>
 				<th>Description</th>
+				<th>Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="ministry in student.ministries">
@@ -208,10 +210,16 @@
 					<td>
 						<p>{{ministry.ministryDescription}}</p>
 					</td>
+					
+					<td>
+					<button class="btn btn-xs btn-primary" ng-click="editMinistry(student._id, ministry._id)">Edit</button>
+					<button class="btn btn-xs btn-primary" ng-click="deleteMinistry(student._id, ministry._id)">Delete</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 		<button class="btn btn-xs btn-primary" ng-click="addMinistry()">Add Ministry</button>
+
 	</uib-tab>
 	<uib-tab index="3" heading="Contacts">
 		<h4>Emergency Contacts</h4>
@@ -221,6 +229,7 @@
 				<th>Email</th>
 				<th>Phone</th>
 				<th>Relationship</th>
+				<th>Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="contact in student.emergencyContacts">
@@ -236,6 +245,11 @@
 					<td>
 						<p>{{contact.relationship}}</p>
 					</td>
+					<td>
+						<button class="btn btn-xs btn-primary" ng-click="editContact(student._id, contact._id)">Edit</button>
+						<button class="btn btn-xs btn-primary" ng-click="deleteContact(student._id, contact._id)">Delete</button>
+					</td>
+
 				</tr>
 			</tbody>
 		</table>
