@@ -1,22 +1,25 @@
 angular.module('smsApp', [
-	'auth0',
-	'ngRoute',
-	'ngResource',
-	'smsApp-home',
-	'smsApp-students',
-	'smsApp-professors',
-	'smsApp-courses',
-	'smsApp-semesters',
-	'smsApp-institutions',
-	'angular-storage',
-	'angular-jwt',
-	'ui.bootstrap',
-	'datatables',
-	'ngNotificationsBar',
-	'ngSanitize'
+		'auth0',
+		'ngRoute',
+		'ngResource',
+		'smsApp-home',
+		'smsApp-students',
+		'smsApp-professors',
+		'smsApp-courses',
+		'smsApp-semesters',
+		'smsApp-institutions',
+		'angular-storage',
+		'angular-jwt',
+		'ui.bootstrap',
+		'datatables',
+		'ngNotificationsBar',
+		'ngSanitize',
+		'angularBootstrapNavTree',
+		'ui.calendar'
 
-])
-	.config(function ($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider, notificationsConfigProvider) {
+	])
+	.config(function($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider, 
+		notificationsConfigProvider) {
 		$routeProvider
 			.when('/home', {
 				controller: 'HomeCtrl',
@@ -57,7 +60,7 @@ angular.module('smsApp', [
 				controller: 'SemesterListCtrl',
 				templateUrl: 'templates/semesters/index.html',
 				requiresLogin: true
-			})	
+			})
 			.when('/professors', {
 				controller: 'ProfessorListCtrl',
 				templateUrl: 'templates/professors/index.html',
@@ -85,21 +88,21 @@ angular.module('smsApp', [
 			loginUrl: '/login'
 		});
 
-		authProvider.on('loginSuccess', function ($location, profilePromise, idToken, store) {
-			profilePromise.then(function (profile) {
+		authProvider.on('loginSuccess', function($location, profilePromise, idToken, store) {
+			profilePromise.then(function(profile) {
 				store.set('profile', profile);
 				store.set('token', idToken);
 			});
 			$location.path('/home');
 		});
-		authProvider.on('loginFailure', function ($location) {
+		authProvider.on('loginFailure', function($location) {
 			$location.path('/error=login%20failure');
 		});
-		authProvider.on('authenticated', function ($location) {
+		authProvider.on('authenticated', function($location) {
 			console.log("Authenticated");
 		});
 
-		jwtInterceptorProvider.tokenGetter = function (store) {
+		jwtInterceptorProvider.tokenGetter = function(store) {
 			return store.get('token');
 		};
 
@@ -114,8 +117,9 @@ angular.module('smsApp', [
 		notificationsConfigProvider.setAutoHideAnimation('fadeOutNotifications');
 		// delay between animation and removing the nofitication
 		notificationsConfigProvider.setAutoHideAnimationDelay(1200);
-	}).run(function ($rootScope, auth, store, jwtHelper, $location, Student) {
-		$rootScope.$on('$locationChangeStart', function () {
+
+	}).run(function($rootScope, auth, store, jwtHelper, $location, Student) {
+		$rootScope.$on('$locationChangeStart', function() {
 			var token = store.get('token');
 			if (token) {
 				if (!jwtHelper.isTokenExpired(token)) {
@@ -137,7 +141,7 @@ angular.module('smsApp', [
 			}
 		});
 
-		$rootScope.logout = function () {
+		$rootScope.logout = function() {
 			auth.signout();
 			store.remove('profile');
 			store.remove('token');

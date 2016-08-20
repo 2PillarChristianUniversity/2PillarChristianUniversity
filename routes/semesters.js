@@ -14,41 +14,66 @@ function createAutoId(index) {
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
 
-    router.get('/semester/id/:id', function (req, res) {
-        db.collection(colName).findOne({ _id: req.params.id }, function (error, semester) {
+    router.get('/semester/id/:id', function(req, res) {
+        db.collection(colName).findOne({
+            _id: req.params.id
+        }, function(error, semester) {
             if (error) {
                 return res.
-                    status(500).
-                    json({ error: error.toString() });
+                status(500).
+                json({
+                    error: error.toString()
+                });
             }
-            res.json({ semester: semester });
+            res.json({
+                semester: semester
+            });
         });
     });
 
-    router.get('/semesters/', function (req, res) {
-        db.collection(colName).find().sort( { "name": 1 } ).toArray(function (error, semester) {            
+    router.get('/semesters/', function(req, res) {
+
+        db.collection(colName).aggregate([{
+            $lookup: {
+                from: "Courses",
+                localField: "_id",
+                foreignField: "semesters",
+                as: "Courses"
+            }
+        }],function(error, semesters) {
+            console.log(semesters);
             if (error) {
                 return res.
-                    status(500).
-                    json({ error: error.toString() });
+                status(500).
+                json({
+                    error: error.toString()
+                });
             }
-            res.json({ semesters: semester });
+            res.json({
+                semesters: semesters
+            });
         });
     });
 
-    router.post('/semester/id/:id', function (req, res) {
-        db.collection(colName).update({ _id: req.params.id}, req.body, function (error, semester) {
+    router.post('/semester/id/:id', function(req, res) {
+        db.collection(colName).update({
+            _id: req.params.id
+        }, req.body, function(error, semester) {
             if (error) {
                 return res.
-                    status(500).
-                    json({ error: error.toString() });
+                status(500).
+                json({
+                    error: error.toString()
+                });
             }
-            res.json({ semester: semester });
+            res.json({
+                semester: semester
+            });
         });
     });
 
     // create new 
-    router.put('/semester', function(req, res) {        
+    router.put('/semester', function(req, res) {
         db.collection(colName, {
             strict: true
         }, function(err, collection) { // check exists collection
@@ -88,14 +113,20 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
     });
 
     // detele
-    router.delete('/semester/id/:id', function (req, res) {
-        db.collection(colName).deleteOne({ _id: req.params.id }, function (error, professor) {
-             if (error) {
+    router.delete('/semester/id/:id', function(req, res) {
+        db.collection(colName).deleteOne({
+            _id: req.params.id
+        }, function(error, professor) {
+            if (error) {
                 return res.
-                    status(400).
-                    json({ error: "Can't delete professor..." });
+                status(400).
+                json({
+                    error: "Can't delete professor..."
+                });
             }
-            res.json({ success: "Delete success." });
+            res.json({
+                success: "Delete success."
+            });
         });
     });
 

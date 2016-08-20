@@ -7,7 +7,7 @@ var util = require('util'),
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');    
+var bodyParser = require('body-parser');
 
 var courses = require('./routes/courses'),
     groups = require('./routes/groups'),
@@ -17,8 +17,7 @@ var courses = require('./routes/courses'),
     students = require('./routes/students'),
     semesters = require('./routes/semesters');
 
-
-var port = 3000;
+var port = Number(process.env.PORT || 3000);
 var app = express();
 
 // var jwtCheck = jwt({
@@ -33,7 +32,7 @@ var jwtCheck = jwt({
 
 app.use(bodyParser.json());
 app.use(expressValidator());
-
+console.log();
 // app.use('/api', jwtCheck);
 
 

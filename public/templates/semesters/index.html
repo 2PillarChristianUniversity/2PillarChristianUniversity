@@ -3,9 +3,15 @@
     <br>
     <br>
     <uib-tabset active="active">
-        <uib-tab index="0" heading="Previous Courses">
+
+        <uib-tab index="0" heading="Calendar">
+           <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources2"></div>  
         </uib-tab>
-        <uib-tab index="1" heading="Courses">
+
+        <uib-tab index="1" heading="Previous Courses">
+            <semester-treeview></semester-treeview>
+        </uib-tab>
+        <uib-tab index="2" heading="Courses">
             <br>
             <button class="btn btn-primary" ng-click="AddSemester()">Add Semester</button>
             <br>
@@ -14,11 +20,11 @@
                 <div class="panel-heading">{{semester.name}}
                     <span style="float:right">
                         <a href="javascript:void(0)" ng-click="editSemester(semester._id)">
-                            edit
+                            Edit
                         </a>
                         |
                         <a href="javascript:void(0)" ng-click="removeSemester(semester._id)">
-                            delete
+                            Delete
                             </a>
                     </span>
                 </div>
@@ -34,7 +40,7 @@
                             <th>End Date</th>
                             <th>Actions</th>
                         </thead>
-                        <tr ng-repeat="course in semester.courseList">
+                        <tr ng-repeat="course in semester.Courses">
                             <td>{{course._id}}</td>
                             <td>{{course.name}}</td>
                             <td>{{course.startDate | date}}</td>

@@ -1,17 +1,14 @@
 <div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
-	<div class="col-lg-1">
+	<div class="col-lg-2 text-left no-padding">
 		<button type="button" class="btn btn-primary" ng-click="addProfessor()">New Professor</button>
 	</div>
-	<div class="col-lg-10">
+	<div class="col-lg-10 text-right no-padding">
 		<b>Professor ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
 		<b>Name</b> <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Professor Name">
 		<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
 	</div>
 	<br>
 	<br>
-	<br>
-	<br>
-
 	<table datatable="ng" class="table table-bordered table-hover" id="professorTable" ng-show="professors.length" >
 		<thead>
 			<tr>

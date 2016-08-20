@@ -12,4 +12,6 @@
 3. if cannot run install bower 
 	sudo apt-get install nodejs-legacy
 
-	 DEBUG=PillarSeminary:* npm start
+	DEBUG=express:* node index.js
+    https://github.com/nickperkinslondon/angular-bootstrap-nav-tree
+    https://github.com/angular-ui/ui-calendar
