@@ -33,7 +33,7 @@ var jwtCheck = jwt({
 app.use(bodyParser.json());
 app.use(expressValidator());
 console.log();
-app.use('/api', jwtCheck);
+// app.use('/api', jwtCheck);
 
 
 app.use('/api', courses);
@@ -43,6 +43,7 @@ app.use('/api', institutions);
 app.use('/api', ministries);
 app.use('/api', students);
 app.use('/api', professors);
+app.use('/api', financials);
 
 app.use(express.static(__dirname + '/public'));
 

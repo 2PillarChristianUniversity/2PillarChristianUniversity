@@ -1,0 +1,37 @@
+<div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
+	<div class="col-lg-10">
+		<b>Financial ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
+		<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+
+	<table datatable="ng" class="table table-bordered table-hover" id="financialTable" ng-show="financials.length" >
+		<thead>
+			<tr>
+				<th>StudentID</th>
+				<th>Student Name</th>
+				<th>Semester</th>
+				<th>Comments</th>
+				<th>Monthly payment</th>
+				<th>Status</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="cursor: pointer;" ng-repeat="financial in students.financials" >
+				<td ng-click="financialDetails(financial._id)">{{financial.studentID}}</td>
+				<td ng-click="studentDetails(financial._id)">{{financial.studentLastName}}, {{financial.studentFirstName}} {{financial.studentMiddleName}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.semester}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.comment}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.monthlyPayment}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.status}}</td>
+				<td>
+					<a type="submit" title="edit" ng-click="editFinancial(financial._id)">Edit</a>
+			    </td>
+			</tr>
+		</tbody>
+	</table>
+</div>
