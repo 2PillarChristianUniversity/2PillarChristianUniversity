@@ -43,6 +43,7 @@ app.use('/api', institutions);
 app.use('/api', ministries);
 app.use('/api', students);
 app.use('/api', professors);
+app.use('/api', financials);
 
 app.use(express.static(__dirname + '/public'));
 

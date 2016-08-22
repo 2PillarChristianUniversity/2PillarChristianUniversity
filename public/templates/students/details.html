@@ -136,6 +136,7 @@
 				<th>Degree</th>
 				<th>Field</th>
 				<th>Graduation Date</th>
+				<th>Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="degree in student.undergraduateDegrees">
@@ -151,6 +152,10 @@
 					<td>
 						<p>{{degree.graduationDate | date}}</p>
 					</td>
+					<td>
+					<button class="btn btn-xs btn-primary" ng-click="editDegree(student._id, degree._id, false)">Edit</button>
+					<button class="btn btn-xs btn-primary" ng-click="deleteDegree(student._id, degree._id, false)">Delete</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -162,6 +167,7 @@
 				<th>Degree</th>
 				<th>Field</th>
 				<th>Graduation Date</th>
+				<th>Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="degree in student.graduateDegrees">
@@ -177,11 +183,14 @@
 					<td>
 						<p>{{degree.graduationDate | date}}</p>
 					</td>
+					<td>
+					<button class="btn btn-xs btn-primary" ng-click="editDegree(student._id, degree._id, true)">Edit</button>
+					<button class="btn btn-xs btn-primary" ng-click="deleteDegree(student._id, degree._id, true)">Delete</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 		<button class="btn btn-xs btn-primary" ng-click="addDegree(true)">Add Degree</button>
-		<button class="btn btn-xs btn-primary" ng-click="deleteDegree(degree._id)">Edit Degree</button>
 	</uib-tab>
 	<uib-tab index="2" heading="Ministry">
 		<table class="table table-hover">
@@ -209,8 +218,7 @@
 					</td>
 					<td>
 						<p>{{ministry.ministryDescription}}</p>
-					</td>
-					
+					</td>					
 					<td>
 					<button class="btn btn-xs btn-primary" ng-click="editMinistry(student._id, ministry._id)">Edit</button>
 					<button class="btn btn-xs btn-primary" ng-click="deleteMinistry(student._id, ministry._id)">Delete</button>
@@ -246,8 +254,8 @@
 						<p>{{contact.relationship}}</p>
 					</td>
 					<td>
-						<button class="btn btn-xs btn-primary" ng-click="editContact(student._id, contact._id)">Edit</button>
-						<button class="btn btn-xs btn-primary" ng-click="deleteContact(student._id, contact._id)">Delete</button>
+						<button class="btn btn-xs btn-primary" ng-click="editContact(student._id, contact._id, true)">Edit</button>
+						<button class="btn btn-xs btn-primary" ng-click="deleteContact(student._id, contact._id, true)">Delete</button>
 					</td>
 
 				</tr>
@@ -261,6 +269,7 @@
 				<th>Email</th>
 				<th>Phone</th>
 				<th>Relationship</th>
+				<th>Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="reference in student.references">
@@ -276,13 +285,43 @@
 					<td>
 						<p>{{reference.relationship}}</p>
 					</td>
+					<td>
+						<button class="btn btn-xs btn-primary" ng-click="editContact(student._id, contact._id, false)">Edit</button>
+						<button class="btn btn-xs btn-primary" ng-click="deleteContact(student._id, contact._id, false)">Delete</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 		<button class="btn btn-xs btn-primary" ng-click="addContact(false)">Add Reference</button>
 	</uib-tab>
 	<uib-tab index="4" heading="Financial">
-
+		<h4>Financial</h4>
+		<table class="table table-hover">
+			<thead>
+				<th>Semester</th>
+				<th>Monthly payment</th>
+				<th>Status</th>
+				<th>Action</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="financial in student.financials">
+					<td>
+						<p>{{financial.semester}}</p>
+					</td>
+					<td>
+						<p>{{financial.monthlyPayment}}</p>
+					</td>
+					<td>
+						<p>{{financial.status}}</p>
+					</td>
+					<td>
+						<button class="btn btn-xs btn-primary" ng-click="editFinancial(student._id, financial._id)">Edit</button>
+						<button class="btn btn-xs btn-primary" ng-click="deleteFinancial(student._id, financial._id)">Delete</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<button class="btn btn-xs btn-primary" ng-click="addRequest(student._id)">Send request</button>
 	</uib-tab>
 	<uib-tab index="5" heading="Courses">
 
