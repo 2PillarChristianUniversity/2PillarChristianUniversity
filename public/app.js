@@ -8,6 +8,7 @@ angular.module('smsApp', [
 		'smsApp-courses',
 		'smsApp-semesters',
 		'smsApp-institutions',
+		'smsApp-financials',
 		'angular-storage',
 		'angular-jwt',
 		'ui.bootstrap',
@@ -69,6 +70,11 @@ angular.module('smsApp', [
 			.when('/institutions', {
 				controller: 'InstitutionListCtrl',
 				templateUrl: 'templates/institutions/index.html',
+				requiresLogin: true
+			})
+			.when('/financials', {
+				controller: 'FinancialListCtrl',
+				templateUrl: 'templates/financials/index.html',
 				requiresLogin: true
 			})
 			.when('/login', {

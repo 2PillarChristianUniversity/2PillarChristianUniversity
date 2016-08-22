@@ -5,7 +5,8 @@
     <div class="modal-body">
         <div class="form-group">
             <label for="institution_name">Ministry</label>
-            <select class="form-control" ng-options="ministry._id as ministry._id for ministry in ministries" ng-model="ministryName"></select>
+            <select class="form-control" id="institution_name" ng-model='institutionName' ng-options="institution._id as institution._id for institution in institutions" required placeholder="Institution Name">
+            </select>
         </div>
         <div class="form-group">
             <label for="degree">Supervisor</label>
@@ -17,7 +18,6 @@
         </div>
         <div class="form-group">
             <label for="graduation_date">Supervisor Phone Number</label>
-
             <input type="text" class="form-control" id="ministry_supervisorPhoneNumber" ng-model='ministrySupervisorPhoneNumber' required placeholder="Supervisor Phone Number">
         </div>
          <div class="form-group">
