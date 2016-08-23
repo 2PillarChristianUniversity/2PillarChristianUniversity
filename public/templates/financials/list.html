@@ -21,13 +21,13 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr style="cursor: pointer;" ng-repeat="financial in students.financials" >
-				<td ng-click="financialDetails(financial._id)">{{financial.studentID}}</td>
-				<td ng-click="studentDetails(financial._id)">{{financial.studentLastName}}, {{financial.studentFirstName}} {{financial.studentMiddleName}}</td>
-				<td ng-click="financialDetails(financial._id)">{{financial.semester}}</td>
-				<td ng-click="financialDetails(financial._id)">{{financial.comment}}</td>
-				<td ng-click="financialDetails(financial._id)">{{financial.monthlyPayment}}</td>
-				<td ng-click="financialDetails(financial._id)">{{financial.status}}</td>
+			<tr style="cursor: pointer;" ng-repeat="financial in financials" >
+				<td ng-click="financialDetails(financial._id)">{{financials.studentID}}</td>
+				<td ng-click="studentDetails(financial._id)">{{student.lastName}}, {{student.firstName}} {{student.middleName}}</td>
+				<td ng-click="financialDetails(financial._id)">{{student.gender}}</td>
+				<td ng-click="financialDetails(financial._id)">{{student.email}}</td>
+				<td ng-click="financialDetails(financial._id)">{{student.city}}</td>
+				<td ng-click="financialDetails(financial._id)">{{student.state}}</td>
 				<td>
 					<a type="submit" title="edit" ng-click="editFinancial(financial._id)">Edit</a>
 			    </td>

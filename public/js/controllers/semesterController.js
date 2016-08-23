@@ -379,15 +379,15 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                 $scope.coures = course;
                 $scope.coures.semesters = semesterID;
 
+
                 Course.insert($scope.coures)
                     .then(
-                        function(response) {
-                            Course.all().success(function(response) {
-                                $scope.courses = response.courses;
-
-                            });
+                        function(response) {                           
                             notifications.showSuccess({
                                 message: 'Add Course successfully.'
+                            });
+                             Course.all().success(function(response) {
+                                $scope.courses = response.courses;
                             });
                         },
                         function(response) {
@@ -397,7 +397,60 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                 
             });
 
-        }
+        };
+
+        $scope.deleteCourse = function(id) {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/alert/confirm.html',
+                controller: function($scope, $uibModalInstance, Course) {
+
+                    $scope.comtent = 'Are you sure you want to delete?'
+
+                    $scope.ok = function() {
+
+                        Course.delete(id)
+                            .then(
+                                function(response) {
+                                    Course.all().success(function(response) {
+                                        $scope.courses = response.courses;
+                                    });
+
+                                    notifications.showSuccess({
+                                        message: 'Delete course successfully.'
+                                    });
+                                    $uibModalInstance.close(true);
+                                },
+                                function(response) {
+                                    notifications.showError({
+                                        message: response.error
+                                    });
+                                });
+                    }
+
+                    $scope.cancel = function() {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+
+                },
+                size: 'sm',
+                resolve: {
+                    isfinished: function() {
+                        return true
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(result) {
+                if (result == true) {
+                    Course.all().success(function(response) {
+                        $scope.courses = response.courses;
+                    });
+
+                }
+            });
+        };
 
         // remove semester
         $scope.removeSemester = function(id) {
@@ -453,60 +506,71 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         }; // ------------
 
         // edit course
-        $scope.editCourse = function(semesterID, courseID) {
-            Semester.get(semesterID).success(function(res) {
-                $rootScope.semester = res.semester;
-                console.log($rootScope.semester.name);
-
+        $scope.editCourse = function(id) {
+            Course.get(id).success(function(res) {
+                $rootScope.course = res.course;
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/semesters/course.html',
-                    controller: function($scope, $uibModalInstance, Course, Semester) {
-                        $scope.courseList = $rootScope.semester.courseList;
-                        $scope.course = null;
+                    controller: function($scope, $uibModalInstance, Course) {
 
-                        for (var i = 0; i < $scope.courseList.length; i++) {
-                            if ($scope.courseList[i]._id == courseID) {
-                                $scope.course = $scope.courseList[i];
-                            }
-                        }
-                        $scope.courseTitle = 'Edit Course';
-                        $scope.semesterName = $rootScope.semester.name;
-                        $scope.scheduleDates = $scope.course.scheduleDates;
-                        $scope.dateOff = $scope.course.dateOff;
+                        $scope.parseDate = function(date) {
+                            return new Date(Date.parse(date));
 
-                        $scope.courseSubmit = function() {
-                            // $scope.course = {
-                            //     name: $scope.name,
-                            //     startDate: $scope.startDate,
-                            //     endDate: $scope.endDate,
-                            //     duration: $scope.duration,
-                            //     noMember: $scope.noMember,
-                            //     scheduleDate: $scope.scheduleDates,
-                            //     dateOff: $scope.dateOff
-
-                            // };
-                            // $uibModalInstance.close($scope.course);
                         };
+                        
+                        $scope.courseTitle = 'Edit Course';
+                        $scope.semesterName = $rootScope.course.semesters;
+                        $scope.name = $rootScope.course.name;
+                        $scope.duration = $rootScope.course.duration;
+                        $scope.noMember = $rootScope.course.noMember;                        
+                        $scope.startDate = new Date($rootScope.course.startDate); 
+                        $scope.endDate = new Date($rootScope.course.endDate);                       
 
+
+                        $scope.semesterSubmit = function() {
+                            $rootScope.semester.name = $scope.name;
+                            $rootScope.semester.startDate = $scope.startDate;
+                            $rootScope.semester.endDate = $scope.endDate;
+
+                            Semester.update($rootScope.semester._id, $rootScope.semester)
+                                .then(
+                                    function(response) {
+                                        notifications.showSuccess({
+                                            message: 'Add Course successfully.'
+                                        });
+                                        $uibModalInstance.close(true);
+                                    },
+                                    function(response) {
+                                        console.log(response);
+                                    }
+                                );
+
+                        };
 
                         $scope.cancel = function() {
                             $uibModalInstance.dismiss('cancel');
                         };
-
                     },
-                    size: 'md',
+                    size: 'sm',
                     resolve: {
-                        course: function() {
-                            return $scope.course;
+                        isfinished: function() {
+                            return true;
                         }
                     }
                 });
 
-
+                modalInstance.result.then(function(isfinished) {
+                    if (isfinished === true) {
+                        Semester.all().success(function(response) {
+                            $scope.semesters = response.semesters;
+                        });
+                    }
+                });
 
             });
-        }; //-------------------
+        }
+         //-------------------
 
     })
     .controller('SemesterTreeviewCtrl', function($scope, $rootScope, $routeParams,
