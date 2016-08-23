@@ -14,6 +14,32 @@ function createAutoId(index) {
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
 
+    router.get('/treelist/', function(req, res) {
+        db.collection('Semesters').find().forEach(
+            function(semester) {
+                semester.courses = db.collection('Courses').findOne({
+                    "semesters": semester._id
+                });
+                semester.courses.students = db.collection('Students').find({
+                    "courses": semester.courses._id
+                }).toArray();
+
+                db.collection('treeList').insert(semester);
+            }
+        );
+       // db.collection('treeList').find().toArray(function (error, semester) {
+       //      console.log(semester);
+       //      if (error) {
+       //          return res.
+       //              status(500).
+       //              json({ error: error });
+       //      }
+       //      res.json({ semester: semester });
+       //  });
+        
+        
+    });
+
     router.get('/semester/id/:id', function(req, res) {
         db.collection(colName).findOne({
             _id: req.params.id
@@ -40,8 +66,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                 foreignField: "semesters",
                 as: "Courses"
             }
-        }],function(error, semesters) {
-            console.log(semesters);
+        }], function(error, semesters) {
             if (error) {
                 return res.
                 status(500).

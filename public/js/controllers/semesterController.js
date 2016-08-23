@@ -3,9 +3,15 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
     ])
     .controller('SemesterListCtrl', function($scope, $rootScope, $routeParams, $location,
         $uibModal, Semester, notifications, Course, $compile, uiCalendarConfig) {
+
+        Semester.getTreeList().success(function(response) {
+                    $scope.treeList = response.semesters;
+                    console.log($scope.treeList);
+                });
+
          Semester.all().success(function(response) {
                     $scope.semesters = response.semesters;
-                    console.log($scope.semesters);
+                    // console.log($scope.semesters);
                 });
 
         // function CalendarCtrl($scope,$compile,uiCalendarConfig) {
