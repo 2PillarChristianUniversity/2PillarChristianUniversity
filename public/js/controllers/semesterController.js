@@ -3,9 +3,10 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
     ])
     .controller('SemesterListCtrl', function($scope, $rootScope, $routeParams, $location,
         $uibModal, Semester, notifications, Course, $compile, uiCalendarConfig) {
+
          Semester.all().success(function(response) {
                     $scope.semesters = response.semesters;
-                    console.log($scope.semesters);
+                    // console.log($scope.semesters);
                 });
 
         // function CalendarCtrl($scope,$compile,uiCalendarConfig) {
@@ -587,6 +588,24 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
     })
     .controller('SemesterTreeviewCtrl', function($scope, $rootScope, $routeParams,
         $location, $uibModal, Semester, notifications, Course) {
+
+        Semester.getTreeList().success(function(response) {
+                    $scope.semesters_list = response.semesters;
+                    $scope.courses_list = response.courses;
+                    $scope.semesters_list.forEach(function (semester) {
+                         $scope.courses_list.forEach(function (course) {
+                            if(semester._id == course.semesters) {
+                                if(!semester.courses) {
+                                    semester.courses = [];
+                                }
+                                semester.courses.push(course);
+                            }
+                         });
+                    });
+                    console.log($scope.semesters_list);
+                   
+                });
+        
 
         var apple_selected, tree, treedata_avm, treedata_geography;
         $scope.my_tree_handler = function(branch) {
