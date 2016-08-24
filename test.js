@@ -52,6 +52,7 @@ describe('Group API', function () {
 		app.use('/api', institutions);
 		app.use('/api', ministries);
 		app.use('/api', students);
+		app.use('/api', financials);
 
 		server = app.listen(3000);
 	});

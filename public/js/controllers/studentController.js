@@ -16,23 +16,20 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             $location.path('/student/' + studentID);
         };
 
+        // delete student
         $scope.deleteStudent = function(id) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'templates/alert/confirm.html',
                 controller: function($scope, $uibModalInstance, Student) {
-
                     $scope.comtent = 'Are you sure you want to delete?'
-
                     $scope.ok = function() {
-
                         Student.delete(id)
                             .then(
                                 function(response) {
                                     Student.all().success(function(response) {
                                         $scope.students = response.students;
                                     });
-
                                     notifications.showSuccess({
                                         message: 'Delete student Successfully.'
                                     });
@@ -45,11 +42,9 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                                     });
                                 });
                     }
-
                     $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
-
                 },
                 size: 'sm',
                 resolve: {
@@ -58,17 +53,16 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(result) {
                 if (result == true) {
                     // Student.all().success(function(response) {
                     //     $scope.students = response.students;
                     // });
-
                 }
             });
         };
 
+        // edit student
         $scope.editStudent = function(id) {
             Student.get(id).success(function(res) {
                 $rootScope.student = res.student;
@@ -122,7 +116,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                                 );
 
                         };
-
                         $scope.cancel = function() {
                             $uibModalInstance.dismiss('cancel');
                         };
@@ -134,7 +127,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         }
                     }
                 });
-
                 modalInstance.result.then(function(isfinished) {
                     if (isfinished === true) {
                         Student.all().success(function(response) {
@@ -146,6 +138,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             });
         };
 
+        // add student
         $scope.addStudents = function() {
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -171,7 +164,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             applicationDate: $scope.applicationDate,
                             acceptanceNotificationDate: $scope.acceptanceNotificationDate
                         };
-
                         Student.insert($scope.student)
                             .then(
                                 function(response) {
@@ -183,25 +175,23 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                                 function(response) {
                                     alert(response.data.error);
                                 });
-
                     };
-
                     $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
                 size: 'md'
             });
-
         }
-
     })
-    .controller('StudentDetailsCtrl', function($scope, $routeParams, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester) {
+
+    .controller('StudentDetailsCtrl', function($scope, $routeParams, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial) {
         $rootScope.index = -1;
         Student.get($routeParams.Id).success(function(response) {
             $scope.student = response.student;
         });
 
+        // add degree
         $scope.addDegree = function(isGraduate) {
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -224,7 +214,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         };
                         $uibModalInstance.close($scope.degree);
                     };
-
                     $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -236,8 +225,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
-
             modalInstance.result.then(function(degree) {
                 if (isGraduate) {
                     if (!$scope.student.graduateDegrees) {
@@ -262,6 +249,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             });
         };
 
+        // edit degree
         $scope.editDegree = function(studentID, degreeID, isGraduate) {
             Student.get(studentID).success(function(res) {
                 $rootScope.student = res.student;
@@ -273,14 +261,14 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         Institution.all().success(function(response) {
                             $scope.institutions = response.institutions;
                         });
-                        $scope.degree = null;
+                        $rootScope.degree = null;
                         $scope.graduateDegrees = [];
                         $scope.undergraduateDegrees = [];
                         if (isGraduate) {                       
                             $scope.graduateDegrees = $rootScope.student.graduateDegrees;                            
                             for (var i = 0; i < $scope.graduateDegrees.length; i++) {
                                 if ($scope.graduateDegrees[i]._id == degreeID) {
-                                    $scope.degree = $scope.graduateDegrees[i];
+                                    $rootScope.degree = $scope.graduateDegrees[i];
                                     $rootScope.index = i;
                                 }
                             }
@@ -288,16 +276,17 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             $scope.undergraduateDegrees = $rootScope.student.undergraduateDegrees;                          
                             for (var i = 0; i < $scope.undergraduateDegrees.length; i++) {
                                 if ($scope.undergraduateDegrees[i]._id == degreeID) {
-                                    $scope.degree = $scope.undergraduateDegrees[i];
+                                    $rootScope.degree = $scope.undergraduateDegrees[i];
                                     $rootScope.index = i;
                                 }
                             }
-                        }                                            
+                        }   
+                        console.log($scope.degree);                                         
                         $scope.degreeTitle = 'Edit Degree';
-                        $scope.institutionName = $scope.degree.institutionName;
-                        $scope.degree = $scope.degree.degree;
-                        $scope.field = $scope.degree.field;
-                        $scope.graduationDate = new Date ($scope.degree.graduationDate);
+                        $scope.institutionName = $rootScope.degree.institutionName;
+                        $scope.degree = $rootScope.degree.degree;
+                        $scope.field = $rootScope.degree.field;
+                        $scope.graduationDate = new Date ($rootScope.degree.graduationDate);
 
                         $scope.ok = function() {
                             $scope.degree = {
@@ -308,8 +297,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             };
                             $uibModalInstance.close($scope.degree);
                         };
-
-
                         $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -321,7 +308,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(degree) {
                 if (isGraduate) {
                     if (!$scope.student.graduateDegrees) {
@@ -346,11 +332,11 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             });
         };
 
+        // delete degree
         $scope.deleteDegree = function(studentID, degreeID, isGraduate) {
             Student.get(studentID).success(function(res) {
                 $rootScope.student = res.student;
             });
-
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/alert/confirm.html',
@@ -375,13 +361,10 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                                     $rootScope.index = i;
                                 }
                             }
-                        }                    
-                     
+                        }                               
                         $scope.ok = function() {
                             $uibModalInstance.close($scope.degree);
                         };
-
-
                         $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -393,7 +376,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(degree) {
                 if (isGraduate) {
                     if (!$scope.student.graduateDegrees) {
@@ -416,8 +398,9 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         }
                     );
             });
-        };  
+        };
 
+        // add ministry
         $scope.addMinistry = function() {
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -449,7 +432,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(ministry) {
                 if (!$scope.student.ministries) {
                     $scope.student.ministries = [];
@@ -467,12 +449,12 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             });
         };
 
+        // edit ministry
         $scope.editMinistry = function(studentID, ministryID) {
             console.log("Edit ministry index  = " + $scope.index);
             Student.get(studentID).success(function(res) {
                 $rootScope.student = res.student;
             });
-
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/students/ministry.html',
@@ -484,17 +466,14 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         $scope.ministries = $rootScope.student.ministries;
                         $scope.ministry = null;
 
-
-
                         for (var i = 0; i < $scope.ministries.length; i++) {
                             if ($scope.ministries[i]._id == ministryID) {
                                 $scope.ministry = $scope.ministries[i];
                                 $rootScope.index = i;
                             }
                         }
-
                         $scope.ministryTitle = 'Edit Ministry';
-                        $scope.ministryName = $scope.ministry.ministryName;
+                        $scope.institutionName = $scope.ministry.ministryName;
                         $scope.ministrySupervisor = $scope.ministry.ministrySupervisor;
                         $scope.ministrySupervisorTitle = $scope.ministry.ministrySupervisorTitle;
                         $scope.ministrySupervisorPhoneNumber = $scope.ministry.ministrySupervisorPhoneNumber;
@@ -502,7 +481,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 
                         $scope.ok = function() {
                             $scope.ministry = {
-                                "ministryName": $scope.ministryName,
+                                "ministryName": $scope.institutionName,
                                 "ministrySupervisor": $scope.ministrySupervisor,
                                 "ministrySupervisorTitle": $scope.ministrySupervisorTitle,
                                 "ministrySupervisorPhoneNumber": $scope.ministrySupervisorPhoneNumber,
@@ -510,8 +489,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             };
                             $uibModalInstance.close($scope.ministry);
                         };
-
-
                         $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -523,7 +500,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(ministry) {
                 if (!$scope.student.ministries) {
                     $scope.student.ministries = [];
@@ -542,11 +518,11 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             });
         };           
         
+        // delete ministry
         $scope.deleteMinistry = function(studentID, ministryID) {
             Student.get(studentID).success(function(res) {
                 $rootScope.student = res.student;
             });
-
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/alert/confirm.html',
@@ -556,20 +532,15 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         $scope.ministries = $rootScope.student.ministries;
                         $scope.ministry = null;
 
-
-
                         for (var i = 0; i < $scope.ministries.length; i++) {
                             if ($scope.ministries[i]._id == ministryID) {
                                 $scope.ministry = $scope.ministries[i];
                                 $rootScope.index = i;
                             }
                         }
-
                         $scope.ok = function() {
                             $uibModalInstance.close($scope.ministry);
                         };
-
-
                         $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -581,7 +552,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(ministry) {
                 if (!$scope.student.ministries) {
                     $scope.student.ministries = [];
@@ -600,6 +570,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             });
         };
 
+        // add contact
         $scope.addContact = function(isContact) {
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -621,7 +592,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         };
                         $uibModalInstance.close($scope.contact);
                     };
-
                     $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -651,6 +621,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             });
         };
 
+        // edit contact
         $scope.editContact = function(studentID, contactID, isGraduate) {
             Student.get(studentID).success(function(res) {
                 $rootScope.student = res.student;
@@ -701,8 +672,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             };
                             $uibModalInstance.close($scope.contact);
                         };
-
-
                         $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -714,7 +683,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(contact) {
                 if (isGraduate) {
                     if (!$scope.student.emergencyContacts) {
@@ -739,11 +707,11 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             });
         };
 
+        // delete contact
         $scope.deleteContact = function(studentID, contactID, isGraduate) {
             Student.get(studentID).success(function(res) {
                 $rootScope.student = res.student;
             });
-
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/alert/confirm.html',
@@ -768,13 +736,10 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                                     $rootScope.index = i;
                                 }
                             }
-                        }                    
-                     
+                        }                  
                         $scope.ok = function() {
                             $uibModalInstance.close($scope.contact);
                         };
-
-
                         $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -786,7 +751,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(contact) {
                 if (isGraduate) {
                     if (!$scope.student.emergencyContacts) {
@@ -811,6 +775,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             });
         };  
         
+        // add request
         $scope.addRequest = function(stuID) {
             Student.get(stuID).success(function(res) {
                 $rootScope.student = res.student;
@@ -818,7 +783,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'templates/students/financial.html',
-                controller: function($scope, $uibModalInstance) {
+                controller: function($scope, $uibModalInstance, Financial, Student) {
                     $scope.financialTitle = 'Send request';
                     Semester.all().success(function(response) {
                         $scope.semesters = response.semesters;
@@ -831,54 +796,56 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     $scope.status = "Waiting";
 
                     $scope.ok = function() {
-                        $scope.request = {
-                            "studentID": $scope.studentID,
-                            "studentEmail": $scope.studentEmail,
-                            "studentFirstName": $scope.studentFirstName,
-                            "studentMiddleName": $scope.studentMiddleName,
-                            "studentLastName": $scope.studentLastName,
-                            "semester": $scope.semester,
-                            "monthlyPayment": $scope.monthlyPayment,
-                            "status": $scope.status,
-                            "comment": $scope.comment
+                        $scope.financial = {
+                            studentID: $scope.studentID,
+                            studentEmail: $scope.studentEmail,
+                            studentFirstName: $scope.studentFirstName,
+                            studentMiddleName: $scope.studentMiddleName,
+                            studentLastName: $scope.studentLastName,
+                            semester: $scope.semester,
+                            monthlyPayment: $scope.monthlyPayment,
+                            status: $scope.status,
+                            comment: $scope.comment
                         };
-                        $uibModalInstance.close($scope.request);
+                        $uibModalInstance.close($scope.financial);
                     };
-
                     $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
                 size: 'md',
                 resolve: {
-                    request: function() {
-                        return $scope.request;
+                    financial: function() {
+                        return $scope.financial;
                     }
                 }
             });
-
-            modalInstance.result.then(function(request) {
-                if (!$scope.student.financials) {
-                    $scope.student.financials = [];
-                }
-                $scope.student.financials.push(request);
-                Student.update($scope.student._id, $scope.student)
+            modalInstance.result.then(function(financial) {
+                $scope.financial = financial;
+                console.log($scope.financial);
+                Financial.insert($scope.financial)
                     .then(
-                        function(response) {
-                            console.log(response);
+                        function(response) {                           
+                            notifications.showSuccess({
+                                message: 'Add Financial successfully.'
+                            });
+                             Financial.all().success(function(response) {
+                                $scope.courses = response.courses;
+                            });
                         },
                         function(response) {
                             console.log(response);
-                        }
-                    );
+                        });   
+
+                                     
             });
         };
 
+        // edit financial
         $scope.editFinancial = function(studentID, financialID) {
             Student.get(studentID).success(function(res) {
                 $rootScope.student = res.student;
             });
-
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/students/financial.html',
@@ -890,16 +857,12 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         $scope.financials = [];
                         $scope.financials = $rootScope.student.financials;
                         $scope.request = null;
-
-
-
                         for (var i = 0; i < $scope.financials.length; i++) {
                             if ($scope.financials[i]._id == financialID) {
                                 $scope.request = $scope.financials[i];
                                 $rootScope.index = i;
                             }
                         }
-
                         $scope.ministryTitle = 'Edit Request';
                         $scope.studentID = $scope.request.studentID;
                         $scope.studentEmail = $scope.request.studentEmail;
@@ -919,8 +882,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             };
                             $uibModalInstance.close($scope.request);
                         };
-
-
                         $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -932,7 +893,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(request) {
                 if (!$scope.student.financials) {
                     $scope.student.financials = [];
@@ -949,13 +909,13 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         }
                     );
             });
-        };           
-        
+        };
+
+        // delete financial
         $scope.deleteFinancial = function(studentID, financialID) {
             Student.get(studentID).success(function(res) {
                 $rootScope.student = res.student;
             });
-
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/alert/confirm.html',
@@ -964,21 +924,15 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         $scope.financials = [];
                         $scope.financials = $rootScope.student.financials;
                         $scope.request = null;
-
-
-
                         for (var i = 0; i < $scope.financials.length; i++) {
                             if ($scope.financials[i]._id == financialID) {
                                 $scope.request = $scope.financials[i];
                                 $rootScope.index = i;
                             }
                         }
-
                         $scope.ok = function() {
                             $uibModalInstance.close($scope.request);
                         };
-
-
                         $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -990,7 +944,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 }
             });
-
             modalInstance.result.then(function(request) {
                 if (!$scope.student.financials) {
                     $scope.student.financials = [];
