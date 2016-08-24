@@ -3,6 +3,8 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
    Student.all().success(function (response) {
 			$scope.students = response.students;
 		});
+   $scope.financials = [];
+   $scope.financials = $scope.students.financials;
 
 	})
 
