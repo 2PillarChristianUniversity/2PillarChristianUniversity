@@ -15,29 +15,39 @@ function createAutoId(index) {
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
 
     router.get('/treelist/', function(req, res) {
-        db.collection('Semesters').find().forEach(
-            function(semester) {
-                semester.courses = db.collection('Courses').findOne({
-                    "semesters": semester._id
-                });
-                semester.courses.students = db.collection('Students').find({
-                    "courses": semester.courses._id
-                }).toArray();
 
-                db.collection('treeList').insert(semester);
-            }
-        );
-       // db.collection('treeList').find().toArray(function (error, semester) {
-       //      console.log(semester);
-       //      if (error) {
-       //          return res.
-       //              status(500).
-       //              json({ error: error });
-       //      }
-       //      res.json({ semester: semester });
-       //  });
-        
-        
+        db.collection(colName).find().toArray(function(error, semesters) {
+
+
+            db.collection('Courses').aggregate([{
+                $lookup: {
+                    from: "Students",
+                    localField: "_id",
+                    foreignField: "courses",
+                    as: "students"
+                }
+            }]).toArray(function(error, courses) {
+                
+                res.json({
+                    semesters: semesters,
+                    courses: courses
+                });
+
+            });
+        });
+
+
+        // db.collection('treeList').find().toArray(function (error, semester) {
+        //      console.log(semester);
+        //      if (error) {
+        //          return res.
+        //              status(500).
+        //              json({ error: error });
+        //      }
+        //      res.json({ semester: semester });
+        //  });
+
+
     });
 
     router.get('/semester/id/:id', function(req, res) {
