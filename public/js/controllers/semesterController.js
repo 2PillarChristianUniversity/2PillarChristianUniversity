@@ -379,7 +379,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                 $scope.coures = course;
                 $scope.coures.semesters = semesterID;
 
-
+                console.log($scope.coures);
                 Course.insert($scope.coures)
                     .then(
                         function(response) {                           
@@ -392,13 +392,11 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         },
                         function(response) {
                             console.log(response);
-                        });
-
-                
+                        });                
             });
 
         };
-
+        // delete course
         $scope.deleteCourse = function(id) {
 
             var modalInstance = $uibModal.open({
@@ -506,9 +504,11 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         }; // ------------
 
         // edit course
-        $scope.editCourse = function(id) {
-            Course.get(id).success(function(res) {
-                $rootScope.course = res.course;
+        $scope.editCourse = function(semesterID ,courseID) {
+            console.log(semesterID);
+            Semester.get(semesterID).success(function(res) {
+                $rootScope.semester = res.semester;
+                console.log($rootScope.course);
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/semesters/course.html',
@@ -518,9 +518,21 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             return new Date(Date.parse(date));
 
                         };
+                        $rootScope.index = -1;
+                        $scope.courses = [];
+                        $scope.courses = $rootScope.semester.Courses;
+                        $scope.course = null;
+
+                        for (var i = 0; i < $scope.courses.length; i++) {
+                            if ($scope.courses[i]._id == courseID) {
+                                $scope.course = $scope.courses[i];
+                                $rootScope.index = i;
+                            }
+                        }
+
                         
                         $scope.courseTitle = 'Edit Course';
-                        $scope.semesterName = $rootScope.course.semesters;
+                        $scope.semesterName = $rootScope.semester.name;
                         $scope.name = $rootScope.course.name;
                         $scope.duration = $rootScope.course.duration;
                         $scope.noMember = $rootScope.course.noMember;                        

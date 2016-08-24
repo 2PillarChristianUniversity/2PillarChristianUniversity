@@ -16,6 +16,7 @@ var courses = require('./routes/courses'),
     ministries = require('./routes/ministries'),
     students = require('./routes/students'),
     semesters = require('./routes/semesters');
+    financials = require('./routes/financials');
 
 var port = Number(process.env.PORT || 3000);
 var app = express();

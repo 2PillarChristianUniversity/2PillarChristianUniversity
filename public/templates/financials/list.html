@@ -1,6 +1,9 @@
 <div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
 	<div class="col-lg-10">
-		<b>Financial ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
+		<b>Student ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
+		<b>Student Name</b> <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Student Name">
+		<b>Semester</b> <select ng-model='semester' class="input-medium search-query" ng-options="semester.name as semester.name for semester in semesters" placeholder="Semester">
+            </select>
 		<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
 	</div>
 	<br>
@@ -22,12 +25,12 @@
 		</thead>
 		<tbody>
 			<tr style="cursor: pointer;" ng-repeat="financial in financials" >
-				<td ng-click="financialDetails(financial._id)">{{financials.studentID}}</td>
-				<td ng-click="studentDetails(financial._id)">{{student.lastName}}, {{student.firstName}} {{student.middleName}}</td>
-				<td ng-click="financialDetails(financial._id)">{{student.gender}}</td>
-				<td ng-click="financialDetails(financial._id)">{{student.email}}</td>
-				<td ng-click="financialDetails(financial._id)">{{student.city}}</td>
-				<td ng-click="financialDetails(financial._id)">{{student.state}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.studentID}}</td>
+				<td ng-click="studentDetails(financial._id)">{{financial.studentLastName}}, {{financial.studentFirstName}} {{financial.studentMiddleName}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.semester}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.comment}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.monthlyPayment}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.status}}</td>
 				<td>
 					<a type="submit" title="edit" ng-click="editFinancial(financial._id)">Edit</a>
 			    </td>

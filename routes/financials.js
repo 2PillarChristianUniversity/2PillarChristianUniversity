@@ -39,15 +39,43 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    router.put('/financial', function (req, res) {
-
-        db.collection('Financials').insert(req.body, function (error, financial) {
-            if (error) {
-                return res.
-                    status(400).
-                    json({ error: "Can't insert financial..." });
+    router.put('/financial', function(req, res) {  
+    console.log(req.body)     ; 
+        db.collection('Financials', {
+            strict: true
+        }, function(err, collection) { // check exists collection
+            if (err != null) { // if exists
+                req.body._id = createAutoId(1);
+                db.collection('Financials').insert(req.body, function(error, financial) {
+                    if (error) {
+                        return res.
+                        status(400).
+                        json({
+                            error: "Can't insert Financials..."
+                        });
+                    }
+                    res.json({
+                        financial: financial
+                    });
+                });
             }
-            res.json({ financial: financial });
+
+            autoIncrement.getNextSequence(db, 'Financials', function(err, autoIndex) {
+                req.body._id = createAutoId(autoIndex);
+                db.collection('Financials').insert(req.body, function(error, financial) {
+                    if (error) {
+                        return res.
+                        status(400).
+                        json({
+                            error: "Can't insert financial..."
+                        });
+                    }
+                    res.json({
+                        financial: financial
+                    });
+                });
+            });
+
         });
     });
 
