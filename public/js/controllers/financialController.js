@@ -14,20 +14,25 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
     $scope.search = function() {
             if ($scope.searchName) {
               for (var i = 0; i < $scope.financials.length; i++) {
-                            if ($scope.financials[i].studentID == $scope.searchName) {
-                                $scope.request = $scope.financials[i];
-                                $rootScope.index = i;
-                                Financial.searchName($rootScope.index).success(function(response) {
-                                    $scope.financials = response.financials;
-                                });
-                            }
-                        }
+                    if ($scope.financials[i].studentID == $scope.searchName) {
+                        $scope.request = $scope.financials[i];
+                        Financial.searchName($rootScope.index).success(function(response) {
+                            $scope.financials = response.financials;
+                        });
+                    }
+                }
 
                 
             } else if ($scope.searchID) {
-                Financial.searchID($scope.searchID).success(function(response) {
+                for (var i = 0; i < $scope.financials.length; i++) {
+                    if ($scope.financials[i].studentID == $scope.searchID) {
+                        $scope.request = $scope.financials[i];                                                
+                    }
+                }
+                console.log($scope.request._id); 
+                Financial.searchID($scope.request._id).success(function(response) {
                     $scope.financials = response.financials;
-                });
+                });               
             }
         };
 

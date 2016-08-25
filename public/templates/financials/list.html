@@ -26,7 +26,7 @@
 		<tbody>
 			<tr style="cursor: pointer;" ng-repeat="financial in financials" >
 				<td ng-click="financialDetails(financial._id)">{{financial.studentID}}</td>
-				<td ng-click="studentDetails(financial._id)">{{financial.studentLastName}}, {{financial.studentFirstName}} {{financial.studentMiddleName}}</td>
+				<td ng-click="studentDetails(financial._id)">{{financial.lastName}}, {{financial.firstName}} {{financial.middleName}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.semester}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.comment}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.monthlyPayment}}</td>

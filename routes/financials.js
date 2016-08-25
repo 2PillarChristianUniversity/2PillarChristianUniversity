@@ -28,14 +28,26 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    router.get('/financials/', function (req, res) {
-        db.collection('Financials').find({}).toArray(function (error, financials) {
+    router.get('/financials/', function(req, res) {
+
+        db.collection(colName).aggregate([{
+            $lookup: {
+                from: "Students",
+                localField: "studentID",
+                foreignField: "_id",
+                as: "Students"
+            }
+        }], function(error, financials) {
             if (error) {
                 return res.
-                    status(500).
-                    json({ error: error.toString() });
+                status(500).
+                json({
+                    error: error.toString()
+                });
             }
-            res.json({ financials: financials });
+            res.json({
+                financials: financials
+            });
         });
     });
 

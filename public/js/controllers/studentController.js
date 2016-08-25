@@ -185,7 +185,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
         }
     })
 
-    .controller('StudentDetailsCtrl', function($scope, $routeParams, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial) {
+    .controller('StudentDetailsCtrl', function($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial) {
         $rootScope.index = -1;
         Student.get($routeParams.Id).success(function(response) {
             $scope.student = response.student;
@@ -790,18 +790,11 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     });
                     $scope.studentID = $rootScope.student._id;
                     $scope.studentEmail = $rootScope.student.email;
-                    $scope.studentFirstName = $rootScope.student.firstName;
-                    $scope.studentMiddleName = $rootScope.student.middleName;
-                    $scope.studentLastName = $rootScope.student.lastName;
                     $scope.status = "Waiting";
 
                     $scope.ok = function() {
                         $scope.financial = {
                             studentID: $scope.studentID,
-                            studentEmail: $scope.studentEmail,
-                            studentFirstName: $scope.studentFirstName,
-                            studentMiddleName: $scope.studentMiddleName,
-                            studentLastName: $scope.studentLastName,
                             semester: $scope.semester,
                             monthlyPayment: $scope.monthlyPayment,
                             status: $scope.status,
@@ -865,7 +858,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         }
                         $scope.ministryTitle = 'Edit Request';
                         $scope.studentID = $scope.request.studentID;
-                        $scope.studentEmail = $scope.request.studentEmail;
+                        $scope.studentEmail = $rootScope.student.email;
                         $scope.semester = $scope.request.semester;
                         $scope.monthlyPayment = $scope.request.monthlyPayment;
                         $scope.status = $scope.request.status;
@@ -874,7 +867,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         $scope.ok = function() {
                             $scope.request = {
                                 "studentID": $scope.studentID,
-                                "studentEmail": $scope.studentEmail,
                                 "semester": $scope.semester,
                                 "monthlyPayment": $scope.monthlyPayment,
                                 "status": $scope.status,
