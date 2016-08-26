@@ -18,7 +18,7 @@ angular.module('smsApp', [
 		'ui.calendar',
 		'ngSecurity'
 	])
-	.config(function($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider, 
+	.config(function($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider,
 		notificationsConfigProvider) {
 
 		$httpProvider.interceptors.push('$securityInterceptor');
@@ -91,9 +91,9 @@ angular.module('smsApp', [
 
 		authProvider.init({
 			// domain: 'pillarseminarysms.auth0.com',
-			domain: 'justintong.auth0.com',
-			clientID: '4f3JCR8Bp6PpNruh4WSrqGijapKol6m7',
-			loginUrl: '/login'
+			domain: 'justintong.auth0.com', // should be moved to file config
+			clientID: '4f3JCR8Bp6PpNruh4WSrqGijapKol6m7', // should be moved to file config
+			loginUrl: '/login' // should be moved to file config
 		});
 
 		authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security) {
@@ -127,7 +127,8 @@ angular.module('smsApp', [
 		// delay between animation and removing the nofitication
 		notificationsConfigProvider.setAutoHideAnimationDelay(1200);
 
-	}).run(function($rootScope, auth, store, jwtHelper, $location, Student) {
+	}).run(function($rootScope, auth, store, jwtHelper, $location, Student, $security) {
+		$rootScope.security = $security;
 		$rootScope.$on('unauthenticated', function () {
 	      alert('redirect to login');
 	    });
@@ -135,11 +136,11 @@ angular.module('smsApp', [
 	      alert('redirect to permission denied');
 	    });
 		$rootScope.$on('$locationChangeStart', function() {
-			var token = store.get('token');
+			var token = auth.idToken;
 			if (token) {
 				if (!jwtHelper.isTokenExpired(token)) {
 					if (!auth.isAuthenticated) {
-						auth.authenticate(store.get('profile'), token);
+						auth.authenticate($security.getUser(), token);
 					}
 				} else {
 					$location.path('/login');
@@ -161,6 +162,7 @@ angular.module('smsApp', [
 
 		$rootScope.logout = function() {
 			auth.signout();
+			$rootScope.security.logout();
 			auth = null;
 			window.location = '/';
 		};
