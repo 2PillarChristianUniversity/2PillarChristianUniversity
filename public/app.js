@@ -98,8 +98,8 @@ angular.module('smsApp', [
 
 		authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security) {
 			profilePromise.then(function(profile) {
-				// store.set('profile', profile);
-				// store.set('token', idToken);
+				//store.set('profile', profile);
+				//store.set('token', idToken);
 				$security.login(idToken, profile, profile.roles);
 			});
 			$location.path('/home');
@@ -153,14 +153,14 @@ angular.module('smsApp', [
 				}
 
 				console.log(auth);
+			} else {
+				$location.path('/login');
 			}
+
 		});
 
 		$rootScope.logout = function() {
 			auth.signout();
-			$security.logout();
-			store.remove('profile');
-			store.remove('token');
 			auth = null;
 			window.location = '/';
 		};
