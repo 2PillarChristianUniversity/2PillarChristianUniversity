@@ -1,3 +1,5 @@
+var auth0Cfg = require('../auth0_cfg');
+
 angular.module('smsApp', [
 		'auth0',
 		'ngRoute',
@@ -89,11 +91,10 @@ angular.module('smsApp', [
 			})
 			.otherwise('/home');
 
-		authProvider.init({
-			// domain: 'pillarseminarysms.auth0.com',
-			domain: 'justintong.auth0.com', // should be moved to file config
-			clientID: '4f3JCR8Bp6PpNruh4WSrqGijapKol6m7', // should be moved to file config
-			loginUrl: '/login' // should be moved to file config
+		authProvider.init({			
+			domain: auth0Cfg.domain, 
+			clientID: auth0Cfg.clientID,
+			loginUrl: auth0Cfg.loginUrl 
 		});
 
 		authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security) {
@@ -152,8 +153,6 @@ angular.module('smsApp', [
 
 					// });
 				}
-
-				console.log(auth);
 			} else {
 				$location.path('/login');
 			}

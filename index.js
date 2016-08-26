@@ -38,7 +38,7 @@ app.use(expressValidator());
 console.log();
 // app.use('/api', jwtCheck);
 
-
+app.use('./auth0_cfg', auth0Cfg);
 app.use('/api', courses);
 app.use('/api', groups);
 app.use('/api', semesters);
