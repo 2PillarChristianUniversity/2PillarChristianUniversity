@@ -15,12 +15,14 @@ angular.module('smsApp', [
 		'datatables',
 		'ngNotificationsBar',
 		'ngSanitize',
-		'angularBootstrapNavTree',
-		'ui.calendar'
-
+		'ui.calendar',
+		'ngSecurity'
 	])
 	.config(function($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider, 
 		notificationsConfigProvider) {
+
+		$httpProvider.interceptors.push('$securityInterceptor');
+
 		$routeProvider
 			.when('/home', {
 				controller: 'HomeCtrl',
@@ -94,10 +96,11 @@ angular.module('smsApp', [
 			loginUrl: '/login'
 		});
 
-		authProvider.on('loginSuccess', function($location, profilePromise, idToken, store) {
+		authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security) {
 			profilePromise.then(function(profile) {
-				store.set('profile', profile);
-				store.set('token', idToken);
+				// store.set('profile', profile);
+				// store.set('token', idToken);
+				$security.login(idToken, profile, profile.roles);
 			});
 			$location.path('/home');
 		});
@@ -125,6 +128,12 @@ angular.module('smsApp', [
 		notificationsConfigProvider.setAutoHideAnimationDelay(1200);
 
 	}).run(function($rootScope, auth, store, jwtHelper, $location, Student) {
+		$rootScope.$on('unauthenticated', function () {
+	      alert('redirect to login');
+	    });
+	    $rootScope.$on('permissionDenied', function () {
+	      alert('redirect to permission denied');
+	    });
 		$rootScope.$on('$locationChangeStart', function() {
 			var token = store.get('token');
 			if (token) {
@@ -149,6 +158,7 @@ angular.module('smsApp', [
 
 		$rootScope.logout = function() {
 			auth.signout();
+			$security.logout();
 			store.remove('profile');
 			store.remove('token');
 			auth = null;
