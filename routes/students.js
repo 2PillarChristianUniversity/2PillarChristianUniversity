@@ -5,13 +5,15 @@ var autoIncrement = require("mongodb-autoincrement");
 
 var mongoCfg = require('../mongo_cfg');
 
+var requiresLogin = require('../requiresLogin');
+
 function createAutoId(index) {
 	var number = 6;
 	return Array(number-String(index).length + 1).join('0') + index;
 }
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function (err, db) {
-	router.get('/student/id/:id', function (req, res) {
+	router.get('/student/id/:id', requiresLogin, function (req, res) {
 		db.collection('Students').findOne({ _id: req.params.id }, function (error, student) {
 			if (error) {
 				return res.
@@ -22,7 +24,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
-	router.get('/students/id/:id', function (req, res) {
+	router.get('/students/id/:id', requiresLogin, function (req, res) {
 		db.collection('Students').find({ _id: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, students) {
 			if (error) {
 				return res.
