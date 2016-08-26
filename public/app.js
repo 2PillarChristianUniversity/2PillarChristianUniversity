@@ -1,4 +1,4 @@
-var auth0Cfg = require('../auth0_cfg');
+
 
 angular.module('smsApp', [
 		'auth0',
@@ -20,6 +20,7 @@ angular.module('smsApp', [
 		'ui.calendar',
 		'ngSecurity'
 	])
+
 	.config(function($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider,
 		notificationsConfigProvider) {
 
