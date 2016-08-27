@@ -2,7 +2,11 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         'ngSanitize', 'ui.calendar'
     ])
     .controller('SemesterListCtrl', function($scope, $rootScope, $routeParams, $location,
-        $uibModal, Semester, notifications, Course, $compile, uiCalendarConfig) {
+        $uibModal, Semester, notifications, Course, $compile, uiCalendarConfig, Student) {
+        Student.studentCourse('000001').success(function (response) {
+            $scope.student = response.student
+            console.log($scope.student);
+        })
 
          Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
