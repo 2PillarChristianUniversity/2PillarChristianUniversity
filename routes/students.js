@@ -148,4 +148,55 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
 });
 
+
+router.get('/student/courses/:id', function(req, res) {
+		db.collection('Students').aggregate([
+		{
+				$match: {
+					_id: req.params.id
+				}
+			},
+			// Unwind the source
+			{
+				"$unwind": "$courses"
+			},
+			// Do the lookup matching
+			{
+				"$lookup": {
+					"from": "Courses",
+					"localField": "courses",
+					"foreignField": "_id",
+					"as": "productObjects"
+				}
+			},
+			// Unwind the result arrays ( likely one or none )
+			{
+				"$unwind": "$productObjects"
+			},
+			// Group back to arrays
+			{
+				"$group": {
+					"_id": "$_id",
+					//         "products": { "$push": "$courses" },
+					"Courses": {
+						"$push": "$productObjects"
+					}
+				}
+			}
+		], function(error, student) {
+			if (error) {
+				return res.
+				status(500).
+				json({
+					error: error.toString()
+				});
+			}
+			res.json({
+				student: student
+
+			});
+		});
+	});
+
+
 module.exports = router;

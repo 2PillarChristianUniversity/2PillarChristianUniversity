@@ -1,6 +1,6 @@
 <form class="form-herizontal" ng-submit='ok()'>
     <div class="modal-header">
-    <h3>{{financialTitle}}</h3>
+        <h3>{{financialTitle}}</h3>
     </div>
     <div class="modal-body">
         <div class="form-group">
@@ -13,8 +13,10 @@
         </div>
         <div class="form-group">
             <label for="semester_name">Semester</label>
-            <select class="form-control" id="semester_name" ng-model='semester' ng-options="semester.name as semester.name for semester in semesters" required placeholder="Semester">
+            <select ng-model='semester' class="form-control" required>
+                <option ng-repeat="smt in semesters" value="{{smt._id}}" ng-selected="semester == smt._id">{{smt.name}}</option>
             </select>
+
         </div>
         <div class="form-group">
             <label for="monthly_payment">Monthly payment</label>
@@ -25,8 +27,8 @@
             <textarea rows="4" class="form-control" id="comment" ng-model='comment' required placeholder="Description">
             </textarea>
         </div>
-    <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Send</button>
-        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-    </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Send</button>
+            <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+        </div>
 </form>

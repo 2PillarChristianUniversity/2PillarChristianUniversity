@@ -175,10 +175,6 @@ angular.module('smsApp', [
 				}
 				if (auth.isAuthenticated) {
 					$rootScope.auth = auth;
-					// Student.all().success(function(response){
-					// 	console.log(response);
-
-					// });
 				}
 			} else {
 				$location.path('/login');
