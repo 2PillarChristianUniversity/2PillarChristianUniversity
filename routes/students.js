@@ -2,9 +2,7 @@ var mongo = require('mongodb').MongoClient, ObjectID = require('mongodb').Object
 var express = require('express');
 var router = express.Router();
 var autoIncrement = require("mongodb-autoincrement");
-
 var mongoCfg = require('../mongo_cfg');
-
 var requiresLogin = require('../requiresLogin');
 
 function createAutoId(index) {
@@ -13,6 +11,7 @@ function createAutoId(index) {
 }
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function (err, db) {
+	//	Get student by id
 	router.get('/student/id/:id', requiresLogin, function (req, res) {
 		db.collection('Students').findOne({ _id: req.params.id }, function (error, student) {
 			if (error) {
@@ -24,6 +23,19 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
+	//	Get student by email
+	router.get('/student/email/:email', function (req, res) {
+		db.collection('Students').findOne({ email: req.params.email }, function (error, student) {
+			if (error) {
+				return res.
+					status(500).
+					json({ error: error.toString() });
+			}
+			res.json({ student: student });
+		});
+	});
+
+	//	Get list students by id (search function)
 	router.get('/students/id/:id', requiresLogin, function (req, res) {
 		db.collection('Students').find({ _id: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, students) {
 			if (error) {
@@ -39,6 +51,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
+	//	Get student by name (search function)
 	router.get('/students/name/:name', function (req, res) {
 		db.collection('Students').find({ "$or": [{ firstName: { "$regex": req.params.name, "$options": "i" } }, { middleName: { "$regex": req.params.name, "$options": "i" } }, { lastName: { "$regex": req.params.name, "$options": "i" } }] }).toArray(function (error, students) {
 			if (error) {
@@ -54,6 +67,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
+	//	Get list all students
 	router.get('/students/', function (req, res) {
 		db.collection('Students').find({}).toArray(function (error, students) {
 			if (error) {
@@ -65,6 +79,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
+	//	Update student
 	router.post('/student/id/:id', function (req, res) {
 		db.collection('Students').update({ _id: req.params.id }, req.body, function (error, student) {
 			if (error) {
@@ -76,6 +91,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
+	//	Insert student
 	router.put('/student', function (req, res) {		
 		var colName = 'Students';
 		db.collection(colName, {strict:true}, function(err, collection) { // check exists collection
@@ -118,6 +134,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
+	//	Delete student
 	router.delete('/student/id/:id', function (req, res) {
         db.collection('Students').deleteOne({ _id: req.params.id }, function (error, student) {
              if (error) {

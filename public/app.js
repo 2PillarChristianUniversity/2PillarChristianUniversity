@@ -32,19 +32,11 @@ angular.module('smsApp', [
 				templateUrl: 'templates/home.html',
 				requiresLogin: true
 			})
+
+			//######## STUDENT
 			.when('/student/:Id', {
 				controller: 'StudentDetailsCtrl',
 				templateUrl: 'templates/students/details.html',
-				requiresLogin: true
-			})
-			.when('/professor/:Id', {
-				controller: 'ProfessorDetailsCtrl',
-				templateUrl: 'templates/professors/details.html',
-				requiresLogin: true
-			})
-			.when('/institution/:Id', {
-				controller: 'InstitutionDetailsCtrl',
-				templateUrl: 'templates/institutions/details.html',
 				requiresLogin: true
 			})
 			.when('/addStudent', {
@@ -52,40 +44,62 @@ angular.module('smsApp', [
 				templateUrl: 'templates/students/addStudent.html',
 				requiresLogin: true
 			})
-			.when('/addProfessor', {
-				controller: 'AddProfessorsCtrl',
-				templateUrl: 'templates/professors/addProfessor.html',
-				requiresLogin: true
-			})
 			.when('/students', {
 				controller: 'StudentListCtrl',
 				templateUrl: 'templates/students/index.html',
 				requiresLogin: true
 			})
-			.when('/semesters', {
-				controller: 'SemesterListCtrl',
-				templateUrl: 'templates/semesters/index.html',
-				requiresLogin: true
-			})
+
+			//######## PROFESSOR
 			.when('/professors', {
 				controller: 'ProfessorListCtrl',
 				templateUrl: 'templates/professors/index.html',
 				requiresLogin: true
 			})
+			.when('/professor/:Id', {
+				controller: 'ProfessorDetailsCtrl',
+				templateUrl: 'templates/professors/details.html',
+				requiresLogin: true
+			})
+			.when('/addProfessor', {
+				controller: 'AddProfessorsCtrl',
+				templateUrl: 'templates/professors/addProfessor.html',
+				requiresLogin: true
+			})
+
+			//######## INSTITUTION
 			.when('/institutions', {
 				controller: 'InstitutionListCtrl',
 				templateUrl: 'templates/institutions/index.html',
 				requiresLogin: true
 			})
+			.when('/institution/:Id', {
+				controller: 'InstitutionDetailsCtrl',
+				templateUrl: 'templates/institutions/details.html',
+				requiresLogin: true
+			})			
+			
+			//######## SEMESTER
+			.when('/semesters', {
+				controller: 'SemesterListCtrl',
+				templateUrl: 'templates/semesters/index.html',
+				requiresLogin: true
+			})
+			
+			//######## FINANCIAL
 			.when('/financials', {
 				controller: 'FinancialListCtrl',
 				templateUrl: 'templates/financials/index.html',
 				requiresLogin: true
 			})
+
+			//######## LOGIN
 			.when('/login', {
 				controller: 'LoginCtrl',
 				templateUrl: 'templates/login.html'
 			})
+
+			//######## OTHERS
 			.when('/:error', {
 				controller: 'FailedCtrl',
 				templateUrl: 'templates/loginFailed.html'
@@ -98,11 +112,23 @@ angular.module('smsApp', [
 			loginUrl: auth0Cfg.loginUrl 
 		});
 
-		authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security) {
+		authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security, Student, Professor) {
 			profilePromise.then(function(profile) {
-				//store.set('profile', profile);
-				//store.set('token', idToken);
-				$security.login(idToken, profile, profile.roles);
+				//	Check role	
+				var roles  = [];			
+				Student.getStudentByEmail('nduyanh87@gmail.com').success(function(response) {
+					if (response.student != null) {
+						roles.push('Student');
+						$security.login(idToken, profile, roles);
+					}        
+                });	
+
+                Professor.getProfessorByEmail('nduyanh87@gmail.com').success(function(response) {
+					if (response.professor != null) {
+						roles.push('Professor');
+						$security.login(idToken, profile, roles);
+					}                  
+                });	
 			});
 			$location.path('/home');
 		});
