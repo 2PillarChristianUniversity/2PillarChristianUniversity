@@ -15,7 +15,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		db.collection('Students').aggregate([
 		{
 				$match: {
-					_id: req.params.id,
+					_id: req.params.id
 					// $or: [
 					// 	{ startDate: { $gt: req.body.start_date, $lt: req.body.end_date }} ,
 					// 	{ endDate: { $gt: req.body.start_date, $lt: req.body.end_date }}

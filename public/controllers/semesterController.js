@@ -8,8 +8,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             // console.log($scope.semesters);
         });
 
-
-
         // function CalendarCtrl($scope,$compile,uiCalendarConfig) {
         var date = new Date();
         var d = date.getDate();
@@ -23,11 +21,44 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
            // getting the events and feeding the calendar
             var startDate = $filter('date')(new Date(start), "yyyy-MM-dd");
             var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+
             Student.studentCourse('000001', startDate, endDate).success(function (response) {
                 $scope.student = response.student;
-                console.log($scope.student);
+                var events = [];
+                if ($scope.student.length) {
+                    angular.forEach(response.student[0].Courses, function(value, key) {
+                        var count = value.scheduleDate.length;
+                        value.startDate = value.startDate.split('T')[0];
+                        value.endDate = value.endDate.split('T')[0];
 
-                var events = [{title: 'Feed Me ' + m, start: new Date(y, m, d - 5), end: new Date(y, m, d - 2), allDay: false}];
+                        var dateOfStartDate = new Date(value.startDate).getTime();
+                        var inputDate = new Date(value.startDate);
+                        if(new Date(start).getTime() > dateOfStartDate) {
+                            inputDate = new Date(start);
+                        }
+                        var startDate = $filter('date')(inputDate, "yyyy-MM-dd");
+                        for(var i = 0; i < count ; i++) {
+                            var d = $filter('filter')($rootScope.weekdays, {id: value.scheduleDate[i].day});
+                            var time = new Date(value.scheduleDate[i].time);
+                            var hour = time.getHours();
+                            var minutes = time.getMinutes();
+
+                            var date = moment(startDate + ' ' + hour + ':' + minutes, "YYYY-MM-DD h:mm").day(d[0].name);
+                            var endTime = new Date(value.endDate).getTime();
+                            while(endTime >= date.valueOf()) {
+                                var data = {
+                                    title: value.name,
+                                    start: new Date(date),
+                                    allDay: false
+                                };
+                                this.push(data);
+
+                                date = date.weekday(parseInt(d[0].id) - 1 + 7);
+                            }
+                        }
+                    }, events);
+                }
+
                 callback(events);
             });
         };
@@ -84,7 +115,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         }, {
             id: '4',
-            name: 'Wedesday'
+            name: 'Wednesday'
 
         }, {
             id: '5',
@@ -96,7 +127,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         }, {
             id: '7',
-            name: 'Saterday'
+            name: 'Saturday'
 
         }];
 
