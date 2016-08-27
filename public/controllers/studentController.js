@@ -792,6 +792,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     $scope.financialTitle = 'Send request';
                     Semester.all().success(function(response) {
                         $scope.semesters = response.semesters;
+                        console.log($scope.semesters)   ;                     
                     });
                     $scope.studentID = $rootScope.student._id;
                     $scope.studentEmail = $rootScope.student.email;

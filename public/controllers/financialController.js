@@ -1,44 +1,34 @@
 angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize'])
-  .controller('FinancialListCtrl', function ($scope, $location, Financial, $uibModal, $routeParams, $rootScope, notifications, Student, Semester) {
-    Financial.all().success(function(response) {
-        $scope.financials = response.financials;
-    });
+    .controller('FinancialListCtrl', function($scope, $location, Financial, $uibModal, $routeParams, $rootScope,
+        notifications, Student, Semester) {
 
-    Semester.all().success(function(response) {
-        $scope.semesters = response.semesters;
-    });
+        Financial.all().success(function(response) {
+            $scope.financials = response.financials;
+        });
 
-    // search financial
-    $scope.search = function() {
-        if ($scope.searchName) {
-            Financial.searchName($scope.searchName).success(function(response) {
-                $scope.financials = response.financials;
-            });
-        } else if ($scope.searchID) {
-            Financial.searchID($scope.searchID).success(function(response) {
-                $scope.financials = response.financials;
-            });
-        }
-    };
+        Semester.all().success(function(response) {
+            $scope.semesters = response.semesters;
+            $rootScope.semester = $scope.semesters
+        });
 
-    // edit Financials
-    $scope.editFinancial = function(id) {
+        // edit Financials
+        $scope.editFinancial = function(id) {
             Financial.get(id).success(function(res) {
-                $rootScope.financial = res.financial;
-                console.log($rootScope.financial);
+                $rootScope.financial = res.financial[0];
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/students/financial.html',
                     controller: function($scope, $uibModalInstance, Financial) {
+                        
                         $scope.financialTitle = 'Edit Financial';
-                        $scope.studentID = $rootScope.financial.studentID;
-                        // $scope.studentEmail = $rootScope.financial.F_Students[0].email;
-                        $scope.semester = $rootScope.financial._id;
+                        $scope.studentID = $rootScope.financial.Students[0]._id
+                        $scope.studentEmail = $rootScope.financial.Students[0].email
+                        $scope.semester = $rootScope.financial.Semesters[0]._id;
                         $scope.monthlyPayment = $rootScope.financial.monthlyPayment;
                         $scope.comment = $rootScope.financial.comment;
+                        $scope.semesters = $rootScope.semester;
 
-                        $scope.financialSubmit = function() {
-                            
+                        $scope.financialSubmit = function() {                            
 
                             Financial.update($rootScope.financial._id, $rootScope.financial)
                                 .then(
@@ -51,8 +41,7 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
                                     function(response) {
                                         console.log(response);
                                     }
-                                );
-
+                            );
                         };
 
                         $scope.cancel = function() {
@@ -80,11 +69,10 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
 
 
 
-   })
+    })
 
-  .controller('FinancialDetailsCtrl', function ($scope, $routeParams, $uibModal, Institution) {
-    Financial.get($routeParams.Id).success(function (response) {
-      $scope.financial = response.financial;
+.controller('FinancialDetailsCtrl', function($scope, $routeParams, $uibModal, Institution) {
+    Financial.get($routeParams.Id).success(function(response) {
+        $scope.financial = response.financial;
     });
-  });
-
+});

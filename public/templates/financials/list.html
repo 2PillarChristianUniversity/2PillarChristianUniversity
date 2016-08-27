@@ -1,16 +1,4 @@
 <div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
-	<div class="col-lg-10">
-		<b>Student ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
-		<b>Student Name</b> <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Student Name">
-		<b>Semester</b> <select ng-model='semester' class="input-medium search-query" ng-options="semester.name as semester.name for semester in semesters" placeholder="Semester">
-            </select>
-		<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
-	</div>
-	<br>
-	<br>
-	<br>
-	<br>
-
 	<table datatable="ng" class="table table-bordered table-hover" id="financialTable" ng-show="financials.length" >
 		<thead>
 			<tr>
@@ -26,8 +14,8 @@
 		<tbody>
 			<tr style="cursor: pointer;" ng-repeat="financial in financials" >
 				<td ng-click="financialDetails(financial._id)">{{financial.studentID}}</td>
-				<td ng-click="studentDetails(financial._id)">{{financial.F_Students[0].lastName}}, {{financial.F_Students[0].firstName}} {{financial.F_Students[0].middleName}}</td>
-				<td ng-click="financialDetails(financial._id)">{{financial.F_Semesters[0].name}}</td>
+				<td ng-click="studentDetails(financial._id)">{{financial.Students[0].lastName}}, {{financial.Students[0].firstName}} {{financial.Students[0].middleName}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.Semesters[0].name}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.comment}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.monthlyPayment}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.status}}</td>
