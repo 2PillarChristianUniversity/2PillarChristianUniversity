@@ -31,11 +31,12 @@ var jwtCheck = jwt({
     audience: '4f3JCR8Bp6PpNruh4WSrqGijapKol6m7'
 });
 
+app.use(cookieParser());
+
 app.use(bodyParser.json());
 app.use(expressValidator());
 console.log();
 // app.use('/api', jwtCheck);
-
 
 app.use('/api', courses);
 app.use('/api', groups);
