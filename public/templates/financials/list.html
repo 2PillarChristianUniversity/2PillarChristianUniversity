@@ -26,15 +26,18 @@
 		<tbody>
 			<tr style="cursor: pointer;" ng-repeat="financial in financials" >
 				<td ng-click="financialDetails(financial._id)">{{financial.studentID}}</td>
-				<td ng-click="studentDetails(financial._id)">{{financial.studentLastName}}, {{financial.studentFirstName}} {{financial.studentMiddleName}}</td>
-				<td ng-click="financialDetails(financial._id)">{{financial.semester}}</td>
+				<td ng-click="studentDetails(financial._id)">{{financial.F_Students[0].lastName}}, {{financial.F_Students[0].firstName}} {{financial.F_Students[0].middleName}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.F_Semesters[0].name}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.comment}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.monthlyPayment}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.status}}</td>
 				<td>
 					<a type="submit" title="edit" ng-click="editFinancial(financial._id)">Edit</a>
+					<a type="submit" title="edit" ng-click="deleteFinancial(financial._id)">Delete</a>
 			    </td>
 			</tr>
 		</tbody>
 	</table>
+	<br>
+	<br>
 </div>

@@ -23,7 +23,7 @@
                             Edit
                         </a>
                         |
-                        <a href="javascript:void(0)" ng-click="removeSemester(semester._id)">
+                        <a href="javascript:void(0)" ng-click="deleteSemester(semester._id)">
                             Delete
                             </a>
                     </span>
@@ -45,7 +45,7 @@
                             <td>{{course.name}}</td>
                             <td>{{course.startDate | date}}</td>
                             <td>{{course.endDate | date}}</td>
-                            <td><a href="javascript:void(0)" ng-click="editCourse(semester._id ,course._id)">edit</a></td>
+                            <td><a href="javascript:void(0)" ng-click="editCourse(semester.name ,course._id)">edit</a></td>
                             <td><a href="javascript:void(0)" ng-click="deleteCourse(course._id)">delete</a></td>
                         </tr>
                     </table>
