@@ -21,6 +21,9 @@ angular.module('smsApp-studentsList')
             },
             delete: function (id) {
                 return $http({ method: "DELETE", url: "/api/student/id/" + id });
+            },
+            studentCourse: function (id) {
+                return $http({ method: "GET", url: "/api/student/courses/" + id });
             }
         };
     });
