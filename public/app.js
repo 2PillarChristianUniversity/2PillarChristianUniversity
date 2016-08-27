@@ -15,11 +15,9 @@ angular.module('smsApp', [
 		'datatables',
 		'ngNotificationsBar',
 		'ngSanitize',
-		'angularBootstrapNavTree',
 		'ui.calendar'
-
 	])
-	.config(function($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider, 
+	.config(function($routeProvider, authProvider, $httpProvider, jwtInterceptorProvider,
 		notificationsConfigProvider) {
 		$routeProvider
 			.when('/home', {

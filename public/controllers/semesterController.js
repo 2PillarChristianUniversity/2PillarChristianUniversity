@@ -2,8 +2,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         'ngSanitize', 'ui.calendar'
     ])
     .controller('SemesterListCtrl', function($scope, $rootScope, $routeParams, $location,
-        $uibModal, Semester, notifications, Course, $compile, uiCalendarConfig) {
-
+        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student) {
          Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
             // console.log($scope.semesters);
@@ -18,30 +17,19 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         var y = date.getFullYear();
 
         $scope.changeTo = 'English';
-        /* event source that pulls from google.com */
-        $scope.eventSource = {
-
-            //className: 'gcal-event', // an option!
-            //currentTimezone: 'America/Chicago' // an option!
-        };
-        /* event source that contains custom events on the scope */
-        $scope.events = [
-          // {title: 'All Day Event',start: new Date(y, m, 1)},
-          // {title: 'Long Event',start: new Date(y, m, d - 5),end: new Date(y, m, d - 2)},
-          // {id: 999,title: 'Repeating Event',start: new Date(y, m, d - 3, 16, 0),allDay: false},
-          // {id: 999,title: 'Repeating Event',start: new Date(y, m, d + 4, 16, 0),allDay: false},
-          // {title: 'Birthday Party',start: new Date(y, m, d + 1, 19, 0),end: new Date(y, m, d + 1, 22, 30),allDay: false},
-          // {title: 'Click for Google',start: new Date(y, m, 28),end: new Date(y, m, 29),url: 'http://google.com/'}
-        ];
 
         /* event source that calls a function on every view switch */
         $scope.eventsF = function (start, end, bool, callback) {
            // getting the events and feeding the calendar
-          var s = new Date(start).getTime() / 1000;
-          var e = new Date(end).getTime() / 1000;
-          var m = new Date(start).getMonth() + 1;
-          var events = [{title: 'Feed Me ' + m,start: new Date(y, m, d - 5),end: new Date(y, m, d - 2),allDay: false}];
-          callback(events);
+            var startDate = $filter('date')(new Date(start), "yyyy-MM-dd");
+            var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+            Student.studentCourse('000001', startDate, endDate).success(function (response) {
+                $scope.student = response.student;
+                console.log($scope.student);
+
+                var events = [{title: 'Feed Me ' + m, start: new Date(y, m, d - 5), end: new Date(y, m, d - 2), allDay: false}];
+                callback(events);
+            });
         };
 
         /* Change View */
@@ -78,7 +66,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             $scope.uiConfig.calendar.dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         };
         /* event sources array*/
-        $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
+        $scope.eventSources = [$scope.eventsF];
 
         // end calendar
 
