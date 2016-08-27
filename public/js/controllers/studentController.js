@@ -1,5 +1,5 @@
 angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize'])
-    .controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal, notifications, $routeParams, $rootScope) {
+    .controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal, notifications, $routeParams, $rootScope, Financial) {
         $scope.search = function() {
             if ($scope.searchName) {
                 Student.searchName($scope.searchName).success(function(response) {
@@ -186,12 +186,17 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     })
 
     .controller('StudentDetailsCtrl', function($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial) {
-        $rootScope.index = -1;
+        $rootScope.index = -1;        
+        console.log($routeParams.Id);
         Student.get($routeParams.Id).success(function(response) {
             $scope.student = response.student;
         });
 
-        // add degree
+        Financial.searchID($routeParams.Id).success(function(response) {
+            $scope.financials = response.financials;
+        });
+
+                // add degree
         $scope.addDegree = function(isGraduate) {
             var modalInstance = $uibModal.open({
                 animation: true,

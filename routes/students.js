@@ -12,7 +12,8 @@ function createAutoId(index) {
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function (err, db) {
 	router.get('/student/id/:id', function (req, res) {
-		db.collection('Students').findOne({ _id: req.params.id }, function (error, student) {
+		db.collection('Students').findOne(
+			{ _id: req.params.id }, function (error, student) {
 			if (error) {
 				return res.
 					status(500).
@@ -20,6 +21,14 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 			}
 			res.json({ student: student });
 		});
+		db.collection('Students').aggregate([{
+                $lookup: {
+                    from: "Financials",
+                    localField: "_id",
+                    foreignField: "studentID",
+                    as: "S_Financials"
+                }
+        }]);
 	});
 
 	router.get('/students/id/:id', function (req, res) {

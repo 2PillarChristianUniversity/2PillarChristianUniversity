@@ -557,6 +557,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         // edit course
         $scope.editCourse = function(semesterName, courseID) {
+            console.log(courseID);
             Course.get(courseID).success(function(res) {
                 $rootScope.course = res.course;
                 console.log($rootScope.course);
