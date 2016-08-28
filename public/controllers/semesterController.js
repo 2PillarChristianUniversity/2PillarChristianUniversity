@@ -5,8 +5,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, store) {
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
-
-        });
+         });
 
         var date = new Date();
         var d = date.getDate();
@@ -479,7 +478,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         // edit course
         $scope.editCourse = function(semesterName, courseID) {
-            console.log(courseID);
             Course.get(courseID).success(function(res) {
                 $rootScope.course = res.course;
                 var modalInstance = $uibModal.open({
