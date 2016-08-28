@@ -1,6 +1,6 @@
 <div ng-include="'/templates/navigation.html'"></div>
 <h3>Student Details</h3>
-
+<div class="container">
 <uib-tabset active="active">
 	<uib-tab index="0" heading="Personal">
 		<table class="table table-hover">
@@ -304,7 +304,7 @@
 				<th>Action</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="financial in student.financials">
+				<tr ng-repeat="financial in financials">
 					<td>
 						<p>{{financial.semester}}</p>
 					</td>
@@ -327,3 +327,4 @@
 
 	</uib-tab>
 </uib-tabset>
+</div>

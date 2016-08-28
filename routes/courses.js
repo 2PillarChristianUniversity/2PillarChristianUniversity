@@ -94,40 +94,16 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
     //     });
     // });
 
-    router.delete('/course/id/:id', function(req, res) {
-        console.log(req.params);
-        db.collection('Courses').removeOne({
-            _id: req.params.id.toString
-        }, function(error, course) {
-            if (error) {
+    router.delete('/course/id/:id', function (req, res) {
+        db.collection('Courses').deleteOne({ _id: req.params.id }, function (error, course) {
+             if (error) {
                 return res.
-                status(400).
-                json({
-                    error: "Can't delete course..."
-                });
+                    status(400).
+                    json({ error: "Can't delete course..." });
             }
-            res.json({
-                msg: "Delete success."
-            });
+            res.json({ msg: "Delete success." });
         });
     });
-
-    router.delete('/course/id/:id', function(req, res) {
-        db.collection('Courses').deleteOne({
-            _id: req.params.id.toString
-        }, function(error, course) {
-            if (error) {
-                return res.
-                status(400).
-                json({
-                    error: "Can't delete course..."
-                });
-            }
-            res.json({
-                msg: "Delete success."
-            });
-        });
-    })
 
     router.post('/course/emailExist', function(req, res) {
         db.collection('Courses').findOne({
@@ -151,7 +127,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                 msg: "Not found."
             });
         })
-    })
+    });
 
      // create new 
     router.put('/course', function(req, res) {  

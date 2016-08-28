@@ -13,6 +13,9 @@ angular.module('smsApp-studentsList')
             get: function (id) {
                 return $http({ method: "GET", url: "/api/professor/id/" + id });
             },
+            getProfessorByEmail: function (email) {
+                return $http({ method: "GET", url: "/api/professor/email/" + email });
+            },
             update: function (id, professor) {
                 return $http({ method: "POST", url: "/api/professor/id/" + id, data: professor });
             },

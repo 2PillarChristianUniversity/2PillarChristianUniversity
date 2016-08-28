@@ -1,11 +1,13 @@
 <div ng-include="'/templates/navigation.html'"></div>
+
 <div class="container">
     <br>
     <br>
-    <uib-tabset active="active">
+    <uib-tabset active="0">
 
-        <uib-tab index="0" heading="Calendar">
-           <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources2"></div>  
+        <uib-tab index="0" heading="Calendar" active="true" ng-click="renderCalendar('calendar')">
+            <br>
+           <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
         </uib-tab>
 
         <uib-tab index="1" heading="Previous Courses">
@@ -23,7 +25,7 @@
                             Edit
                         </a>
                         |
-                        <a href="javascript:void(0)" ng-click="removeSemester(semester._id)">
+                        <a href="javascript:void(0)" ng-click="deleteSemester(semester._id)">
                             Delete
                             </a>
                     </span>
@@ -45,10 +47,12 @@
                             <td>{{course.name}}</td>
                             <td>{{course.startDate | date}}</td>
                             <td>{{course.endDate | date}}</td>
-                            <td><a href="javascript:void(0)" ng-click="editCourse(semester._id,course._id)">edit</a></td>
+                            <td><a href="javascript:void(0)" ng-click="editCourse(semester.name ,course._id)">edit</a></td>
+                            <td><a href="javascript:void(0)" ng-click="deleteCourse(course._id)">delete</a></td>
                         </tr>
                     </table>
                 </div>
         </uib-tab>
     </uib-tabset>
     </div>
+ 

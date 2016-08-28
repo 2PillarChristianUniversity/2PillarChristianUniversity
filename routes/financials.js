@@ -13,41 +13,136 @@ function createAutoId(index) {
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function (err, db) {
     router.get('/financial/id/:id', function (req, res) {
-        db.collection('Financials').findOne({ _id: req.params.id }, function (error, financial) {
+       db.collection(colName).aggregate(
+            [{
+                $match:{
+                    _id: req.params.id
+                    }
+                 },
+                {
+                    $lookup:
+                    {
+                      from: "Semesters",
+                      localField: "semester",
+                      foreignField: "_id",
+                      as: "Semesters"
+                    }        
+               },
+               { 
+                    $lookup:
+                    {
+                      from: "Students",
+                      localField: "studentID",
+                      foreignField: "_id",
+                      as: "Students"
+                    }
+                }
+            ],
+         function(error, financial) {
             if (error) {
                 return res.
-                    status(500).
-                    json({ error: error.toString() });
+                status(500).
+                json({
+                    error: error.toString()
+                });
             }
-            if (!financial) {
-                return res.
-                    status(404).
-                    json({ error: 'Not found' });
-            }
-            res.json({ financial: financial });
+            res.json({
+                financial: financial
+
+            });
         });
     });
 
-    router.get('/financials/', function (req, res) {
-        db.collection('Financials').find({}).toArray(function (error, financials) {
+    // // search student id
+    // router.get('/financials/id/:id', function (req, res) {
+    //     db.collection(colName).find({ studentID: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, financials) {
+    //         if (error) {
+    //             return res.
+    //                 status(500).
+    //                 json({ error: error.toString() });
+    //         }
+    //         if (!financials) {
+    //             res.json({ financials: [] });
+    //         } else {
+    //             res.json({ financials: financials });
+    //         }
+    //     });
+    // });
+
+    router.get('/financials/', function(req, res) {
+
+        db.collection(colName).aggregate(
+            [
+                {
+                    $lookup:
+                    {
+                      from: "Semesters",
+                      localField: "semester",
+                      foreignField: "_id",
+                      as: "Semesters"
+                    }        
+               },
+               { 
+                    $lookup:
+                    {
+                      from: "Students",
+                      localField: "studentID",
+                      foreignField: "_id",
+                      as: "Students"
+                    }
+                }
+            ],
+         function(error, financials) {
             if (error) {
                 return res.
-                    status(500).
-                    json({ error: error.toString() });
+                status(500).
+                json({
+                    error: error.toString()
+                });
             }
-            res.json({ financials: financials });
+            res.json({
+                financials: financials
+            });
         });
     });
 
-    router.put('/financial', function (req, res) {
-
-        db.collection('Financials').insert(req.body, function (error, financial) {
-            if (error) {
-                return res.
-                    status(400).
-                    json({ error: "Can't insert financial..." });
+    router.put('/financial', function(req, res) {  
+   
+        db.collection('Financials', {
+            strict: true
+        }, function(err, collection) { // check exists collection
+            if (err != null) { // if exists
+                req.body._id = createAutoId(1);
+                db.collection('Financials').insert(req.body, function(error, financial) {
+                    if (error) {
+                        return res.
+                        status(400).
+                        json({
+                            error: "Can't insert Financials..."
+                        });
+                    }
+                    res.json({
+                        financial: financial
+                    });
+                });
             }
-            res.json({ financial: financial });
+
+            autoIncrement.getNextSequence(db, 'Financials', function(err, autoIndex) {
+                req.body._id = createAutoId(autoIndex);
+                db.collection('Financials').insert(req.body, function(error, financial) {
+                    if (error) {
+                        return res.
+                        status(400).
+                        json({
+                            error: "Can't insert financial..."
+                        });
+                    }
+                    res.json({
+                        financial: financial
+                    });
+                });
+            });
+
         });
     });
 

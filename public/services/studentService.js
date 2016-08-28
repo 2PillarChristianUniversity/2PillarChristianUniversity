@@ -1,5 +1,5 @@
 angular.module('smsApp-studentsList')
-    .factory("Student", function StudentFactory($http) {
+    .factory("Student", function StudentFactory($http   ) {
         return {
             all: function () {
                 return $http({ method: "GET", url: "/api/students" });
@@ -13,6 +13,9 @@ angular.module('smsApp-studentsList')
             get: function (id) {
                 return $http({ method: "GET", url: "/api/student/id/" + id });
             },
+            getStudentByEmail: function (email) {
+                return $http({ method: "GET", url: "/api/student/email/" + email });
+            },
             update: function (id, student) {
                 return $http({ method: "POST", url: "/api/student/id/" + id, data: student });
             },
@@ -21,6 +24,9 @@ angular.module('smsApp-studentsList')
             },
             delete: function (id) {
                 return $http({ method: "DELETE", url: "/api/student/id/" + id });
+            },
+            studentCourse: function (id, startDate, endDate) {
+                return $http({ method: "POST", url: "/api/student/courses/" + id, data: {start_date: startDate, end_date: endDate} });
             }
         };
     });
