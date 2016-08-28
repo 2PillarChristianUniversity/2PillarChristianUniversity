@@ -1,10 +1,9 @@
 angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize', 'ngSecurity'])
     .controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal,
         notifications, $routeParams, $rootScope, Financial, $security, store) {            
-        console.log(store.get('studentID'));
-        // if ($security.hasPermission('Student')) {
-        //     $location.path('/404_page/');
-        // }
+        // console.log(store.get('studentID'));
+        // $security.logout();
+        
 
         $scope.search = function() {
             if ($scope.searchName) {
