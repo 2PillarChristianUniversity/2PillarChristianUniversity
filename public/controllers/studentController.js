@@ -793,7 +793,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
         });
         var modalInstance = $uibModal.open({
             animation: true,
-            templateUrl: 'templates/students/financial.html',
+            templateUrl: 'templates/financials/new.html',
             controller: function($scope, $uibModalInstance, Financial, Student) {
                 $scope.financialTitle = 'Send request';
                 Semester.all().success(function(response) {
@@ -804,7 +804,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 $scope.studentEmail = $rootScope.student.email;
                 $scope.status = "Waiting";
 
-                $scope.ok = function() {
+                $scope.financialSubmit = function() {
                     $scope.financial = {
                         studentID: $scope.studentID,
                         semester: $scope.semester,
