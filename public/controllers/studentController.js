@@ -787,9 +787,9 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // add request
-    $scope.addRequest = function(stuID) {
+    $scope.addRequest = function(stuID) {       
         Student.get(stuID).success(function(res) {
-            $rootScope.student = res.student[0];
+            $rootScope.student = res.student;       
         });
         var modalInstance = $uibModal.open({
             animation: true,

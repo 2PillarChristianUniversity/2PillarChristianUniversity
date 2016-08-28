@@ -132,14 +132,14 @@ angular.module('smsApp', [
 					$location.path('/home');
 				}
 			});
-			// if ($security.getPermissions() == undefined) {
-			// 	roles.push('Admin');
-			// 	$security.login(idToken, profile, roles);
-			// }
 
+			if ($security.getPermissions() == undefined) {
+				roles.push('Admin');
+				$security.login(idToken, profile, roles);
+			}
 		});
-
 	});
+	
 	authProvider.on('loginFailure', function($location) {
 		$location.path('/error=login%20failure');
 	});
