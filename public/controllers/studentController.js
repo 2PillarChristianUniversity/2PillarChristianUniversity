@@ -1,11 +1,10 @@
 angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize', 'ngSecurity'])
     .controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal,
-        notifications, $routeParams, $rootScope, Financial, $security) {
-            
-        console.log($security.getPermissions());
-        if ($security.hasPermission('student')) {
-            $location.path('/404_page/');
-        }
+        notifications, $routeParams, $rootScope, Financial, $security, store) {            
+        console.log(store.get('studentID'));
+        // if ($security.hasPermission('Student')) {
+        //     $location.path('/404_page/');
+        // }
 
         $scope.search = function() {
             if ($scope.searchName) {
@@ -790,7 +789,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     // add request
     $scope.addRequest = function(stuID) {
         Student.get(stuID).success(function(res) {
-            $rootScope.student = res.student;
+            $rootScope.student = res.student[0];
         });
         var modalInstance = $uibModal.open({
             animation: true,

@@ -118,6 +118,7 @@ angular.module('smsApp', [
 			Student.getStudentByEmail(profile.email).success(function(response) {
 				if (response.student != null) {
 					roles.push('Student');
+					store.set('studentID', response.student._id);
 					$security.login(idToken, profile, roles);
 					$location.path('/home');
 				}
@@ -126,14 +127,15 @@ angular.module('smsApp', [
 			Professor.getProfessorByEmail(profile.email).success(function(response) {
 				if (response.professor != null) {
 					roles.push('Professor');
+					store.set('studentID', response.professor._id);
 					$security.login(idToken, profile, roles);
 					$location.path('/home');
 				}
 			});
-			if ($security.getPermissions() == undefined) {
-				roles.push('Admin');
-				$security.login(idToken, profile, roles);
-			}
+			// if ($security.getPermissions() == undefined) {
+			// 	roles.push('Admin');
+			// 	$security.login(idToken, profile, roles);
+			// }
 
 		});
 
@@ -190,7 +192,8 @@ angular.module('smsApp', [
 
 	$rootScope.logout = function() {
 		auth.signout();
-		$rootScope.security.logout();
+		store.set('token', null);
+		$security.logout();
 		auth = null;
 		window.location = '/';
 	};
