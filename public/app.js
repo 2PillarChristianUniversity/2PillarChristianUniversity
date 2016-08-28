@@ -77,15 +77,15 @@ angular.module('smsApp', [
 				controller: 'InstitutionDetailsCtrl',
 				templateUrl: 'templates/institutions/details.html',
 				requiresLogin: true
-			})			
-			
+			})
+
 			//######## SEMESTER
 			.when('/semesters', {
 				controller: 'SemesterListCtrl',
 				templateUrl: 'templates/semesters/index.html',
 				requiresLogin: true
 			})
-			
+
 			//######## FINANCIAL
 			.when('/financials', {
 				controller: 'FinancialListCtrl',
@@ -106,29 +106,29 @@ angular.module('smsApp', [
 			})
 			.otherwise('/home');
 
-		authProvider.init({			
-			domain: auth0Cfg.domain, 
+		authProvider.init({
+			domain: auth0Cfg.domain,
 			clientID: auth0Cfg.clientID,
-			loginUrl: auth0Cfg.loginUrl 
+			loginUrl: auth0Cfg.loginUrl
 		});
 
 		authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security, Student, Professor) {
 			profilePromise.then(function(profile) {
-				//	Check role	
-				var roles  = [];			
+				//	Check role
+				var roles  = [];
 				Student.getStudentByEmail('nduyanh87@gmail.com').success(function(response) {
 					if (response.student != null) {
 						roles.push('Student');
 						$security.login(idToken, profile, roles);
-					}        
-                });	
+					}
+                });
 
                 Professor.getProfessorByEmail('nduyanh87@gmail.com').success(function(response) {
 					if (response.professor != null) {
 						roles.push('Professor');
 						$security.login(idToken, profile, roles);
-					}                  
-                });	
+					}
+                });
 			});
 			$location.path('/home');
 		});

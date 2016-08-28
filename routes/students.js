@@ -9,11 +9,47 @@ function createAutoId(index) {
 	var number = 6;
 	return Array(number-String(index).length + 1).join('0') + index;
 }
+mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
+	router.post('/student/courses/:id', function(req, res) {
+		db.collection('Students').aggregate([
+		{
+				$match: {
+					_id: req.params.id
+					// $or: [
+					// 	{ startDate: { $gt: req.body.start_date, $lt: req.body.end_date }} ,
+					// 	{ endDate: { $gt: req.body.start_date, $lt: req.body.end_date }}
+					// ]
 
-mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function (err, db) {
-	//	Get student by id
-	router.get('/student/id/:id', requiresLogin, function (req, res) {
-		db.collection('Students').findOne({ _id: req.params.id }, function (error, student) {
+				}
+			},
+			// Unwind the source
+			{
+				"$unwind": "$courses"
+			},
+			// Do the lookup matching
+			{
+				"$lookup": {
+					"from": "Courses",
+					"localField": "courses",
+					"foreignField": "_id",
+					"as": "productObjects"
+				}
+			},
+			// Unwind the result arrays ( likely one or none )
+			{
+				"$unwind": "$productObjects"
+			},
+			// Group back to arrays
+			{
+				"$group": {
+					"_id": "$_id",
+					//         "products": { "$push": "$courses" },
+					"Courses": {
+						"$push": "$productObjects"
+					}
+				}
+			}
+		], function(error, student) {
 			if (error) {
 				return res.
 					status(500).
@@ -92,7 +128,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 	});
 
 	//	Insert student
-	router.put('/student', function (req, res) {		
+	router.put('/student', function (req, res) {
 		var colName = 'Students';
 		db.collection(colName, {strict:true}, function(err, collection) { // check exists collection
 			if(err != null) { // if exists
@@ -116,7 +152,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 				}
 				if(course) {
 					return res.status(403)
-	          				.json({ error: "This email is already being used" });            
+	          				.json({ error: "This email is already being used" });
 				} else {
 					autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
 						req.body._id = createAutoId(autoIndex);
