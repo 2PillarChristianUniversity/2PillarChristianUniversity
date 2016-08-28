@@ -1,8 +1,7 @@
 angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize', 'ngSecurity'])
     .controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal,
         notifications, $routeParams, $rootScope, Financial, $security, store) {            
-     
-    store.get('studentID');
+
         // if ($security.hasPermission('Student')) {
         //     $location.path('/404_page/');
         // }
