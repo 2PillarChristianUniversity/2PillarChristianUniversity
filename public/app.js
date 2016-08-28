@@ -116,10 +116,12 @@ angular.module('smsApp', [
 			profilePromise.then(function(profile) {
 				//	Check role
 				var roles  = [];
+				store.set('token', idToken);
 				Student.getStudentByEmail('nduyanh87@gmail.com').success(function(response) {
 					if (response.student != null) {
 						roles.push('Student');
 						$security.login(idToken, profile, roles);
+						$location.path('/home');
 					}
                 });
 
@@ -127,10 +129,11 @@ angular.module('smsApp', [
 					if (response.professor != null) {
 						roles.push('Professor');
 						$security.login(idToken, profile, roles);
+						$location.path('/home');
 					}
                 });
 			});
-			$location.path('/home');
+			
 		});
 		authProvider.on('loginFailure', function($location) {
 			$location.path('/error=login%20failure');
@@ -164,7 +167,7 @@ angular.module('smsApp', [
 	      alert('redirect to permission denied');
 	    });
 		$rootScope.$on('$locationChangeStart', function() {
-			var token = auth.idToken;
+			var token = store.get('token');
 			if (token) {
 				if (!jwtHelper.isTokenExpired(token)) {
 					if (!auth.isAuthenticated) {
