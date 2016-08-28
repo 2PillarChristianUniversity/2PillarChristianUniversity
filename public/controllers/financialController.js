@@ -11,13 +11,13 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
             $rootScope.semester = $scope.semesters
         });
 
-        // edit Financials
+        // edit financials
         $scope.editFinancial = function(id) {
             Financial.get(id).success(function(res) {
                 $rootScope.financial = res.financial[0];
                 var modalInstance = $uibModal.open({
                     animation: true,
-                    templateUrl: 'templates/students/financial.html',
+                    templateUrl: 'templates/financials/edit.html',
                     controller: function($scope, $uibModalInstance, Financial) {
                         
                         $scope.financialTitle = 'Edit Financial';
@@ -27,10 +27,18 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
                         $scope.monthlyPayment = $rootScope.financial.monthlyPayment;
                         $scope.comment = $rootScope.financial.comment;
                         $scope.semesters = $rootScope.semester;
+                        $scope.status = $rootScope.financial.status;
 
-                        $scope.financialSubmit = function() {                            
+                        $scope.financialSubmit = function() { 
+                            $scope.financial = {
+                                "studentID": $scope.studentID,
+                                "semester": $scope.semester,
+                                "monthlyPayment": $scope.monthlyPayment,
+                                "status": $scope.status,
+                                "comment": $scope.comment
+                            };                                                    
 
-                            Financial.update($rootScope.financial._id, $rootScope.financial)
+                            Financial.update($rootScope.financial._id, $scope.financial)
                                 .then(
                                     function(response) {
                                         notifications.showSuccess({
@@ -64,6 +72,59 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
                     }
                 });
 
+            });
+        };
+
+        // delete financials
+        $scope.deleteFinancial = function(id) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/alert/confirm.html',
+                controller: function($scope, $uibModalInstance, Financial) {
+
+                    $scope.comtent = 'Are you sure you want to delete?'
+
+                    $scope.ok = function() {
+
+                        Financial.delete(id)
+                            .then(
+                                function(response) {
+                                    Financial.all().success(function(response) {
+                                        $scope.financials = response.financials;
+                                    });
+
+                                    notifications.showSuccess({
+                                        message: 'Delete financial successfully.'
+                                    });
+                                    $uibModalInstance.close(true);
+                                },
+                                function(response) {
+                                    notifications.showError({
+                                        message: response.error
+                                    });
+                                });
+                    }
+
+                    $scope.cancel = function() {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+
+                },
+                size: 'sm',
+                resolve: {
+                    isfinished: function() {
+                        return true
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(result) {
+                if (result == true) {
+                    Financial.all().success(function(response) {
+                        $scope.financials = response.financials;
+                    });
+
+                }
             });
         };
 
