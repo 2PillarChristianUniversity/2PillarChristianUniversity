@@ -5,7 +5,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student) {
          Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
-            // console.log($scope.semesters);
         });
 
         // function CalendarCtrl($scope,$compile,uiCalendarConfig) {
@@ -301,8 +300,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             modalInstance.result.then(function(course) {
                 $scope.coures = course;
                 $scope.coures.semesters = semesterID;
-
-                console.log($scope.coures);
                 Course.insert($scope.coures)
                     .then(
                         function(response) {
@@ -478,10 +475,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         // edit course
         $scope.editCourse = function(semesterName, courseID) {
-            console.log(courseID);
             Course.get(courseID).success(function(res) {
                 $rootScope.course = res.course;
-                console.log($rootScope.course);
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/semesters/course.html',
@@ -559,7 +554,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             }
                          });
                     });
-                    console.log($scope.semesters_list);
 
                 });
 

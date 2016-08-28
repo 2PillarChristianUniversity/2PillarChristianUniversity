@@ -1,7 +1,8 @@
 angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize', 'ngSecurity'])
     .controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal,
         notifications, $routeParams, $rootScope, Financial, $security, store) {            
-        console.log(store.get('studentID'));
+     
+    store.get('studentID');
         // if ($security.hasPermission('Student')) {
         //     $location.path('/404_page/');
         // }
@@ -191,14 +192,22 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
         }
     })
 
-.controller('StudentDetailsCtrl', function($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial) {
+.controller('StudentDetailsCtrl', function($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial, $security, store) {
     $rootScope.index = -1;
-    console.log($routeParams.Id);
     Student.get($routeParams.Id).success(function(response) {
         $scope.student = response.student;
-    });
+    });  
 
     Financial.searchID($routeParams.Id).success(function(response) {
+        $scope.financials = response.financials;
+    });
+
+    // permission student
+    $scope.studentPermission = store.get('studentID');
+    Student.get($scope.studentPermission).success(function(response) {
+        $scope.student = response.student;
+    });
+    Financial.searchID($scope.studentPermission).success(function(response) {
         $scope.financials = response.financials;
     });
 
@@ -292,7 +301,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         }
                     }
                 }
-                console.log($scope.degree);
                 $scope.degreeTitle = 'Edit Degree';
                 $scope.institutionName = $rootScope.degree.institutionName;
                 $scope.degree = $rootScope.degree.degree;
@@ -462,7 +470,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 
     // edit ministry
     $scope.editMinistry = function(studentID, ministryID) {
-        console.log("Edit ministry index  = " + $scope.index);
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -515,7 +522,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             if (!$scope.student.ministries) {
                 $scope.student.ministries = [];
             }
-            console.log($rootScope.index);
             $scope.student.ministries.splice($rootScope.index, 1, ministry);
             Student.update($scope.student._id, $scope.student)
                 .then(
@@ -567,7 +573,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             if (!$scope.student.ministries) {
                 $scope.student.ministries = [];
             }
-            console.log($rootScope.index);
             $scope.student.ministries.splice($rootScope.index, 1);
             Student.update($scope.student._id, $scope.student)
                 .then(
@@ -798,7 +803,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 $scope.financialTitle = 'Send request';
                 Semester.all().success(function(response) {
                     $scope.semesters = response.semesters;
-                    console.log($scope.semesters);
                 });
                 $scope.studentID = $rootScope.student._id;
                 $scope.studentEmail = $rootScope.student.email;
@@ -827,7 +831,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
         });
         modalInstance.result.then(function(financial) {
             $scope.financial = financial;
-            console.log($scope.financial);
             Financial.insert($scope.financial)
                 .then(
                     function(response) {
@@ -901,7 +904,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             if (!$scope.student.financials) {
                 $scope.student.financials = [];
             }
-            console.log($rootScope.index);
             $scope.student.financials.splice($rootScope.index, 1, request);
             Student.update($scope.student._id, $scope.student)
                 .then(
@@ -952,7 +954,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             if (!$scope.student.financials) {
                 $scope.student.financials = [];
             }
-            console.log($rootScope.index);
             $scope.student.financials.splice($rootScope.index, 1);
             Student.update($scope.student._id, $scope.student)
                 .then(

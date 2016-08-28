@@ -47,6 +47,11 @@ angular.module('smsApp', [
 			templateUrl: 'templates/students/index.html',
 			requiresLogin: true
 		})
+		.when('/rolestudent', {
+			controller: 'StudentDetailsCtrl',
+			templateUrl: 'templates/students/details.html',
+			requiresLogin: true
+		})
 
 	//######## PROFESSOR
 	.when('/professors', {
@@ -62,6 +67,11 @@ angular.module('smsApp', [
 		.when('/addProfessor', {
 			controller: 'AddProfessorsCtrl',
 			templateUrl: 'templates/professors/addProfessor.html',
+			requiresLogin: true
+		})
+		.when('/roleprofessor', {
+			controller: 'ProfessorDetailsCtrl',
+			templateUrl: 'templates/professors/details.html',
 			requiresLogin: true
 		})
 
@@ -127,16 +137,16 @@ angular.module('smsApp', [
 			Professor.getProfessorByEmail(profile.email).success(function(response) {
 				if (response.professor != null) {
 					roles.push('Professor');
-					store.set('studentID', response.professor._id);
+					store.set('professorID', response.professor._id);
 					$security.login(idToken, profile, roles);
 					$location.path('/home');
 				}
 			});
 
-			if ($security.getPermissions() == undefined) {
-				roles.push('Admin');
-				$security.login(idToken, profile, roles);
-			}
+			// if ($security.getPermissions() == undefined) {
+			// 	roles.push('Admin');
+			// 	$security.login(idToken, profile, roles);
+			// }
 		});
 	});
 	
