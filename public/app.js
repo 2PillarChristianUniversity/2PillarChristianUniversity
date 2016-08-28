@@ -110,7 +110,7 @@ angular.module('smsApp', [
 		loginUrl: auth0Cfg.loginUrl
 	});
 
-	authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security, Student, Professor) {
+	authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security, Student, Professor, $rootScope) {
 		profilePromise.then(function(profile) {
 			//	Check role
 			var roles = [];
@@ -119,8 +119,6 @@ angular.module('smsApp', [
 				if (response.student != null) {
 					roles.push('Student');
 					store.set('studentID', response.student._id);
-					$security.login(idToken, profile, roles);
-					$location.path('/home');
 				}
 			});
 
@@ -128,15 +126,16 @@ angular.module('smsApp', [
 				if (response.professor != null) {
 					roles.push('Professor');
 					store.set('studentID', response.professor._id);
-					$security.login(idToken, profile, roles);
-					$location.path('/home');
 				}
-			});
 
-			if ($security.getPermissions() == undefined) {
-				roles.push('Admin');
+				//	Login security
+				if (roles.length == 0) {
+					roles.push('Admin');					
+				}
+
 				$security.login(idToken, profile, roles);
-			}
+				$location.path('/home');
+			});
 		});
 	});
 	
