@@ -301,7 +301,6 @@
 				<th>Semester</th>
 				<th>Monthly payment</th>
 				<th>Status</th>
-				<th>Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="financial in financials">
@@ -313,10 +312,6 @@
 					</td>
 					<td>
 						<p>{{financial.status}}</p>
-					</td>
-					<td>
-						<button class="btn btn-xs btn-primary" ng-click="editFinancial(student._id, financial._id)">Edit</button>
-						<button class="btn btn-xs btn-primary" ng-click="deleteFinancial(student._id, financial._id)">Delete</button>
 					</td>
 				</tr>
 			</tbody>

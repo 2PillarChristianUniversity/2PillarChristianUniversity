@@ -74,6 +74,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 	//	Get list students by id (search function)
 	router.get('/students/id/:id', requiresLogin, function (req, res) {
 		db.collection('Students').find({ _id: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, students) {
+			
 			if (error) {
 				return res.
 					status(500).
@@ -112,6 +113,18 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 					json({ error: error });
 			}
 			res.json({ students: students });
+		});
+	});
+
+	//	Get student by ID
+	router.get('/student/id/:id', function (req, res) {
+		db.collection('Students').findOne({ _id: req.params.id }, function (error, student) {
+			if (error) {
+				return res.
+					status(500).
+					json({ error: error.toString() });
+			}
+			res.json({ student: student });
 		});
 	});
 
