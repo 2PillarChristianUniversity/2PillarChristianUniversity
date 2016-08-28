@@ -12,12 +12,12 @@
 		</div>
 
 		<ul class="nav navbar-nav">
-			<li  ng-if-permission="Student"><a href="#students"><b>Students</b></a></li>
-			<li><a href="#professors"><b>Professors</b></a></li>
-			<li><a href="#institutions"><b>Institutions</b></a></li>
-			<li><a href="#semesters"><b>Courses</b></a></li>
-			<li><a href="#financials"><b>Financial</b></a></li>
-			<li><a href=""><b>Reports</b></a></li>
+			<li  ng-if-permission="Student,Admin"><a href="#students"><b>Students</b></a></li>
+			<li><a href="#professors" ng-if-permission="Professor,Admin"><b>Professors</b></a></li>
+			<li><a href="#institutions" ng-if-permission="Admin"><b>Institutions</b></a></li>
+			<li><a href="#semesters" ng-if-permission="Student,Professor,Admin" ><b>Courses</b></a></li>
+			<li><a href="#financials" ng-if-permission="Admin"><b>Financial</b></a></li>
+			<li><a href="" ng-if-permission="Admin><b>Reports</b></a></li>
 		</ul>
 
 		<div style="position:fixed;right:50px;top:5px;cursor:pointer;" uib-dropdown>

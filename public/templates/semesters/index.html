@@ -1,11 +1,13 @@
 <div ng-include="'/templates/navigation.html'"></div>
+
 <div class="container">
     <br>
     <br>
     <uib-tabset active="0">
 
-        <uib-tab index="0" heading="Calendar">
-           <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources2"></div>  
+        <uib-tab index="0" heading="Calendar" active="true" ng-click="renderCalendar('calendar')">
+            <br>
+           <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
         </uib-tab>
 
         <uib-tab index="1" heading="Previous Courses">
