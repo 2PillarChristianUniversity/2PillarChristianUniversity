@@ -2,8 +2,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     .controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal,
         notifications, $routeParams, $rootScope, Financial, $security, store) {            
         // console.log(store.get('studentID'));
-        // $security.logout();
-        
+        // $security.logout();        
 
         $scope.search = function() {
             if ($scope.searchName) {

@@ -13,3 +13,7 @@
 .notifications .notifications-container {
   top: 50px;
 }
+
+.modal {
+    transition: all 0.5s ease;
+}
