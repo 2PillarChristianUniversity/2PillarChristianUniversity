@@ -116,20 +116,23 @@ angular.module('smsApp', [
 			profilePromise.then(function(profile) {
 				//	Check role	
 				var roles  = [];			
-				Student.getStudentByEmail('nduyanh87@gmail.com').success(function(response) {
+				Student.getStudentByEmail(profile.email).success(function(response) {
 					if (response.student != null) {
 						roles.push('Student');
 						$security.login(idToken, profile, roles);
+						console.log(roles);
 					}        
                 });	
 
-                Professor.getProfessorByEmail('nduyanh87@gmail.com').success(function(response) {
+                Professor.getProfessorByEmail(profile.email).success(function(response) {
 					if (response.professor != null) {
 						roles.push('Professor');
 						$security.login(idToken, profile, roles);
+						console.log(roles);
 					}                  
                 });	
 			});
+			console.log($security);
 			$location.path('/home');
 		});
 		authProvider.on('loginFailure', function($location) {
