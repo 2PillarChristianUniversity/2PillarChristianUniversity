@@ -1,7 +1,9 @@
-angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize'])
-    .controller('FinancialListCtrl', function($scope, $location, Financial, $uibModal, $routeParams, $rootScope,
+angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize', 'ngSecurity'])
+    .controller('FinancialListCtrl', function($scope, $location, $security, Financial, $uibModal, $routeParams, $rootScope,
         notifications, Student, Semester) {
-
+        if (!$security.hasPermission('Admin')) {
+            $location.path('/404_page/');
+        }
         Financial.all().success(function(response) {
             $scope.financials = response.financials;
         });
@@ -19,7 +21,7 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
                     animation: true,
                     templateUrl: 'templates/financials/edit.html',
                     controller: function($scope, $uibModalInstance, Financial) {
-                        
+
                         $scope.financialTitle = 'Edit Financial';
                         $scope.studentID = $rootScope.financial.Students[0]._id
                         $scope.studentEmail = $rootScope.financial.Students[0].email
@@ -29,14 +31,14 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
                         $scope.semesters = $rootScope.semester;
                         $scope.status = $rootScope.financial.status;
 
-                        $scope.financialSubmit = function() { 
+                        $scope.financialSubmit = function() {
                             $scope.financial = {
                                 "studentID": $scope.studentID,
                                 "semester": $scope.semester,
                                 "monthlyPayment": $scope.monthlyPayment,
                                 "status": $scope.status,
                                 "comment": $scope.comment
-                            };                                                    
+                            };
 
                             Financial.update($rootScope.financial._id, $scope.financial)
                                 .then(
@@ -49,7 +51,7 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
                                     function(response) {
                                         console.log(response);
                                     }
-                            );
+                                );
                         };
 
                         $scope.cancel = function() {

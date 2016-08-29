@@ -1,21 +1,18 @@
 <div ng-include="'/templates/navigation.html'"></div>
-
 <div class="container">
     <br>
     <br>
     <uib-tabset active="0">
-
-        <uib-tab index="0" heading="Calendar" active="true" ng-click="renderCalendar('calendar')" ng-if-permission="Student,Professor">
+        <uib-tab index="0" heading="Schedule" active="true" ng-click="renderCalendar('calendar')" ng-if-permission="Student,Professor">
             <br>
-           <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
+            <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
         </uib-tab>
-
-        <uib-tab index="1" heading="Previous Courses">
+        <uib-tab index="1" heading="Previous Courses"  ng-if-permission="Admin,Professor"  >
             <semester-treeview></semester-treeview>
         </uib-tab>
         <uib-tab index="2" heading="Courses">
             <br>
-            <button class="btn btn-primary" ng-click="AddSemester()">Add Semester</button>
+            <button ng-if-permission="Admin" class="btn btn-primary" ng-click="AddSemester()">Add Semester</button>
             <br>
             <br>
             <div class="panel panel-default" ng-repeat="semester in semesters">
@@ -24,14 +21,14 @@
                         <a href="javascript:void(0)"  ng-if-permission="Admin"  ng-click="editSemester(semester._id)">
                             Edit
                         </a>
-                        |
+                          
                         <a href="javascript:void(0)"  ng-if-permission="Admin"  ng-click="deleteSemester(semester._id)">
                             Delete
                             </a>
                     </span>
                 </div>
                 <div class="panel-body">
-                    <button ng-click="addCourse(semester._id, semester.name)">Add Course</button>
+                    <button ng-if-permission="Admin"   ng-click="addCourse(semester._id, semester.name)">Add Course</button>
                     <br>
                     <br>
                     <table class="table">
@@ -47,12 +44,12 @@
                             <td>{{course.name}}</td>
                             <td>{{course.startDate | date}}</td>
                             <td>{{course.endDate | date}}</td>
-                            <td><a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">edit</a></td>
-                            <td><a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">delete</a></td>
+                            <td><a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>  <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>  
+                            <a href="javascript:void(0)"  ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>   <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
+                            </td>
                         </tr>
                     </table>
                 </div>
         </uib-tab>
     </uib-tabset>
     </div>
- 

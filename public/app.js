@@ -135,12 +135,12 @@ angular.module('smsApp', [
 			Professor.getProfessorByEmail(profile.email).success(function(response) {
 				if (response.professor != null) {
 					roles.push('Professor');
-					store.set('studentID', response.professor._id);
+					store.set('professorID', response.professor._id);
 				}
 
 				//	Login security
 				if (roles.length == 0) {
-					roles.push('Admin');					
+					roles.push('Admin');
 				}
 
 				$security.login(idToken, profile, roles);
@@ -148,7 +148,7 @@ angular.module('smsApp', [
 			});
 		});
 	});
-	
+
 	authProvider.on('loginFailure', function($location) {
 		$location.path('/error=login%20failure');
 	});

@@ -12,14 +12,14 @@
 		</div>
 
 		<ul class="nav navbar-nav">
-			<li><a href="#students" ng-if-permission="Admin"><b>Students</b></a></li>
-			<li><a href="#rolestudent" ng-if-permission="Student"><b>Students</b></a></li>
-			<li><a href="#professors" ng-if-permission="Admin"><b>Professors</b></a></li>
-			<li><a href="#roleprofessor" ng-if-permission="Professor"><b>Professors</b></a></li>
-			<li><a href="#institutions" ng-if-permission="Admin"><b>Institutions</b></a></li>
-			<li><a href="#semesters" ng-if-permission="Student,Professor,Admin" ><b>Courses</b></a></li>
-			<li><a href="#financials" ng-if-permission="Admin"><b>Financial</b></a></li>
-			<li><a href="" ng-if-permission="Admin"><b>Reports</b></a></li>
+			<li ng-if-permission="Admin"><a href="#students"><b>Students</b></a></li>
+			<li ng-if-permission="Student"><a href="#rolestudent"><b>Students</b></a></li>
+			<li ng-if-permission="Admin"><a href="#professors" ><b>Professors</b></a></li>
+			<li ng-if-permission="Professor"><a href="#roleprofessor" ><b>Professors</b></a></li>
+			<li ng-if-permission="Admin"><a href="#institutions" ><b>Institutions</b></a></li>
+			<li ng-if-permission="Student,Professor,Admin"  ><a href="#semesters" ><b>Courses</b></a></li>
+			<li ng-if-permission="Admin"><a href="#financials" ><b>Financial</b></a></li>
+			<li ng-if-permission="Admin" ><a href="javascipt:void(0)" ><b>Reports</b></a></li>
 		</ul>
 
 		<div style="position:fixed;right:50px;top:5px;cursor:pointer;" uib-dropdown>
