@@ -501,7 +501,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.student.courses = []
                     }
 
-                    if ($scope.student.courses.indexOf(courseID) !== 1) {
+                    if ($scope.student.courses.indexOf(courseID) > -1) {
 
                         var modalInstance = $uibModal.open({
                             animation: true,
@@ -544,10 +544,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                 $rootScope.professors = res.professors;
             });
 
-            Course.get(courseID).success(function(res) {
-                $rootScope.course = res.courses;
-            });
-
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'templates/semesters/assign.html',
@@ -556,33 +552,47 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     $scope.course = $rootScope.course;
                     $scope.assignSubmit = function() {
 
-                        if (!$scope.course.professor) {
-                            $scope.course.professor = '';
-                        }
+                        if ($scope.professor != null) {
+                            Professor.get($scope.professor).success(function(res) {
+                                $rootScope.current_professor = res.professor;
 
-                        $scope.course.professor = $scope.professor;
+                                if ($rootScope.current_professor) {
+                                    if (!$rootScope.current_professor.courses) {
+                                        $rootScope.current_professor.courses = [];
+                                    }
+                                    if ($rootScope.current_professor.courses.indexOf(courseID) > -1) {
+                                        notifications.showError({
+                                            message: 'You already has been taken this course!'
+                                        });
+                                        $uibModalInstance.close(true);
+                                    } else {
 
-                        Course.update(courseID, $scope.course)
-                            .then(
-                                function(response) {
-                                    notifications.showSuccess({
-                                        message: 'Assign successfully.'
-                                    });
-                                    $uibModalInstance.close(true);
-                                },
-                                function(response) {
-                                    console.log(response);
+                                        $rootScope.current_professor.courses.push(courseID);
+                                        $scope.professorID = store.get('professorID')
+
+                                        Professor.update($scope.professorID, $rootScope.current_professor)
+                                            .then(
+                                                function(response) {
+                                                    notifications.showSuccess({
+                                                        message: 'Assign successfully.'
+                                                    });
+                                                    $uibModalInstance.close(true);
+                                                },
+                                                function(response) {
+                                                    console.log(response);
+                                                }
+                                            );
+                                    }
                                 }
-                            );
 
+                            });
+                        }
                     };
 
 
                     $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
                     };
-
-
 
                 },
                 size: 'sm'
