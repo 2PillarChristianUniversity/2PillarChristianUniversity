@@ -129,6 +129,7 @@ angular.module('smsApp', [
 				if (response.student != null) {
 					roles.push('Student');
 					store.set('studentID', response.student._id);
+					profile = angular.extend(profile, response.student);
 				}
 			});
 

@@ -1,8 +1,14 @@
 angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar',
-        'ngSanitize', 'ui.calendar'
+        'ngSanitize', 'ui.calendar', 'ngSecurity'
     ])
     .controller('SemesterListCtrl', function($timeout, $scope, $rootScope, $routeParams, $location,
-        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store) {
+        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, $security) {
+        var coursesOfStudents = [];
+        angular.forEach($security.getUser().Courses, function(value, key) {
+            this.push(value._id);
+        }, coursesOfStudents);
+        $scope.coursesOfStudents = coursesOfStudents;
+
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
             // console.log($scope.semesters);
