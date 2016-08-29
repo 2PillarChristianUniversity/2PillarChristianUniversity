@@ -3,7 +3,7 @@
     <br>
     <br>
     <uib-tabset active="0">
-        <uib-tab index="0" heading="Schedule" active="true" ng-click="renderCalendar('calendar')" ng-if-permission="Student,Professor">
+        <uib-tab index="0" select="renderCalendar()" heading="Schedule" active="true" ng-click="renderCalendar('calendar')" >
             <br>
             <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
         </uib-tab>
@@ -21,7 +21,7 @@
                         <a href="javascript:void(0)"  ng-if-permission="Admin"  ng-click="editSemester(semester._id)">
                             Edit
                         </a>
-                          
+
                         <a href="javascript:void(0)"  ng-if-permission="Admin"  ng-click="deleteSemester(semester._id)">
                             Delete
                             </a>
@@ -44,7 +44,7 @@
                             <td>{{course.name}}</td>
                             <td>{{course.startDate | date}}</td>
                             <td>{{course.endDate | date}}</td>
-                            <td><a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>  <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>  
+                            <td><a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>  <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>
                             <a href="javascript:void(0)"  ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>   <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
                             </td>
                         </tr>

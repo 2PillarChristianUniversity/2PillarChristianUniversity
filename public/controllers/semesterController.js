@@ -1,7 +1,7 @@
 angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar',
         'ngSanitize', 'ui.calendar'
     ])
-    .controller('SemesterListCtrl', function($scope, $rootScope, $routeParams, $location,
+    .controller('SemesterListCtrl', function($timeout, $scope, $rootScope, $routeParams, $location,
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student) {
          Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
@@ -72,6 +72,13 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             if(uiCalendarConfig.calendars[calendar]){
               uiCalendarConfig.calendars[calendar].fullCalendar('render');
             }
+        };
+
+        $scope.renderCalendar = function() {
+            $timeout(function(){
+                $('#calendar').fullCalendar('render');
+                $('#calendar').fullCalendar('rerenderEvents');
+            }, 0);
         };
          /* Render Tooltip */
         $scope.eventRender = function( event, element, view ) {
