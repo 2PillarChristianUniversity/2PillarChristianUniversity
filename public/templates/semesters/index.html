@@ -3,7 +3,7 @@
     <br>
     <br>
     <uib-tabset active="0">
-        <uib-tab index="0" select="renderCalendar()" heading="Schedule" active="true" ng-click="renderCalendar('calendar')" >
+        <uib-tab index="0" select="renderCalendar()" heading="Schedule" active="true" ng-click="renderCalendar('calendar')" ng-if-permission="Student,Professor">
             <br>
             <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
         </uib-tab>
