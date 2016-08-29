@@ -1,0 +1,134 @@
+<div ng-include="'/templates/navigation.html'"></div>
+<h3>Professor Details</h3>
+
+<uib-tabset active="active">
+	<uib-tab index="0" heading="Personal">
+		<table class="table table-hover">
+			<tbody>
+				<tr>
+					<td>
+						Professor ID:
+					</td>
+					<td>
+						<p>{{professor._id}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Email:
+					</td>
+					<td>
+						<p>{{professor.email}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						First Name:
+					</td>
+					<td>
+						<p>{{professor.firstName}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Middle Name:
+					</td>
+					<td>
+						<p>{{professor.middleName}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Last Name:
+					</td>
+					<td>
+						<p>{{professor.lastName}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Birth Date:
+					</td>
+					<td>
+						<p>{{professor.birthDate | date}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Gender:
+					</td>
+					<td>
+						<p>{{professor.gender}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Phone Number:
+					</td>
+					<td>
+						<p>{{professor.phoneNumber}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Address:
+					</td>
+					<td>
+						<p>{{professor.addressLine1}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						City:
+					</td>
+					<td>
+						<p>{{professor.city}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						State:
+					</td>
+					<td>
+						<p>{{professor.state}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Zip:
+					</td>
+					<td>
+						<p>{{professor.zipCode}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Application Date:
+					</td>
+					<td>
+						<p>{{professor.applicationDate | date}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Acceptance Notification Date:
+					</td>
+					<td>
+						<p>{{professor.acceptanceNotificationDate | date}}</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Graduation Date:
+					</td>
+					<td>
+						<p>{{professor.graduationDate | date}}</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</uib-tab>
+	<uib-tab index="5" heading="Courses">
+
+	</uib-tab>
+</uib-tabset>
