@@ -168,6 +168,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             zipCode: $scope.zipCode,
                             graduationDate: $scope.graduationDate,
                             applicationDate: $scope.applicationDate,
+                            emergencyContacts: $scope.emergencyContacts,
                             acceptanceNotificationDate: $scope.acceptanceNotificationDate
                         };
                         Student.insert($scope.student)
@@ -629,8 +630,14 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
         });
         modalInstance.result.then(function(contact) {
             if (isContact) {
+                if (!$scope.student.emergencyContacts) {
+                    $scope.student.emergencyContacts = [];
+                }
                 $scope.student.emergencyContacts.push(contact);
             } else {
+                if (!$scope.student.references) {
+                    $scope.student.references = [];
+                }
                 $scope.student.references.push(contact);
             }
             Student.update($scope.student._id, $scope.student)
@@ -845,9 +852,9 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         notifications.showSuccess({
                             message: 'Add Financial successfully.'
                         });
-                        Financial.all().success(function(response) {
-                            $scope.courses = response.courses;
-                        });
+                        Financial.searchID(stuID).success(function(response) {
+                            $scope.financials = response.financials;
+                        });                      
                     },
                     function(response) {
                         console.log(response);
