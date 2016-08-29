@@ -4,6 +4,7 @@ var express = require('express');
 var router = express.Router();
 var autoIncrement = require("mongodb-autoincrement");
 var mongoCfg = require('../mongo_cfg');
+var colName = 'Courses';
 
 function createAutoId(index) {
     var number = 6;
@@ -11,27 +12,14 @@ function createAutoId(index) {
 }
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
-    router.get('/course/id/:id', function(req, res) {
-        db.collection('Courses').findOne({
-            _id: req.params.id
-        }, function(error, course) {
+    router.get('/course/id/:id', function (req, res) {
+        db.collection('Courses').findOne({ _id: req.params.id }, function (error, course) {
             if (error) {
                 return res.
-                status(500).
-                json({
-                    error: error.toString()
-                });
+                    status(500).
+                    json({ error: error.toString() });
             }
-            if (!course) {
-                return res.
-                status(404).
-                json({
-                    error: 'Not found'
-                });
-            }
-            res.json({
-                courses: course
-            });
+            res.json({ course: course });
         });
     });
 
@@ -47,6 +35,22 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
             res.json({
                 courses: courses
             });
+        });
+    });
+
+    // search student id
+    router.get('/courses/id/:id', function (req, res) {
+        db.collection(colName).find({ studentID: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, courses) {
+            if (error) {
+                return res.
+                    status(500).
+                    json({ error: error.toString() });
+            }
+            if (!courses) {
+                res.json({ courses: [] });
+            } else {
+                res.json({ courses: courses });
+            }
         });
     });
 

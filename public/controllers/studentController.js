@@ -191,9 +191,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
         }
     })
 
-.controller('StudentDetailsCtrl', function($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial) {
+.controller('StudentDetailsCtrl', function($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial, $security, store) {
     $rootScope.index = -1;
-    console.log($routeParams.Id);
     Student.get($routeParams.Id).success(function(response) {
         $scope.student = response.student;
     });
@@ -201,6 +200,20 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     Financial.searchID($routeParams.Id).success(function(response) {
         $scope.financials = response.financials;
     });
+
+    // role student
+    // $scope.rolestudent = store.get('studentID');
+    // Student.get($scope.rolestudent).success(function(response) {
+    //     $scope.student = response.student;
+    // });
+
+    // Financial.searchID($scope.rolestudent).success(function(response) {
+    //     $scope.financials = response.financials;
+    // });
+
+    // Student.getStudentCourse($scope.rolestudent).success(function(response) {
+    //     $scope.studentCourses = response.student;
+    // });
 
     // add degree
     $scope.addDegree = function(isGraduate) {

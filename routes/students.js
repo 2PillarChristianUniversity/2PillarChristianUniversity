@@ -10,54 +10,7 @@ function createAutoId(index) {
 	return Array(number-String(index).length + 1).join('0') + index;
 }
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
-	router.post('/student/courses/:id', function(req, res) {
-		db.collection('Students').aggregate([
-		{
-				$match: {
-					_id: req.params.id
-					// $or: [
-					// 	{ startDate: { $gt: req.body.start_date, $lt: req.body.end_date }} ,
-					// 	{ endDate: { $gt: req.body.start_date, $lt: req.body.end_date }}
-					// ]
-
-				}
-			},
-			// Unwind the source
-			{
-				"$unwind": "$courses"
-			},
-			// Do the lookup matching
-			{
-				"$lookup": {
-					"from": "Courses",
-					"localField": "courses",
-					"foreignField": "_id",
-					"as": "productObjects"
-				}
-			},
-			// Unwind the result arrays ( likely one or none )
-			{
-				"$unwind": "$productObjects"
-			},
-			// Group back to arrays
-			{
-				"$group": {
-					"_id": "$_id",
-					//         "products": { "$push": "$courses" },
-					"Courses": {
-						"$push": "$productObjects"
-					}
-				}
-			}
-		], function(error, student) {
-			if (error) {
-				return res.
-					status(500).
-					json({ error: error.toString() });
-			}
-			res.json({ student: student });
-		});
-	});
+	
 
 	//	Get student by email
 	router.get('/student/email/:email', function (req, res) {
@@ -86,6 +39,62 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 				res.json({ students: students });
 			}
 		});
+	});
+
+	// Get course by student id
+	router.get('/student/courses/:id', function(req, res) {
+		db.collection('Students').aggregate(
+            [
+            	{
+                	$match:{
+                    	_id: req.params.id
+                    }
+                },
+
+				// Unwind the source
+				{
+					$unwind: "$courses"
+				},
+
+				// Do the lookup matching
+				{
+					$lookup: {
+						from: "Courses",
+						localField: "courses",
+						foreignField: "_id",
+						as: "productObjects"
+					}
+				},
+
+				// Unwind the result arrays ( likely one or none )
+				{
+					"$unwind": "$productObjects"
+				},
+				
+				// Group back to arrays
+				{
+					"$group": {
+						"_id": "$_id",
+						//         "products": { "$push": "$courses" },
+						"Courses": {
+							"$push": "$productObjects"
+						}
+					}
+				}
+            ],
+        function(error, student) {
+            if (error) {
+                return res.
+                status(500).
+                json({
+                    error: error.toString()
+                });
+            }
+            res.json({
+                student: student
+
+            });
+        });
 	});
 
 	//	Get student by name (search function)
@@ -131,6 +140,56 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 	//	Update student
 	router.post('/student/id/:id', function (req, res) {
 		db.collection('Students').update({ _id: req.params.id }, req.body, function (error, student) {
+			if (error) {
+				return res.
+					status(500).
+					json({ error: error.toString() });
+			}
+			res.json({ student: student });
+		});
+	});
+
+	//	Update Student's course
+	router.post('/student/courses/:id', function(req, res) {
+		db.collection('Students').aggregate([
+		{
+				$match: {
+					_id: req.params.id
+					// $or: [
+					// 	{ startDate: { $gt: req.body.start_date, $lt: req.body.end_date }} ,
+					// 	{ endDate: { $gt: req.body.start_date, $lt: req.body.end_date }}
+					// ]
+
+				}
+			},
+			// Unwind the source
+			{
+				"$unwind": "$courses"
+			},
+			// Do the lookup matching
+			{
+				"$lookup": {
+					"from": "Courses",
+					"localField": "courses",
+					"foreignField": "_id",
+					"as": "productObjects"
+				}
+			},
+			// Unwind the result arrays ( likely one or none )
+			{
+				"$unwind": "$productObjects"
+			},
+			// Group back to arrays
+			{
+				"$group": {
+					"_id": "$_id",
+					//         "products": { "$push": "$courses" },
+					"Courses": {
+						"$push": "$productObjects"
+					}
+				}
+			}
+		], function(error, student) {
 			if (error) {
 				return res.
 					status(500).
@@ -198,54 +257,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 });
 
 
-router.get('/student/courses/:id', function(req, res) {
-		db.collection('Students').aggregate([
-		{
-				$match: {
-					_id: req.params.id
-				}
-			},
-			// Unwind the source
-			{
-				"$unwind": "$courses"
-			},
-			// Do the lookup matching
-			{
-				"$lookup": {
-					"from": "Courses",
-					"localField": "courses",
-					"foreignField": "_id",
-					"as": "productObjects"
-				}
-			},
-			// Unwind the result arrays ( likely one or none )
-			{
-				"$unwind": "$productObjects"
-			},
-			// Group back to arrays
-			{
-				"$group": {
-					"_id": "$_id",
-					//         "products": { "$push": "$courses" },
-					"Courses": {
-						"$push": "$productObjects"
-					}
-				}
-			}
-		], function(error, student) {
-			if (error) {
-				return res.
-				status(500).
-				json({
-					error: error.toString()
-				});
-			}
-			res.json({
-				student: student
 
-			});
-		});
-	});
 
 
 module.exports = router;

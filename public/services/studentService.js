@@ -27,6 +27,9 @@ angular.module('smsApp-studentsList')
             },
             studentCourse: function (id, startDate, endDate) {
                 return $http({ method: "POST", url: "/api/student/courses/" + id, data: {start_date: startDate, end_date: endDate} });
+            },
+            getStudentCourse: function (id) {
+                return $http({ method: "GET", url: "/api/student/courses/" + id,  });
             }
         };
     });
