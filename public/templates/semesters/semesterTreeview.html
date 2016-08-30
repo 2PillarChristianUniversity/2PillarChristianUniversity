@@ -3,7 +3,7 @@
         <li ng-repeat="semester in semesters_list">
             <span ng-click="box1=!box1"><i class="fa  fa-circle"></i> <a href="">{{semester.name}}</a></span> 
             <ul data-slide-toggle="box1" data-slide-toggle-duration="400">
-                <li ng-repeat="course in semester.courses">
+                <li ng-repeat="course in semester.courses" ng-click="addGradeForStudent(course._id)">
                     <span><i ng-click="box2=!box2" class="fa fa-circle"></i> <a href="" >{{course.name}}</a></span> 
                     <ul data-slide-toggle="box2" data-slide-toggle-duration="400" class="student-course" >
                         <li ng-repeat=" st in course.students">

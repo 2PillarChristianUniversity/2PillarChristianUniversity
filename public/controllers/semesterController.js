@@ -602,10 +602,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         // edit course
         $scope.editCourse = function(semesterName, courseID) {
-            console.log(courseID);
             Course.get(courseID).success(function(res) {
                 $rootScope.course = res.course;
-                console.log($rootScope.course);
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/semesters/course.html',
@@ -668,7 +666,33 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
     })
     .controller('SemesterTreeviewCtrl', function($scope, $rootScope, $routeParams,
-        $location, $uibModal, Semester, notifications, Course) {
+        $location, $uibModal, Semester, notifications, Course, Professor) {
+
+        // set grade for student base course ID 
+        $scope.addGradeForStudent = function(courseID) {
+        var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/professors/setGrade.html',
+                controller: function($scope, $uibModalInstance, Professor) {
+                    $scope.comtent = 'Are you sure you want to delete?'
+                    $scope.ok = function() {
+                        
+                    }
+                    $scope.cancel = function() {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                },
+                size: 'md',
+                resolve: {
+                    isfinished: function() {
+                        return true
+                    }
+                }
+            });
+            
+        };
+            
+
 
         Semester.getTreeList().success(function(response) {
             $scope.semesters_list = response.semesters;
