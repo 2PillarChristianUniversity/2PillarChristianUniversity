@@ -37,7 +37,7 @@
                             <th>Course Name</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th>Actions</th>
+                            <th ng-if-permission="Admin">Actions</th>
                         </thead>
                         <tr ng-repeat="course in semester.Courses">
                             <td>{{course._id}}</td>
