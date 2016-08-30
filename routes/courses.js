@@ -4,6 +4,7 @@ var express = require('express');
 var router = express.Router();
 var autoIncrement = require("mongodb-autoincrement");
 var mongoCfg = require('../mongo_cfg');
+var colName = 'Courses';
 
 function createAutoId(index) {
     var number = 6;
@@ -11,27 +12,14 @@ function createAutoId(index) {
 }
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
-    router.get('/course/id/:id', function(req, res) {
-        db.collection('Courses').findOne({
-            _id: req.params.id
-        }, function(error, course) {
+    router.get('/course/id/:id', function (req, res) {
+        db.collection('Courses').findOne({ _id: req.params.id }, function (error, course) {
             if (error) {
                 return res.
-                status(500).
-                json({
-                    error: error.toString()
-                });
+                    status(500).
+                    json({ error: error.toString() });
             }
-            if (!course) {
-                return res.
-                status(404).
-                json({
-                    error: 'Not found'
-                });
-            }
-            res.json({
-                courses: course
-            });
+            res.json({ course: course });
         });
     });
 
@@ -50,9 +38,25 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
+    // search student id
+    router.get('/courses/id/:id', function (req, res) {
+        db.collection(colName).find({ studentID: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, courses) {
+            if (error) {
+                return res.
+                    status(500).
+                    json({ error: error.toString() });
+            }
+            if (!courses) {
+                res.json({ courses: [] });
+            } else {
+                res.json({ courses: courses });
+            }
+        });
+    });
+
     router.post('/course/id/:id', function(req, res) {
         db.collection('Courses').update({
-            _id: new ObjectID(req.params.id)
+            _id: req.params.id
         }, req.body, function(error, course) {
             if (error) {
                 return res.
@@ -67,44 +71,25 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    // router.put('/course', function(req, res) {
-    //     // check validator
-    //     // req.check('name', "Cant't be blank!.").isNull();
-    //     // var error = req.validationErrors();
-    //     // if(error) {
-    //     //     return res.
-    //     //             status(400).
-    //     //             json({ error: "Can't insert course..." });
-    //     // }
-    //     // return res.
-    //     //             status(200).
-    //     // json({ error: req.body });
-
-    //     db.collection('Courses').insert(req.body, function(error, course) {
-    //         if (error) {
-    //             return res.
-    //             status(400).
-    //             json({
-    //                 error: "Can't insert course..."
-    //             });
-    //         }
-    //         res.json({
-    //             course: course
-    //         });
-    //     });
-    // });
-
-    router.delete('/course/id/:id', function (req, res) {
-        db.collection('Courses').deleteOne({ _id: req.params.id }, function (error, course) {
-             if (error) {
+    // delete course
+    router.delete('/course/id/:id', function(req, res) {
+        db.collection('Courses').deleteOne({
+            _id: req.params.id
+        }, function(error, course) {
+            if (error) {
                 return res.
-                    status(400).
-                    json({ error: "Can't delete course..." });
+                status(400).
+                json({
+                    error: "Can't delete course..."
+                });
             }
-            res.json({ msg: "Delete success." });
+            res.json({
+                msg: "Delete success."
+            });
         });
     });
 
+    // check email exits
     router.post('/course/emailExist', function(req, res) {
         db.collection('Courses').findOne({
             email: 'sagasg'
@@ -129,9 +114,8 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         })
     });
 
-     // create new 
-    router.put('/course', function(req, res) {  
-    console.log(req.body)     ; 
+    // create new 
+    router.put('/course', function(req, res) {
         db.collection('Courses', {
             strict: true
         }, function(err, collection) { // check exists collection

@@ -69,7 +69,13 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
     router.get('/semesters/', function(req, res) {
 
-        db.collection(colName).aggregate([{
+        db.collection(colName).aggregate([
+        {
+                $match: {
+                    is_deleted: "false",
+                }
+            },
+        {
             $lookup: {
                 from: "Courses",
                 localField: "_id",

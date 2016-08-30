@@ -1,10 +1,10 @@
 angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize', 'ngSecurity'])
     .controller('StudentListCtrl', function($scope, $location, Student, $resource, $uibModal,
-        notifications, $routeParams, $rootScope, Financial, $security) {
+        notifications, $routeParams, $rootScope, Financial, $security, store) {            
 
-        if ($security.hasPermission('student')) {
-            $location.path('/404_page/');
-        }
+        // if ($security.hasPermission('Student')) {
+        //     $location.path('/404_page/');
+        // }
 
         $scope.search = function() {
             if ($scope.searchName) {
@@ -168,6 +168,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             zipCode: $scope.zipCode,
                             graduationDate: $scope.graduationDate,
                             applicationDate: $scope.applicationDate,
+                            emergencyContacts: $scope.emergencyContacts,
                             acceptanceNotificationDate: $scope.acceptanceNotificationDate
                         };
                         Student.insert($scope.student)
@@ -191,15 +192,32 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
         }
     })
 
-.controller('StudentDetailsCtrl', function($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial) {
+.controller('StudentDetailsCtrl', function($scope, $routeParams, $location, $uibModal, Student, Institution, Ministry, $rootScope, notifications, Semester, Financial, $security, store) {
     $rootScope.index = -1;
-    console.log($routeParams.Id);
     Student.get($routeParams.Id).success(function(response) {
         $scope.student = response.student;
-    });
+    });  
 
     Financial.searchID($routeParams.Id).success(function(response) {
         $scope.financials = response.financials;
+    });
+
+    Student.getStudentCourse($routeParams.Id).success(function(response) {
+        $scope.studentCourses = response.student;
+    });
+
+    // permission student
+    $scope.studentPermission = store.get('studentID');
+    Student.get($scope.studentPermission).success(function(response) {
+        $scope.profileStudent = response.student;
+    });
+    
+    Financial.searchID($scope.studentPermission).success(function(response) {
+        $scope.profileFinancials = response.financials;
+    });
+
+    Student.getStudentCourse($scope.studentPermission).success(function(response) {
+        $scope.studentProfileCourses = response.student;
     });
 
     // add degree
@@ -292,7 +310,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         }
                     }
                 }
-                console.log($scope.degree);
                 $scope.degreeTitle = 'Edit Degree';
                 $scope.institutionName = $rootScope.degree.institutionName;
                 $scope.degree = $rootScope.degree.degree;
@@ -462,7 +479,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
 
     // edit ministry
     $scope.editMinistry = function(studentID, ministryID) {
-        console.log("Edit ministry index  = " + $scope.index);
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -515,7 +531,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             if (!$scope.student.ministries) {
                 $scope.student.ministries = [];
             }
-            console.log($rootScope.index);
             $scope.student.ministries.splice($rootScope.index, 1, ministry);
             Student.update($scope.student._id, $scope.student)
                 .then(
@@ -567,7 +582,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             if (!$scope.student.ministries) {
                 $scope.student.ministries = [];
             }
-            console.log($rootScope.index);
             $scope.student.ministries.splice($rootScope.index, 1);
             Student.update($scope.student._id, $scope.student)
                 .then(
@@ -616,8 +630,14 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
         });
         modalInstance.result.then(function(contact) {
             if (isContact) {
+                if (!$scope.student.emergencyContacts) {
+                    $scope.student.emergencyContacts = [];
+                }
                 $scope.student.emergencyContacts.push(contact);
             } else {
+                if (!$scope.student.references) {
+                    $scope.student.references = [];
+                }
                 $scope.student.references.push(contact);
             }
             Student.update($scope.student._id, $scope.student)
@@ -787,24 +807,23 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // add request
-    $scope.addRequest = function(stuID) {
+    $scope.addRequest = function(stuID) {       
         Student.get(stuID).success(function(res) {
-            $rootScope.student = res.student;
+            $rootScope.student = res.student;       
         });
         var modalInstance = $uibModal.open({
             animation: true,
-            templateUrl: 'templates/students/financial.html',
+            templateUrl: 'templates/financials/new.html',
             controller: function($scope, $uibModalInstance, Financial, Student) {
                 $scope.financialTitle = 'Send request';
                 Semester.all().success(function(response) {
                     $scope.semesters = response.semesters;
-                    console.log($scope.semesters);
                 });
                 $scope.studentID = $rootScope.student._id;
                 $scope.studentEmail = $rootScope.student.email;
                 $scope.status = "Waiting";
 
-                $scope.ok = function() {
+                $scope.financialSubmit = function() {
                     $scope.financial = {
                         studentID: $scope.studentID,
                         semester: $scope.semester,
@@ -827,16 +846,15 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
         });
         modalInstance.result.then(function(financial) {
             $scope.financial = financial;
-            console.log($scope.financial);
             Financial.insert($scope.financial)
                 .then(
                     function(response) {
                         notifications.showSuccess({
                             message: 'Add Financial successfully.'
                         });
-                        Financial.all().success(function(response) {
-                            $scope.courses = response.courses;
-                        });
+                        Financial.searchID(stuID).success(function(response) {
+                            $scope.profileFinancials = response.financials;
+                        });                      
                     },
                     function(response) {
                         console.log(response);
@@ -901,7 +919,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             if (!$scope.student.financials) {
                 $scope.student.financials = [];
             }
-            console.log($rootScope.index);
             $scope.student.financials.splice($rootScope.index, 1, request);
             Student.update($scope.student._id, $scope.student)
                 .then(
@@ -952,7 +969,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             if (!$scope.student.financials) {
                 $scope.student.financials = [];
             }
-            console.log($rootScope.index);
             $scope.student.financials.splice($rootScope.index, 1);
             Student.update($scope.student._id, $scope.student)
                 .then(

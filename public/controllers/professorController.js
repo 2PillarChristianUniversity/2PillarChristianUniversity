@@ -200,9 +200,17 @@ angular.module('smsApp-professorsList', ['ngRoute', 'datatables', 'ngResource', 
             });
         }
 
+      
     })
-    .controller('ProfessorDetailsCtrl', function($scope, $routeParams, $uibModal, Professor, Institution, Ministry) {
+    .controller('ProfessorDetailsCtrl', function($scope, $routeParams, $uibModal, Professor, Institution, Ministry, $security, store) {
         Professor.get($routeParams.Id).success(function(response) {
             $scope.professor = response.professor;
         });
+
+        // permission professor
+        $scope.professorPermission = store.get('professorID');
+        Professor.get($scope.professorPermission).success(function(response) {
+            $scope.professor = response.professor;
+        });
+
     });

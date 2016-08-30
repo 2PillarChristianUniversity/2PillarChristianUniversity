@@ -10,7 +10,7 @@
 						Student ID:
 					</td>
 					<td>
-						<p>{{student._id}}</p>
+						<p>{{profileStudent._id}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -18,7 +18,7 @@
 						Email:
 					</td>
 					<td>
-						<p>{{student.email}}</p>
+						<p>{{profileStudent.email}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -26,7 +26,7 @@
 						First Name:
 					</td>
 					<td>
-						<p>{{student.firstName}}</p>
+						<p>{{profileStudent.firstName}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -34,7 +34,7 @@
 						Middle Name:
 					</td>
 					<td>
-						<p>{{student.middleName}}</p>
+						<p>{{profileStudent.middleName}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -42,7 +42,7 @@
 						Last Name:
 					</td>
 					<td>
-						<p>{{student.lastName}}</p>
+						<p>{{profileStudent.lastName}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -50,7 +50,7 @@
 						Birth Date:
 					</td>
 					<td>
-						<p>{{student.birthDate | date}}</p>
+						<p>{{profileStudent.birthDate | date}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -58,7 +58,7 @@
 						Gender:
 					</td>
 					<td>
-						<p>{{student.gender}}</p>
+						<p>{{profileStudent.gender}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -66,7 +66,7 @@
 						Phone Number:
 					</td>
 					<td>
-						<p>{{student.phoneNumber}}</p>
+						<p>{{profileStudent.phoneNumber}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -74,7 +74,7 @@
 						Address:
 					</td>
 					<td>
-						<p>{{student.addressLine1}}</p>
+						<p>{{profileStudent.addressLine1}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -82,7 +82,7 @@
 						City:
 					</td>
 					<td>
-						<p>{{student.city}}</p>
+						<p>{{profileStudent.city}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -90,7 +90,7 @@
 						State:
 					</td>
 					<td>
-						<p>{{student.state}}</p>
+						<p>{{profileStudent.state}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -98,7 +98,7 @@
 						Zip:
 					</td>
 					<td>
-						<p>{{student.zipCode}}</p>
+						<p>{{profileStudent.zipCode}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -106,7 +106,7 @@
 						Application Date:
 					</td>
 					<td>
-						<p>{{student.applicationDate | date}}</p>
+						<p>{{profileStudent.applicationDate | date}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -114,7 +114,7 @@
 						Acceptance Notification Date:
 					</td>
 					<td>
-						<p>{{student.acceptanceNotificationDate | date}}</p>
+						<p>{{profileStudent.acceptanceNotificationDate | date}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -122,7 +122,7 @@
 						Graduation Date:
 					</td>
 					<td>
-						<p>{{student.graduationDate | date}}</p>
+						<p>{{profileStudent.graduationDate | date}}</p>
 					</td>
 				</tr>
 			</tbody>
@@ -139,7 +139,7 @@
 				<th ng-if-permission="Admin">Action</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="degree in student.undergraduateDegrees">
+				<tr ng-repeat="degree in profileStudent.undergraduateDegrees">
 					<td>
 						<p>{{degree.institutionName}}</p>
 					</td>
@@ -170,7 +170,7 @@
 				<th ng-if-permission="Admin">Action</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="degree in student.graduateDegrees">
+				<tr ng-repeat="degree in profileStudent.graduateDegrees">
 					<td>
 						<p>{{degree.institutionName}}</p>
 					</td>
@@ -203,7 +203,7 @@
 				<th ng-if-permission="Admin">Action</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="ministry in student.ministries">
+				<tr ng-repeat="ministry in profileStudent.ministries">
 					<td>
 						<p>{{ministry.ministryName}}</p>
 					</td>
@@ -240,7 +240,7 @@
 				<th ng-if-permission="Admin">Action</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="contact in student.emergencyContacts">
+				<tr ng-repeat="contact in profileStudent.emergencyContacts">
 					<td>
 						<p>{{contact.firstName}} {{contact.middleName}} {{contact.lastName}}</p>
 					</td>
@@ -272,7 +272,7 @@
 				<th ng-if-permission="Admin">Action</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="reference in student.references">
+				<tr ng-repeat="reference in profileStudent.references">
 					<td>
 						<p>{{reference.firstName}} {{reference.middleName}} {{reference.lastName}}</p>
 					</td>
@@ -303,7 +303,7 @@
 				<th>Status</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="financial in financials">
+				<tr ng-repeat="financial in profileFinancials">
 					<td>
 						<p>{{financial.semester}}</p>
 					</td>
@@ -316,7 +316,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<button class="btn btn-xs btn-primary" ng-click="addRequest(student._id)" ng-if-permission="Student">>Send request</button>
+		<button class="btn btn-xs btn-primary" ng-click="addRequest(profileStudent._id)">Send request</button>
 	</uib-tab>
 	<uib-tab index="5" heading="Courses">
 		<h4>Course</h4>
@@ -328,7 +328,7 @@
 				<th>End Date</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="course in studentCourses[0].Courses">
+				<tr ng-repeat="course in studentProfileCourses[0].Courses">
 					<td>
 						<p>{{course._id}}</p>
 					</td>

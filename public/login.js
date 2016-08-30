@@ -7,7 +7,7 @@ angular.module('smsApp')
 
 		$scope.openLogin = function () {
 			$scope.lock.showSignin({
-				icon: '/img/Pillar_Seminary_logo_small.png',
+				icon: 'assets/images/Pillar_Seminary_logo_small.png',
 				connections: ['google-oauth2'],
 				dict: {
 					signin: {

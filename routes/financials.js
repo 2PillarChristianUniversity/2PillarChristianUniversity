@@ -53,21 +53,21 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    // // search student id
-    // router.get('/financials/id/:id', function (req, res) {
-    //     db.collection(colName).find({ studentID: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, financials) {
-    //         if (error) {
-    //             return res.
-    //                 status(500).
-    //                 json({ error: error.toString() });
-    //         }
-    //         if (!financials) {
-    //             res.json({ financials: [] });
-    //         } else {
-    //             res.json({ financials: financials });
-    //         }
-    //     });
-    // });
+    // search student id
+    router.get('/financials/id/:id', function (req, res) {
+        db.collection(colName).find({ studentID: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, financials) {
+            if (error) {
+                return res.
+                    status(500).
+                    json({ error: error.toString() });
+            }
+            if (!financials) {
+                res.json({ financials: [] });
+            } else {
+                res.json({ financials: financials });
+            }
+        });
+    });
 
     router.get('/financials/', function(req, res) {
 
