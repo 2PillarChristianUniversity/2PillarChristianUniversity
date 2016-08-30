@@ -39,12 +39,12 @@
                 </tr>
                 <tr ng-repeat="day in scheduleDates">
                     <td>
-                        <select name="repeatSelect" ng-model="day.day">
-                            <option ng-selected="{{day.day}}" ng-repeat="option in weekdays" value="{{option.id}}">{{option.name}}</option>
+                        <select name="repeatSelect" ng-model="day.day" required>
+                            <option ng-selected="{{day.day}}" ng-repeat="option in weekdays" value="{{option.id}}">{{option.name}}</option required>
                         </select>
                     </td>
                     <td>
-                        <input type="time" id="time" name="input" ng-model="day.time" />
+                        <input type="time" id="time" name="input" ng-model="day.time" required />
                     </td>
                     <td><a href="javascript:void(0)" ng-click="scheduleDates.splice($index, 1)" aria-label="Remove">remove</a></td>
                 </tr>

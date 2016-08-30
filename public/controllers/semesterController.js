@@ -272,7 +272,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     $scope.courseTitle = 'Add Course';
                     $scope.semesterName = semesterName
                     $scope.scheduleDates = [{
-                        // day: 3,
+                        day: 3,
                         // time: new Date(1970, 0, 1, 08, 00, 0)
                     }];
                     $scope.dateOff = [{
@@ -613,17 +613,29 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             return new Date(Date.parse(date));
 
                         };
+                        $scope.scheduleDates = [];
+                        $scope.dateOff = [];
+
 
                         $scope.courseTitle = 'Edit Course';
                         $scope.semesterName = semesterName;
                         $scope.name = $rootScope.course.name;
                         $scope.startDate = new Date($rootScope.course.startDate);
                         $scope.endDate = new Date($rootScope.course.endDate);
+                        $scope.duration = $rootScope.course.duration;
+                        $scope.noMember = $rootScope.course.noMember;
+                        $scope.scheduleDates = $rootScope.course.scheduleDate;
+                        $scope.dateOff = $rootScope.course.dateOff; 
+                        console.log($scope.scheduleDates);                   
 
                         $scope.courseSubmit = function() {
                             $rootScope.course.name = $scope.name;
+                            $rootScope.course.duration = $scope.duration;
+                            $rootScope.course.noMember = $scope.noMember;
                             $rootScope.course.startDate = $scope.startDate;
                             $rootScope.course.endDate = $scope.endDate;
+                            $rootScope.course.scheduleDate = $scope.scheduleDates;
+                            $rootScope.course.dateOff = $scope.dateOff;                          
 
                             Course.update($rootScope.course._id, $rootScope.course)
                                 .then(
@@ -644,7 +656,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             $uibModalInstance.dismiss('cancel');
                         };
                     },
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         isfinished: function() {
                             return true;
