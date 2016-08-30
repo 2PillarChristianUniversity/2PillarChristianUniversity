@@ -853,7 +853,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             message: 'Add Financial successfully.'
                         });
                         Financial.searchID(stuID).success(function(response) {
-                            $scope.financials = response.financials;
+                            $scope.profileFinancials = response.financials;
                         });                      
                     },
                     function(response) {
