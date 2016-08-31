@@ -39,10 +39,16 @@
                 </tr>
                 <tr ng-repeat="day in scheduleDates">
                     <td>
-                        <select name="repeatSelect" ng-model="day.day" required>
-                            <option ng-selected="{{day.day}}" ng-repeat="option in weekdays" value="{{option.id}}">{{option.name}}</option required>
+                        
+                        <select ng-model="day.day" required>
+                            <option value="2">Monday</option>
+                            <option value="3">Tuesday</option>
+                            <option value="4">Wednesday</option>
+                            <option value="5">Thursday</option>
+                            <option value="6">Friday</option>
+                            <option value="7">Saturday</option>
+                            <option value="8">Sunday</option>
                         </select>
-                    </td>
                     <td>
                         <input type="time" id="time" name="input" ng-model="day.time" required />
                     </td>
