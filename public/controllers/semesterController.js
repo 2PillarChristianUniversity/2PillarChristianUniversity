@@ -272,7 +272,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     $scope.courseTitle = 'Add Course';
                     $scope.semesterName = semesterName
                     $scope.scheduleDates = [{
-                        day: 3,
+                        day: "2",
                         // time: new Date(1970, 0, 1, 08, 00, 0)
                     }];
                     $scope.dateOff = [{
@@ -625,6 +625,10 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.duration = $rootScope.course.duration;
                         $scope.noMember = $rootScope.course.noMember;
                         $scope.scheduleDates = $rootScope.course.scheduleDate;
+                        for (var i = 0; i < $rootScope.course.scheduleDate.length; i++) {
+                            $scope.scheduleDates[i].time = new Date ($rootScope.course.scheduleDate[i].time);
+                        }  
+                        
                         $scope.dateOff = $rootScope.course.dateOff; 
                         console.log($scope.scheduleDates);                   
 
@@ -678,28 +682,56 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
     })
     .controller('SemesterTreeviewCtrl', function($scope, $rootScope, $routeParams,
-        $location, $uibModal, Semester, notifications, Course, Professor) {
+        $location, $uibModal, Semester, notifications, Course, Professor, Grade) {
 
         // set grade for student base course ID 
         $scope.addGradeForStudent = function(courseID) {
-        var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'templates/professors/setGrade.html',
-                controller: function($scope, $uibModalInstance, Professor) {
-                    $scope.comtent = 'Are you sure you want to delete?'
-                    $scope.ok = function() {
-                        
+            Grade.get(courseID).success(function(res) {
+                $rootScope.grade = res.grade;
+                console.log(courseID);
+                console.log($rootScope.grade);
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: 'templates/professors/setGrade.html',
+                    controller: function($scope, $uibModalInstance, Professor, Grade) {
+                        $scope.studentID = $rootScope.grade.studentID;
+                        $scope.point = [];
+                        $scope.addGrade = function() {
+                            
+                            console.log($scope.point);
+                            for (var i = 0; i < $rootScope.grade.length - 1; i++) {
+                                $scope.grade = {
+                                    "_id": $rootScope.grade[i]._id,
+                                    "studentID": $rootScope.grade[i].studentID,
+                                    "courseID": $rootScope.grade[i].courseID,
+                                    "grade": $scope.point[$rootScope.grade[i].studentID]
+                                };
+                                Grade.update($scope.grade._id, $scope.grade)
+                                .then(
+                                    function(response) {
+                                        notifications.showSuccess({
+                                            message: 'Successfully.'
+                                        });
+                                        $uibModalInstance.close(true);
+                                    },
+                                    function(response) {
+                                        console.log(response);
+                                    }
+                                );
+                            }                            
+                            
+                        }
+                        $scope.cancel = function() {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                    },
+                    size: 'md',
+                    resolve: {
+                        grade: function() {
+                            return true
+                        }
                     }
-                    $scope.cancel = function() {
-                        $uibModalInstance.dismiss('cancel');
-                    };
-                },
-                size: 'md',
-                resolve: {
-                    isfinished: function() {
-                        return true
-                    }
-                }
+                });
             });
             
         };

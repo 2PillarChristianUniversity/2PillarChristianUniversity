@@ -17,6 +17,7 @@ var courses = require('./routes/courses'),
     students = require('./routes/students'),
     semesters = require('./routes/semesters');
     financials = require('./routes/financials');
+    financials = require('./routes/grades');
 
 var port = Number(process.env.PORT || 3000);
 var app = express();
@@ -46,6 +47,7 @@ app.use('/api', ministries);
 app.use('/api', students);
 app.use('/api', professors);
 app.use('/api', financials);
+
 
 app.use(express.static(__dirname + '/public'));
 
