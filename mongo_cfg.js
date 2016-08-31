@@ -1,5 +1,5 @@
 module.exports = {
-    'server': 'pillarseminary:changeit123@ds063715.mlab.com',
-    'port': '63715',
+    'server': 'localhost',
+    'port': '27017',
     'db_name': 'pillarseminary'
 };
