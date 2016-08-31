@@ -272,7 +272,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     $scope.courseTitle = 'Add Course';
                     $scope.semesterName = semesterName
                     $scope.scheduleDates = [{
-                        day: 3,
+                        day: "2",
                         // time: new Date(1970, 0, 1, 08, 00, 0)
                     }];
                     $scope.dateOff = [{
@@ -625,6 +625,10 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.duration = $rootScope.course.duration;
                         $scope.noMember = $rootScope.course.noMember;
                         $scope.scheduleDates = $rootScope.course.scheduleDate;
+                        for (var i = 0; i < $rootScope.course.scheduleDate.length; i++) {
+                            $scope.scheduleDates[i].time = new Date ($rootScope.course.scheduleDate[i].time);
+                        }  
+                        
                         $scope.dateOff = $rootScope.course.dateOff; 
                         console.log($scope.scheduleDates);                   
 
@@ -695,15 +699,13 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.addGrade = function() {
                             
                             console.log($scope.point);
-                            for (var i = 0; i < $rootScope.grade.length; i++) {
+                            for (var i = 0; i < $rootScope.grade.length - 1; i++) {
                                 $scope.grade = {
                                     "_id": $rootScope.grade[i]._id,
                                     "studentID": $rootScope.grade[i].studentID,
                                     "courseID": $rootScope.grade[i].courseID,
                                     "grade": $scope.point[$rootScope.grade[i].studentID]
                                 };
-                                // $rootScope.grade[i].grade = $scope.point[i];
-                                // console.log($rootScope.grade[i]);
                                 Grade.update($scope.grade._id, $scope.grade)
                                 .then(
                                     function(response) {

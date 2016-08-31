@@ -3,14 +3,14 @@
     <br>
     <br>
     <uib-tabset active="0">
-        <uib-tab index="0" select="renderCalendar()" heading="Schedule" active="true" ng-click="renderCalendar('calendar')" ng-if-permission="Student,Professor">
+        <uib-tab index="2" select="renderCalendar()" heading="Schedule" active="true" ng-click="renderCalendar('calendar')" ng-if-permission="Student,Professor">
             <br>
-            <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar"></div>
+            <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar" ng-if-permission="Student,Professor"></div>
         </uib-tab>
         <uib-tab index="1" heading="Previous Courses"  ng-if-permission="Admin,Professor"  >
             <semester-treeview></semester-treeview>
         </uib-tab>
-        <uib-tab index="2" heading="Courses">
+        <uib-tab index="0" heading="Courses">
             <br>
             <button ng-if-permission="Admin" class="btn btn-primary" ng-click="AddSemester()">Add Semester</button>
             <br>
