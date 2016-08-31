@@ -12,32 +12,15 @@
                 <th>Email</th>
                 <th>Grade</th>
             </tr>
-            <tr>
+            <tr ng-repeat="grade in grade">
                 <td>
+                    {{grade.studentID}}
                 </td>
                 <td>
+                    {{grade.Students[0].email}}
                 </td>
                 <td>
-                    <select ng-model="grade[11]">
-                        <option value="A+">A+</option>
-                        <option value="A">A</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B">B</option>
-                        <option value="B-">B-</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                </td>
-                <td>
-                </td>
-                <td>
-                    <select ng-model="grade[12]">
+                    <select ng-model="point[grade.studentID]" required>
                         <option value="A+">A+</option>
                         <option value="A">A</option>
                         <option value="A-">A-</option>
