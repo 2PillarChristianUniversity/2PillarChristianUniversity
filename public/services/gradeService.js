@@ -14,7 +14,7 @@ angular.module('smsApp-studentsList')
                 return $http({ method: "GET", url: "/api/grade/id/" + id });
             },
             getStudentCourse: function (ids) {
-                return $http({ method: "GET", url: "/api/grade/student", ids });
+                return $http({ method: "POST", url: "/api/grade/studentCourses", data: ids });
             },
             update: function (id, grade) {
                 return $http({ method: "POST", url: "/api/grade/id/" + id, data: grade });

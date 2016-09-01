@@ -494,24 +494,36 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $scope.enRollClass = function(courseID) {
             studentID = store.get('studentID');
             if (studentID) {
-                $scope.grade = {                    
-                    "studentID" : studentID,
-                    "courseID" : courseID
+                $scope.grade = {
+                    "studentID": studentID,
+                    "courseID": courseID
                 }
-                Grade.create($scope.grade).then(
-                                function(response) {                                    
-                                    notifications.showSuccess({
-                                        message: 'Enroll successfully.'
-                                    });
-                                    
-                                },
-                                function(response) {
-                                    console.log(response.data.error);
+
+                Grade.getStudentCourse($scope.grade).success(function(res) {
+                    if (res.grade.length > 0) {
+                        notifications.showError({
+                            message: 'You already enroll this course!'
+                        });
+                    } else {
+                        Grade.create($scope.grade).then(
+                            function(response) {
+                                notifications.showSuccess({
+                                    message: 'Enroll successfully.'
                                 });
 
-                    };
+                                Semester.all().success(function(response) {
+                                    $scope.semesters = response.semesters;
+                                    
+                                });
+                            },
+                            function(response) {
+                                console.log(response.data.error);
+                            });
+                    }
 
-            
+                });
+            };
+
         };
         // Assign course for  professor
         $scope.assignCourse = function(courseID) {
@@ -601,15 +613,15 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.noMember = $rootScope.course.noMember;
                         $scope.scheduleDates = $rootScope.course.scheduleDate;
                         for (var i = 0; i < $rootScope.course.scheduleDate.length; i++) {
-                            $scope.scheduleDates[i].time = new Date ($rootScope.course.scheduleDate[i].time);
-                        }  
-                        
+                            $scope.scheduleDates[i].time = new Date($rootScope.course.scheduleDate[i].time);
+                        }
+
                         $scope.dateOff = $rootScope.course.dateOff;
                         for (var i = 0; i < $rootScope.course.dateOff.length; i++) {
-                            $scope.dateOff[i].dateOffStart = new Date ($rootScope.course.dateOff[i].dateOffStart);
-                            $scope.dateOff[i].dateOffEnd = new Date ($rootScope.course.dateOff[i].dateOffEnd);
-                        } 
-                        console.log($scope.scheduleDates);                   
+                            $scope.dateOff[i].dateOffStart = new Date($rootScope.course.dateOff[i].dateOffStart);
+                            $scope.dateOff[i].dateOffEnd = new Date($rootScope.course.dateOff[i].dateOffEnd);
+                        }
+                        console.log($scope.scheduleDates);
 
                         $scope.courseSubmit = function() {
                             $rootScope.course.name = $scope.name;
@@ -618,7 +630,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             $rootScope.course.startDate = $scope.startDate;
                             $rootScope.course.endDate = $scope.endDate;
                             $rootScope.course.scheduleDate = $scope.scheduleDates;
-                            $rootScope.course.dateOff = $scope.dateOff;                          
+                            $rootScope.course.dateOff = $scope.dateOff;
 
                             Course.update($rootScope.course._id, $rootScope.course)
                                 .then(
@@ -677,7 +689,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.studentID = $rootScope.grade.studentID;
                         $scope.point = [];
                         $scope.addGrade = function() {
-                            
+
                             console.log($scope.point);
                             for (var i = 0; i < $rootScope.grade.length - 1; i++) {
                                 $scope.grade = {
@@ -687,19 +699,19 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                                     "grade": $scope.point[$rootScope.grade[i].studentID]
                                 };
                                 Grade.update($scope.grade._id, $scope.grade)
-                                .then(
-                                    function(response) {
-                                        notifications.showSuccess({
-                                            message: 'Successfully.'
-                                        });
-                                        $uibModalInstance.close(true);
-                                    },
-                                    function(response) {
-                                        console.log(response);
-                                    }
-                                );
-                            }                            
-                            
+                                    .then(
+                                        function(response) {
+                                            notifications.showSuccess({
+                                                message: 'Successfully.'
+                                            });
+                                            $uibModalInstance.close(true);
+                                        },
+                                        function(response) {
+                                            console.log(response);
+                                        }
+                                    );
+                            }
+
                         }
                         $scope.cancel = function() {
                             $uibModalInstance.dismiss('cancel');
@@ -713,13 +725,13 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     }
                 });
             });
-            
+
         };
-            
+
 
 
         Semester.getTreeList().success(function(response) {
-            
+
             $scope.semesters_list = response.semesters;
             $scope.courses_list = response.courses;
             $scope.semesters_list.forEach(function(semester) {

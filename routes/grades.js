@@ -44,18 +44,19 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
     });
 
     // get grade by student id
-    router.get('/grade/studentCourses/', function(req, res) {
+    router.post('/grade/studentCourses/', function(req, res) {
+        console.log(req.body);
         db.collection(colName).aggregate(
             [{
                 $match: {
-                    studentID: req.body.ids.studentID,
-                    courseID: req.body.ids.courseID
+                    studentID: req.body.studentID,
+                    courseID: req.body.courseID
                 }
             }],
             function(error, grade) {
                 if (error) {
                     return res.
-                    status(500).
+                    status(302)
                     json({
                         error: error.toString()
                     });
