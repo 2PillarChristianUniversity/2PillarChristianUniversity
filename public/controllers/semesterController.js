@@ -2,7 +2,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         'ngSanitize', 'ui.calendar'
     ])
     .controller('SemesterListCtrl', function($timeout, $scope, $rootScope, $routeParams, $location,
-        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store) {
+        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade) {
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
             // console.log($scope.semesters);
@@ -494,48 +494,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $scope.enRollClass = function(courseID) {
             studentID = store.get('studentID');
             if (studentID) {
-                Student.get(studentID).success(function(res) {
-                    $scope.student = res.student;
-
-                    if (!$scope.student.courses) {
-                        $scope.student.courses = []
-                    }
-
-                    if ($scope.student.courses.indexOf(courseID) > -1) {
-
-                        var modalInstance = $uibModal.open({
-                            animation: true,
-                            templateUrl: 'templates/alert/warning.html',
-                            controller: function($scope, $uibModalInstance, Course) {
-
-                                $scope.errorContent = 'You already has been enroll this course!'
-
-                                $scope.ok = function() {
-                                    $uibModalInstance.dismiss('ok');
-                                }
-                            },
-                            size: 'sm'
-                        });
-
-
-                    } else {
-
-                        $scope.student.courses.push(courseID);
-
-                        Student.update($scope.student._id, $scope.student)
-                            .then(
-                                function(response) {
-                                    notifications.showSuccess({
-                                        message: 'Enroll successfully.'
-                                    });
-                                },
-                                function(response) {
-                                    console.log(response);
-                                }
-                            );
-                    }
-
-                });
+                
             }
         };
         // Assign course for  professor
