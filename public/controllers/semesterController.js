@@ -604,7 +604,11 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             $scope.scheduleDates[i].time = new Date ($rootScope.course.scheduleDate[i].time);
                         }  
                         
-                        $scope.dateOff = $rootScope.course.dateOff; 
+                        $scope.dateOff = $rootScope.course.dateOff;
+                        for (var i = 0; i < $rootScope.course.dateOff.length; i++) {
+                            $scope.dateOff[i].dateOffStart = new Date ($rootScope.course.dateOff[i].dateOffStart);
+                            $scope.dateOff[i].dateOffEnd = new Date ($rootScope.course.dateOff[i].dateOffEnd);
+                        } 
                         console.log($scope.scheduleDates);                   
 
                         $scope.courseSubmit = function() {
@@ -620,7 +624,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                                 .then(
                                     function(response) {
                                         notifications.showSuccess({
-                                            message: 'Add Course successfully.'
+                                            message: 'Edit Course successfully.'
                                         });
                                         $uibModalInstance.close(true);
                                     },
@@ -660,7 +664,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $location, $uibModal, Semester, notifications, Course, Professor, Grade) {
 
         // set grade for student base course ID 
-        $scope.addGradeForStudent = function(courseID) {
+        $scope.addGradeForStudent = function(courseID, courseName) {
             Grade.get(courseID).success(function(res) {
                 $rootScope.grade = res.grade;
                 console.log(courseID);
@@ -669,6 +673,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     animation: true,
                     templateUrl: 'templates/professors/setGrade.html',
                     controller: function($scope, $uibModalInstance, Professor, Grade) {
+                        $scope.gradeTitle = courseName
                         $scope.studentID = $rootScope.grade.studentID;
                         $scope.point = [];
                         $scope.addGrade = function() {
