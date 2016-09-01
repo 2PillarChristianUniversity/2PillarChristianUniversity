@@ -136,6 +136,8 @@ angular.module('smsApp', [
 						if (response.professor != null) {
 							roles.push('Professor');
 							store.set('professorID', response.professor._id);
+							profile = angular.extend(profile, response.professor);
+
 							$security.login(idToken, profile, roles);
 							$location.path('/home');
 						} else {

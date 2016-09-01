@@ -14,6 +14,33 @@ function createAutoId(index) {
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
 
+    router.get('/treelist/id/:id', function(req, res) {
+            db.collection(colName).aggregate([
+            {
+                $match: { 'is_deleted': 'false' },
+            },
+            {
+                  $lookup:
+                   {
+                      from: "Courses",
+                      localField: "_id",
+                      foreignField: "semesters",
+                      as: "Courses"
+                    }
+            },
+            {
+                $match: { 'Courses._id': { $in : req.params.id.split(',') } }
+            }
+            ]).toArray(function(error, semesters) {
+                res.json({
+                    semesters: semesters,
+                    coursesProfessors: req.params.id.split(',')
+                });
+
+            });
+
+    });
+
     router.get('/treelist/', function(req, res) {
 
         db.collection(colName).find({ "is_deleted" : "false"}).toArray(function(error, semesters) {
@@ -27,7 +54,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     as: "students"
                 }
             }]).toArray(function(error, courses) {
-                
+
                 res.json({
                     semesters: semesters,
                     courses: courses
@@ -113,7 +140,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    // create new 
+    // create new
     router.put('/semester', function(req, res) {
         db.collection(colName, {
             strict: true
