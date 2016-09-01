@@ -699,16 +699,18 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         Semester.getTreeList().success(function(response) {
             $scope.semesters_list = response.semesters;
-            $scope.courses_list = response.courses;
+            $scope.courses_list = typeof response.courses != 'undefined' ? response.courses : null;
             $scope.semesters_list.forEach(function(semester) {
-                $scope.courses_list.forEach(function(course) {
-                    if (semester._id == course.semesters) {
-                        if (!semester.courses) {
-                            semester.courses = [];
+                if (!semester.courses) {
+                    semester.courses = [];
+                }
+                if($scope.courses_list != null) {
+                    $scope.courses_list.forEach(function(course) {
+                        if (semester._id == course.semesters) {
+                            semester.courses.push(course);
                         }
-                        semester.courses.push(course);
-                    }
-                });
+                    });
+                }
             });
             console.log($scope.semesters_list);
 
