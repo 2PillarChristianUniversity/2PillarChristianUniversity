@@ -494,8 +494,24 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $scope.enRollClass = function(courseID) {
             studentID = store.get('studentID');
             if (studentID) {
-                
-            }
+                $scope.grade = {                    
+                    "studentID" : studentID,
+                    "courseID" : courseID
+                }
+                Grade.create($scope.grade).then(
+                                function(response) {                                    
+                                    notifications.showSuccess({
+                                        message: 'Enroll successfully.'
+                                    });
+                                    
+                                },
+                                function(response) {
+                                    console.log(response.data.error);
+                                });
+
+                    };
+
+            
         };
         // Assign course for  professor
         $scope.assignCourse = function(courseID) {
@@ -698,6 +714,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
 
         Semester.getTreeList().success(function(response) {
+            
             $scope.semesters_list = response.semesters;
             $scope.courses_list = response.courses;
             $scope.semesters_list.forEach(function(semester) {
@@ -710,7 +727,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     }
                 });
             });
-            console.log($scope.semesters_list);
 
         });
 

@@ -3,6 +3,7 @@ var mongo = require('mongodb').MongoClient,
 var express = require('express');
 var router = express.Router();
 var colName = 'Grades';
+var autoIncrement = require("mongodb-autoincrement");
 
 var mongoCfg = require('../mongo_cfg');
 
@@ -25,6 +26,30 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     localField: "studentID",
                     foreignField: "_id",
                     as: "Students"
+                }
+            }],
+            function(error, grade) {
+                if (error) {
+                    return res.
+                    status(500).
+                    json({
+                        error: error.toString()
+                    });
+                }
+                res.json({
+                    grade: grade
+
+                });
+            });
+    });
+
+    // get grade by student id
+    router.get('/grade/studentCourses/', function(req, res) {
+        db.collection(colName).aggregate(
+            [{
+                $match: {
+                    studentID: req.body.ids.studentID,
+                    courseID: req.body.ids.courseID
                 }
             }],
             function(error, grade) {
@@ -76,43 +101,39 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
     });
 
     //  Insert professor
-    router.put('/professor', function(req, res) {
+    router.put('/grade', function(req, res) {
         db.collection(colName, {
             strict: true
         }, function(err, collection) { // check exists collection
             if (err != null) { // if exists
                 req.body._id = createAutoId(1);
-                db.collection(colName).createIndex({
-                    "email": 1
-                }, {
-                    unique: true
-                })
+                                                
                 db.collection(colName).insert(req.body, function(error, grade) {
                     if (error) {
                         return res.
                         status(400).
                         json({
-                            error: "Can't insert professor..."
+                            error: "Can't insert grade..."
                         });
                     }
                     res.json({
-                        professor: professor
+                        grade: grade
                     });
                 });
             }
 
             autoIncrement.getNextSequence(db, colName, function(err, autoIndex) {
                 req.body._id = createAutoId(autoIndex);
-                db.collection(colName).insert(req.body, function(error, professor) {
+                db.collection(colName).insert(req.body, function(error, grade) {
                     if (error) {
                         return res.
                         status(400).
                         json({
-                            error: "Can't insert professor..."
+                            error: "Can't insert grade..."
                         });
                     }
                     res.json({
-                        professor: professor
+                        grade: grade
                     });
                 });
             })

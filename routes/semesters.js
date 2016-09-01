@@ -18,7 +18,6 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
         db.collection(colName).find().toArray(function(error, semesters) {
 
-
             db.collection('Courses').aggregate([{
                 $lookup: {
                     from: "Students",
@@ -27,6 +26,11 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     as: "students"
                 }
             }]).toArray(function(error, courses) {
+                if (error) {
+                 return res.
+                     status(400).
+                     json({ error: error });
+                }
                 
                 res.json({
                     semesters: semesters,
@@ -35,18 +39,6 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
             });
         });
-
-
-        // db.collection('treeList').find().toArray(function (error, semester) {
-        //      console.log(semester);
-        //      if (error) {
-        //          return res.
-        //              status(500).
-        //              json({ error: error });
-        //      }
-        //      res.json({ semester: semester });
-        //  });
-
 
     });
 
@@ -85,7 +77,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         }], function(error, semesters) {
             if (error) {
                 return res.
-                status(500).
+                status(302).
                 json({
                     error: error.toString()
                 });
