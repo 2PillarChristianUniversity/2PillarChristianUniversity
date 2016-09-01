@@ -16,7 +16,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
     router.get('/treelist/', function(req, res) {
 
-        db.collection(colName).find().toArray(function(error, semesters) {
+        db.collection(colName).find({ "is_deleted" : "false"}).toArray(function(error, semesters) {
 
 
             db.collection('Courses').aggregate([{
