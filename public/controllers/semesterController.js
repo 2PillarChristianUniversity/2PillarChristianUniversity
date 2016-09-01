@@ -2,10 +2,18 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         'ngSanitize', 'ui.calendar', 'ngSecurity'
     ])
     .controller('SemesterListCtrl', function($timeout, $scope, $rootScope, $routeParams, $location,
-        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade) {
+        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade, $security) {
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
             // console.log($scope.semesters);
+        });
+
+        Grade.getStudent($security.getUser()._id).success(function(response) {
+            var coursesOfStudents = [];
+            angular.forEach(response.grades, function(value, key) {
+                this.push(value.courseID);
+            }, coursesOfStudents);
+            $scope.coursesOfStudents = coursesOfStudents;
         });
 
         // function CalendarCtrl($scope,$compile,uiCalendarConfig) {
@@ -22,7 +30,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             var startDate = $filter('date')(new Date(start), "yyyy-MM-dd");
             var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
 
-            Student.studentCourse('000001', startDate, endDate).success(function(response) {
+            Student.studentCourse($security.getUser()._id, startDate, endDate).success(function(response) {
                 $scope.student = response.student;
                 var events = [];
                 if ($scope.student.length) {

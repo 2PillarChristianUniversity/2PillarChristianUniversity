@@ -21,6 +21,9 @@ angular.module('smsApp-studentsList')
             },
             create: function (grade) {
                 return $http({ method: "PUT", url: "/api/grade", data: grade });
+            },
+            getStudent: function (id) {
+                return $http({ method: "GET", url: "/api/grade/student/" + id });
             }
         };
     });
