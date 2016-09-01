@@ -61,20 +61,18 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
     router.get('/semesters/', function(req, res) {
 
-        db.collection(colName).aggregate([
-        {
-                $match: {
-                    is_deleted: "false",
-                }
-            },
-        {
-            $lookup: {
-                from: "Courses",
-                localField: "_id",
-                foreignField: "semesters",
-                as: "Courses"
-            }
-        }], function(error, semesters) {
+        db.collection(colName).aggregate([{
+                    $match: {
+                        is_deleted: "false",
+                    }
+                }, {
+                    $lookup: {
+                        from: "Courses",
+                        localField: "_id",
+                        foreignField: "semesters",
+                        as: "Courses"
+                    }
+                }], function(error, semesters) {
             if (error) {
                 return res.
                 status(302).
@@ -89,6 +87,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
     });
 
     router.post('/semester/id/:id', function(req, res) {
+        console.log(req.body)
         db.collection(colName).update({
             _id: req.params.id
         }, req.body, function(error, semester) {

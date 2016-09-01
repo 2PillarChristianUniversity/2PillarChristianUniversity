@@ -541,25 +541,27 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
                         if ($scope.professor != null) {
                             Professor.get($scope.professor).success(function(res) {
-                                $rootScope.current_professor = res.professor;
+                                $scope.current_professor = res.professor;
+                                console.log($scope.current_professor);
 
-                                if ($rootScope.current_professor) {
-                                    if (!$rootScope.current_professor.courses) {
-                                        $rootScope.current_professor.courses = [];
+                                if ($scope.current_professor) {
+                                    if (!$scope.current_professor.courses) {
+                                        $scope.current_professor.courses = [];
                                     }
-                                    if ($rootScope.current_professor.courses.indexOf(courseID) > -1) {
+                                    if ($scope.current_professor.courses.indexOf(courseID) > -1) {
                                         notifications.showError({
                                             message: 'You already has been taken this course!'
                                         });
                                         $uibModalInstance.close(true);
                                     } else {
 
-                                        $rootScope.current_professor.courses.push(courseID);
-                                        $scope.professorID = store.get('professorID')
-
-                                        Professor.update($scope.professorID, $rootScope.current_professor)
+                                        $scope.current_professor.courses.push(courseID);
+                                        // $scope.professorID = store.get('professorID')
+                                        
+                                        Professor.update($scope.professor, $scope.current_professor)
                                             .then(
                                                 function(response) {
+                                                    console.log(response)
                                                     notifications.showSuccess({
                                                         message: 'Assign successfully.'
                                                     });

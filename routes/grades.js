@@ -45,7 +45,6 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
     // get grade by student id
     router.post('/grade/studentCourses/', function(req, res) {
-        console.log(req.body);
         db.collection(colName).aggregate(
             [{
                 $match: {
