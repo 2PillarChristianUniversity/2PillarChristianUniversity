@@ -1,39 +1,41 @@
 <div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
-	<div class="col-lg-2 text-left no-padding">
-		<button type="button" class="btn btn-primary" ng-click="addProfessor()">New Professor</button>
-	</div>
-	<div class="col-lg-10 text-right no-padding">
-		<b>Professor ID</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
-		<b>Name</b> <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Professor Name">
-		<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
-	</div>
-	<br>
-	<br>
-	<table datatable="ng" class="table table-bordered table-hover" id="professorTable" ng-show="professors.length" >
-		<thead>
-			<tr>
-				<th>Professor ID</th>
-				<th>Name</th>
-				<th>Gender</th>
-				<th>Birth Date</th>
-				<th>Email</th>
-				<th>Number</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr style="cursor: pointer;" ng-repeat="professor in professors" >
-				<td ng-click="professorDetails(professor._id)">{{professor._id}}</td>
-				<td ng-click="professorDetails(professor._id)">{{professor.lastName}}, {{professor.firstName}} {{professor.middleName}}</td>
-				<td ng-click="professorDetails(professor._id)">{{professor.gender}}</td>
-				<td ng-click="professorDetails(professor._id)">{{professor.birthDate | date}}</td>
-				<td ng-click="professorDetails(professor._id)">{{professor.email}}</td>
-				<td ng-click="professorDetails(professor._id)">{{professor.phoneNumber}}</td>
-				<td>
-					<a type="submit" title="edit" ng-click="editProfessor(professor._id)">Edit</a>
-			        <a type="submit" title="delete" ng-click="deleteProfessor(professor._id)">Delete</a>
-			    </td>
-			</tr>
-		</tbody>
-	</table>
+    <div class="col-lg-2 text-left no-padding">
+        <button type="button" class="btn btn-primary" ng-click="addProfessor()">New Professor</button>
+    </div>
+    <div class="col-lg-10 text-right no-padding">
+        <b>Professor ID</b>
+        <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
+        <b>Name</b>
+        <input type="text" ng-model="searchName" class="input-medium search-query" placeholder="Professor Name">
+        <button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
+    </div>
+    <br>
+    <br>
+    <table datatable="ng" class="table table-bordered table-hover" id="professorTable" ng-show="professors.length">
+        <thead>
+            <tr>
+                <th>Professor ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Birth Date</th>
+                <th>Email</th>
+                <th>Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="cursor: pointer;" ng-repeat="professor in professors">
+                <td ng-click="professorDetails(professor._id)">{{professor._id}}</td>
+                <td ng-click="professorDetails(professor._id)">{{professor.lastName}}, {{professor.firstName}} {{professor.middleName}}</td>
+                <td ng-click="professorDetails(professor._id)">{{professor.gender}}</td>
+                <td ng-click="professorDetails(professor._id)">{{professor.birthDate | date}}</td>
+                <td ng-click="professorDetails(professor._id)">{{professor.email}}</td>
+                <td ng-click="professorDetails(professor._id)">{{professor.phoneNumber}}</td>
+                <td>
+                    <a type="submit" title="edit" ng-click="editProfessor(professor._id)">Edit</a>
+                    <a type="submit" title="delete" ng-click="deleteProfessor(professor._id)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

@@ -38,6 +38,7 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th ng-if-permission="Admin">Actions</th>
+                            <th>Professor Owner </th>
                         </thead>
                         <tr ng-repeat="course in semester.Courses">
                             <td>{{course._id}}</td>
@@ -46,6 +47,9 @@
                             <td>{{course.endDate | date}}</td>
                             <td><a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>  <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>
                             <a href="javascript:void(0)"  ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>   <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
+                            </td>
+                            <td>
+                                
                             </td>
                         </tr>
                     </table>
