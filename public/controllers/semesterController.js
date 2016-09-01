@@ -763,20 +763,23 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
             });
         } else if ($security.hasPermission('Professor')) {
-            Semester.getTreeListByProfessor($security.getUser().courses).success(function(response) {
-                $scope.semesters_list = response.semesters;
-                var courses = response.coursesProfessors;
-                $scope.semesters_list.forEach(function(semester) {
-                    if (!semester.courses) {
-                        semester.courses = [];
-                    }
-                    semester.Courses.forEach(function(course) {
-                        if (courses.indexOf(course._id) > -1) {
-                            semester.courses.push(course);
+            Professor.get($security.getUser()._id).success(function(response) {
+                Semester.getTreeListByProfessor(response.professor.courses).success(function(response) {
+                    $scope.semesters_list = response.semesters;
+                    var courses = response.coursesProfessors;
+                    $scope.semesters_list.forEach(function(semester) {
+                        if (!semester.courses) {
+                            semester.courses = [];
                         }
+                        semester.Courses.forEach(function(course) {
+                            if (courses.indexOf(course._id) > -1) {
+                                semester.courses.push(course);
+                            }
+                        });
                     });
                 });
             });
+
 
         }
 
