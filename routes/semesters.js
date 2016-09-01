@@ -14,10 +14,39 @@ function createAutoId(index) {
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
 
+    router.get('/treelist/id/:id', function(req, res) {
+        db.collection(colName).aggregate([{
+            $match: {
+                'is_deleted': 'false'
+            },
+        }, {
+            $lookup: {
+                from: "Courses",
+                localField: "_id",
+                foreignField: "semesters",
+                as: "Courses"
+            }
+        }, {
+            $match: {
+                'Courses._id': {
+                    $in: req.params.id.split(',')
+                }
+            }
+        }]).toArray(function(error, semesters) {
+            res.json({
+                semesters: semesters,
+                coursesProfessors: req.params.id.split(',')
+            });
+
+        });
+
+    });
+
     router.get('/treelist/', function(req, res) {
 
-        db.collection(colName).find().toArray(function(error, semesters) {
-
+        db.collection(colName).find({
+            "is_deleted": "false"
+        }).toArray(function(error, semesters) {
 
             db.collection('Courses').aggregate([{
                 $lookup: {
@@ -27,7 +56,15 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     as: "students"
                 }
             }]).toArray(function(error, courses) {
-                
+
+                if (error) {
+                    return res.
+                    status(400).
+                    json({
+                        error: error
+                    });
+                }
+
                 res.json({
                     semesters: semesters,
                     courses: courses
@@ -35,18 +72,6 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
             });
         });
-
-
-        // db.collection('treeList').find().toArray(function (error, semester) {
-        //      console.log(semester);
-        //      if (error) {
-        //          return res.
-        //              status(500).
-        //              json({ error: error });
-        //      }
-        //      res.json({ semester: semester });
-        //  });
-
 
     });
 
@@ -69,13 +94,11 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
     router.get('/semesters/', function(req, res) {
 
-        db.collection(colName).aggregate([
-        {
-                $match: {
-                    is_deleted: "false",
-                }
-            },
-        {
+        db.collection(colName).aggregate([{
+            $match: {
+                is_deleted: "false",
+            }
+        }, {
             $lookup: {
                 from: "Courses",
                 localField: "_id",
@@ -85,7 +108,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         }], function(error, semesters) {
             if (error) {
                 return res.
-                status(500).
+                status(302).
                 json({
                     error: error.toString()
                 });
@@ -97,6 +120,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
     });
 
     router.post('/semester/id/:id', function(req, res) {
+        console.log(req.body)
         db.collection(colName).update({
             _id: req.params.id
         }, req.body, function(error, semester) {
@@ -113,7 +137,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    // create new 
+    // create new
     router.put('/semester', function(req, res) {
         db.collection(colName, {
             strict: true

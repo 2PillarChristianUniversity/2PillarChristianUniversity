@@ -215,10 +215,12 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     Financial.searchID($scope.studentPermission).success(function(response) {
         $scope.profileFinancials = response.financials;
     });
-
+    $scope.studentProfileCourses = [];
     Student.getStudentCourse($scope.studentPermission).success(function(response) {
         $scope.studentProfileCourses = response.student;
     });
+    console.log($scope.studentProfileCourses);
+    console.log($scope.studentPermission);
 
     // add degree
     $scope.addDegree = function(isGraduate) {
@@ -853,7 +855,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                             message: 'Add Financial successfully.'
                         });
                         Financial.searchID(stuID).success(function(response) {
-                            $scope.financials = response.financials;
+                            $scope.profileFinancials = response.financials;
                         });                      
                     },
                     function(response) {

@@ -130,22 +130,24 @@ angular.module('smsApp', [
 					roles.push('Student');
 					store.set('studentID', response.student._id);
 					profile = angular.extend(profile, response.student);
-				}
-			});
+					$security.login(idToken, profile, roles);
+					$location.path('/home');
+				} else {
+					Professor.getProfessorByEmail(profile.email).success(function(response) {
+						if (response.professor != null) {
+							roles.push('Professor');
+							store.set('professorID', response.professor._id);
+							profile = angular.extend(profile, response.professor);
 
-			Professor.getProfessorByEmail(profile.email).success(function(response) {
-				if (response.professor != null) {
-					roles.push('Professor');
-					store.set('professorID', response.professor._id);
+							$security.login(idToken, profile, roles);
+							$location.path('/home');
+						} else {
+							roles.push('Admin');
+							$security.login(idToken, profile, roles);
+							$location.path('/home');
+						}
+					});
 				}
-
-				//	Login security
-				if (roles.length == 0) {
-					roles.push('Admin');
-				}
-
-				$security.login(idToken, profile, roles);
-				$location.path('/home');
 			});
 		});
 	});

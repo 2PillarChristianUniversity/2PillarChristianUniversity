@@ -34,7 +34,7 @@
 						Middle Name:
 					</td>
 					<td>
-						<p>{{student.middleName}}</p>
+						<p>{{profileStudent.middleName}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -316,7 +316,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<button class="btn btn-xs btn-primary" ng-click="addRequest(student._id)">Send request</button>
+		<button class="btn btn-xs btn-primary" ng-click="addRequest(profileStudent._id)">Send request</button>
 	</uib-tab>
 	<uib-tab index="5" heading="Courses">
 		<h4>Course</h4>
@@ -328,18 +328,18 @@
 				<th>End Date</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="course in studentProfileCourses[0].Courses">
+				<tr ng-repeat="course in studentProfileCourses">
 					<td>
-						<p>{{course._id}}</p>
+						<p>{{course.Courses[0]._id}}</p>
 					</td>
 					<td>
-						<p>{{course.name}}</p>
+						<p>{{course.Courses[0].name}}</p>
 					</td>
 					<td>
-						<p>{{course.startDate | date}}</p>
+						<p>{{course.Courses[0].startDate | date}}</p>
 					</td>
 					<td>
-						<p>{{course.endDate | date}}</p>
+						<p>{{course.Courses[0].endDate | date}}</p>
 					</td>
 				</tr>
 			</tbody>

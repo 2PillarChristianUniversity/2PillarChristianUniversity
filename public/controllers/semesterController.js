@@ -2,13 +2,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         'ngSanitize', 'ui.calendar', 'ngSecurity'
     ])
     .controller('SemesterListCtrl', function($timeout, $scope, $rootScope, $routeParams, $location,
-        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, $security) {
-        var coursesOfStudents = [];
-        angular.forEach($security.getUser().Courses, function(value, key) {
-            this.push(value._id);
-        }, coursesOfStudents);
-        $scope.coursesOfStudents = coursesOfStudents;
-
+        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade) {
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
             // console.log($scope.semesters);
@@ -278,7 +272,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     $scope.courseTitle = 'Add Course';
                     $scope.semesterName = semesterName
                     $scope.scheduleDates = [{
-                        // day: 3,
+                        day: "2",
                         // time: new Date(1970, 0, 1, 08, 00, 0)
                     }];
                     $scope.dateOff = [{
@@ -500,49 +494,38 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $scope.enRollClass = function(courseID) {
             studentID = store.get('studentID');
             if (studentID) {
-                Student.get(studentID).success(function(res) {
-                    $scope.student = res.student;
 
-                    if (!$scope.student.courses) {
-                        $scope.student.courses = []
-                    }
+                $scope.grade = {
+                    "studentID": studentID,
+                    "courseID": courseID
+                }
 
-                    if ($scope.student.courses.indexOf(courseID) > -1) {
-
-                        var modalInstance = $uibModal.open({
-                            animation: true,
-                            templateUrl: 'templates/alert/warning.html',
-                            controller: function($scope, $uibModalInstance, Course) {
-
-                                $scope.errorContent = 'You already has been enroll this course!'
-
-                                $scope.ok = function() {
-                                    $uibModalInstance.dismiss('ok');
-                                }
-                            },
-                            size: 'sm'
+                Grade.getStudentCourse($scope.grade).success(function(res) {
+                    if (res.grade.length > 0) {
+                        notifications.showError({
+                            message: 'You already enroll this course!'
                         });
-
-
                     } else {
+                        Grade.create($scope.grade).then(
+                            function(response) {
+                                notifications.showSuccess({
+                                    message: 'Enroll successfully.'
+                                });
 
-                        $scope.student.courses.push(courseID);
+                                Semester.all().success(function(response) {
+                                    $scope.semesters = response.semesters;
 
-                        Student.update($scope.student._id, $scope.student)
-                            .then(
-                                function(response) {
-                                    notifications.showSuccess({
-                                        message: 'Enroll successfully.'
-                                    });
-                                },
-                                function(response) {
-                                    console.log(response);
-                                }
-                            );
+                                });
+                            },
+                            function(response) {
+                                console.log(response.data.error);
+                            });
                     }
 
                 });
-            }
+            };
+
+
         };
         // Assign course for  professor
         $scope.assignCourse = function(courseID) {
@@ -560,25 +543,27 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
                         if ($scope.professor != null) {
                             Professor.get($scope.professor).success(function(res) {
-                                $rootScope.current_professor = res.professor;
+                                $scope.current_professor = res.professor;
+                                console.log($scope.current_professor);
 
-                                if ($rootScope.current_professor) {
-                                    if (!$rootScope.current_professor.courses) {
-                                        $rootScope.current_professor.courses = [];
+                                if ($scope.current_professor) {
+                                    if (!$scope.current_professor.courses) {
+                                        $scope.current_professor.courses = [];
                                     }
-                                    if ($rootScope.current_professor.courses.indexOf(courseID) > -1) {
+                                    if ($scope.current_professor.courses.indexOf(courseID) > -1) {
                                         notifications.showError({
                                             message: 'You already has been taken this course!'
                                         });
                                         $uibModalInstance.close(true);
                                     } else {
 
-                                        $rootScope.current_professor.courses.push(courseID);
-                                        $scope.professorID = store.get('professorID')
+                                        $scope.current_professor.courses.push(courseID);
+                                        // $scope.professorID = store.get('professorID')
 
-                                        Professor.update($scope.professorID, $rootScope.current_professor)
+                                        Professor.update($scope.professor, $scope.current_professor)
                                             .then(
                                                 function(response) {
+                                                    console.log(response)
                                                     notifications.showSuccess({
                                                         message: 'Assign successfully.'
                                                     });
@@ -608,10 +593,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         // edit course
         $scope.editCourse = function(semesterName, courseID) {
-            console.log(courseID);
             Course.get(courseID).success(function(res) {
                 $rootScope.course = res.course;
-                console.log($rootScope.course);
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/semesters/course.html',
@@ -621,23 +604,46 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             return new Date(Date.parse(date));
 
                         };
+                        $scope.scheduleDates = [];
+                        $scope.dateOff = [];
+
 
                         $scope.courseTitle = 'Edit Course';
                         $scope.semesterName = semesterName;
                         $scope.name = $rootScope.course.name;
                         $scope.startDate = new Date($rootScope.course.startDate);
                         $scope.endDate = new Date($rootScope.course.endDate);
+                        $scope.duration = $rootScope.course.duration;
+                        $scope.noMember = $rootScope.course.noMember;
+                        $scope.scheduleDates = $rootScope.course.scheduleDate;
+                        for (var i = 0; i < $rootScope.course.scheduleDate.length; i++) {
+
+                            $scope.scheduleDates[i].time = new Date($rootScope.course.scheduleDate[i].time);
+
+                        }
+
+                        $scope.dateOff = $rootScope.course.dateOff;
+                        for (var i = 0; i < $rootScope.course.dateOff.length; i++) {
+
+                            $scope.dateOff[i].dateOffStart = new Date($rootScope.course.dateOff[i].dateOffStart);
+                            $scope.dateOff[i].dateOffEnd = new Date($rootScope.course.dateOff[i].dateOffEnd);
+                        }
+                        console.log($scope.scheduleDates);
 
                         $scope.courseSubmit = function() {
                             $rootScope.course.name = $scope.name;
+                            $rootScope.course.duration = $scope.duration;
+                            $rootScope.course.noMember = $scope.noMember;
                             $rootScope.course.startDate = $scope.startDate;
                             $rootScope.course.endDate = $scope.endDate;
+                            $rootScope.course.scheduleDate = $scope.scheduleDates;
+                            $rootScope.course.dateOff = $scope.dateOff;
 
                             Course.update($rootScope.course._id, $rootScope.course)
                                 .then(
                                     function(response) {
                                         notifications.showSuccess({
-                                            message: 'Add Course successfully.'
+                                            message: 'Edit Course successfully.'
                                         });
                                         $uibModalInstance.close(true);
                                     },
@@ -652,7 +658,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             $uibModalInstance.dismiss('cancel');
                         };
                     },
-                    size: 'sm',
+                    size: 'md',
                     resolve: {
                         isfinished: function() {
                             return true;
@@ -674,25 +680,97 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
     })
     .controller('SemesterTreeviewCtrl', function($scope, $rootScope, $routeParams,
-        $location, $uibModal, Semester, notifications, Course) {
+        $location, $uibModal, Semester, notifications, Course, Professor, Grade, $security) {
 
-        Semester.getTreeList().success(function(response) {
-            $scope.semesters_list = response.semesters;
-            $scope.courses_list = response.courses;
-            $scope.semesters_list.forEach(function(semester) {
-                $scope.courses_list.forEach(function(course) {
-                    if (semester._id == course.semesters) {
-                        if (!semester.courses) {
-                            semester.courses = [];
+        // set grade for student base course ID
+        $scope.addGradeForStudent = function(courseID, courseName) {
+            Grade.get(courseID).success(function(res) {
+                $rootScope.grade = res.grade;
+                console.log(courseID);
+                console.log($rootScope.grade);
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: 'templates/professors/setGrade.html',
+                    controller: function($scope, $uibModalInstance, Professor, Grade) {
+                        $scope.gradeTitle = courseName
+                        $scope.studentID = $rootScope.grade.studentID;
+                        $scope.point = [];
+                        $scope.addGrade = function() {
+
+                            console.log($scope.point);
+                            for (var i = 0; i < $rootScope.grade.length - 1; i++) {
+                                $scope.grade = {
+                                    "_id": $rootScope.grade[i]._id,
+                                    "studentID": $rootScope.grade[i].studentID,
+                                    "courseID": $rootScope.grade[i].courseID,
+                                    "grade": $scope.point[$rootScope.grade[i].studentID]
+                                };
+                                Grade.update($scope.grade._id, $scope.grade)
+
+                                .then(
+                                    function(response) {
+                                        notifications.showSuccess({
+                                            message: 'Successfully.'
+                                        });
+                                        $uibModalInstance.close(true);
+                                    },
+                                    function(response) {
+                                        console.log(response);
+                                    }
+                                );
+
+                            }
+
                         }
-                        semester.courses.push(course);
+                        $scope.cancel = function() {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                    },
+                    size: 'md',
+                    resolve: {
+                        grade: function() {
+                            return true
+                        }
                     }
                 });
             });
-            console.log($scope.semesters_list);
 
-        });
+        };
 
+        if ($security.hasPermission('Admin')) {
+            Semester.getTreeList().success(function(response) {
+                $scope.semesters_list = response.semesters;
+                $scope.courses_list = response.courses;
+                $scope.semesters_list.forEach(function(semester) {
+                    $scope.courses_list.forEach(function(course) {
+                        if (semester._id == course.semesters) {
+                            if (!semester.courses) {
+                                semester.courses = [];
+                            }
+                            semester.courses.push(course);
+
+                        }
+                    });
+                });
+
+            });
+        } else if ($security.hasPermission('Professor')) {
+            Semester.getTreeListByProfessor($security.getUser().courses).success(function(response) {
+                $scope.semesters_list = response.semesters;
+                var courses = response.coursesProfessors;
+                $scope.semesters_list.forEach(function(semester) {
+                    if (!semester.courses) {
+                        semester.courses = [];
+                    }
+                    semester.Courses.forEach(function(course) {
+                        if (courses.indexOf(course._id) > -1) {
+                            semester.courses.push(course);
+                        }
+                    });
+                });
+            });
+
+        }
 
         var apple_selected, tree, treedata_avm, treedata_geography;
         $scope.my_tree_handler = function(branch) {

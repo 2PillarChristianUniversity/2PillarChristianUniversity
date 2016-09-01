@@ -22,7 +22,7 @@
 		</thead>
 		<tbody>
 			<tr style="cursor: pointer;" ng-repeat="institution in institutions" >
-				<td ng-click="institutionDetails(institution._id)">{{institution._id}}</td>
+				<td ng-click="institutionDetails(institution._id)">{{institution.name}}</td>
 				<td ng-click="institutionDetails(institution._id)">{{institution.phoneNumber}}</td>
 				<td ng-click="institutionDetails(institution._id)">{{institution.addressLine1}}</td>
 				<td ng-click="institutionDetails(institution._id)">{{institution.city}}</td>
