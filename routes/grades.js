@@ -15,7 +15,9 @@ function createAutoId(index) {
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
     // Update grade
     router.get('/grade/student/:id', function(req, res) {
-        db.collection(colName).find({ studentID: req.params.id }).toArray(function(error, grades) {
+        db.collection(colName).find({
+            studentID: req.params.id
+        }).toArray(function(error, grades) {
             if (error) {
                 return res.
                 status(500).
@@ -83,6 +85,29 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
             });
     });
 
+    //delete grade by course id and student id 
+    router.put('/grade/unEnroll/', function(req, res) {
+        db.collection(colName).remove({
+            studentID: req.body.studentID,
+            courseID: req.body.courseID
+        }, function(error) {
+
+            if (error) {
+                return res.
+                status(500).
+                json({
+                    error: error.toString()
+                });
+            } else {
+                res.json({
+                    msg: 'Un-Enroll Successfully!'
+                });
+            }
+
+        });
+    });
+
+    //get all grades
     router.get('/grades/', function(req, res) {
         db.collection(colName).find({}).toArray(function(error, grades) {
             if (error) {

@@ -24,6 +24,9 @@ angular.module('smsApp-studentsList')
             },
             getStudent: function (id) {
                 return $http({ method: "GET", url: "/api/grade/student/" + id });
+            },
+            unenrollStudent: function (ids) {
+                return $http({ method: "PUT", url: "/api/grade/unEnroll/", data: ids });
             }
         };
     });

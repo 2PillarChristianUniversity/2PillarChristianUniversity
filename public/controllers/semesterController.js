@@ -550,8 +550,9 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
                                 Semester.all().success(function(response) {
                                     $scope.semesters = response.semesters;
-
+                                    $scope.courseList = response.courses;
                                 });
+
                             },
                             function(response) {
                                 console.log(response.data.error);
@@ -561,6 +562,32 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                 });
             };
 
+
+        };
+
+        // Enroll class for student
+        $scope.unEnRollClass = function(courseID) {
+            studentID = store.get('studentID');
+            if (studentID) {
+                $scope.ids = {
+                    studentID: studentID,
+                    courseID: courseID
+                }
+
+                Grade.unenrollStudent($scope.ids).then(function(response) {
+                    notifications.showSuccess({
+                        message: 'Un-Enroll successfully.'
+                    });
+
+                    Semester.all().success(function(response) {
+                        $scope.semesters = response.semesters;
+                        $scope.courseList = response.courses;
+                    });
+
+                }, function function_name(error) {
+
+                });
+            };
 
         };
         // Assign course for  professor
