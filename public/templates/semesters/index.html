@@ -49,7 +49,9 @@
                             <a href="javascript:void(0)"  ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>   <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
                             </td>
                             <td>
-                                
+                                <span ng-repeat="professor in checkProfessors(course._id)">
+                                    {{professor.firstName}} {{professor.lastName}}
+                                </span>
                             </td>
                         </tr>
                     </table>

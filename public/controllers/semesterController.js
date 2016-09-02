@@ -5,8 +5,34 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade) {
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
-            // console.log($scope.semesters);
+            $scope.courseList = response.courses;
+            // console.log(response)
         });
+
+        $scope.checkProfessors = function(courseID) {
+            var result = [];
+            var keepRunning = true;
+
+            $scope.courseList.forEach(function(key, val) {
+                if (keepRunning) {
+
+                    if (courseID === key._id) {
+
+                        result = key.professor;
+                        keepRunning = false;
+
+                    } else {
+                        result = [];
+                    }
+
+                }
+
+
+            });
+
+
+            return result;
+        }
 
         // function CalendarCtrl($scope,$compile,uiCalendarConfig) {
         var date = new Date();
@@ -587,6 +613,14 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
                 },
                 size: 'sm'
+            });
+
+            modalInstance.result.then(function(wr) {
+                Semester.all().success(function(response) {
+                    $scope.semesters = response.semesters;
+                    $scope.courseList = response.courses;
+                });
+
             });
 
         };

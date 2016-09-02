@@ -13,7 +13,6 @@ function createAutoId(index) {
 }
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
-
     router.get('/treelist/id/:id', function(req, res) {
         db.collection(colName).aggregate([{
             $match: {
@@ -106,16 +105,39 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                 as: "Courses"
             }
         }], function(error, semesters) {
+
             if (error) {
                 return res.
-                status(302).
+                status(500).
                 json({
                     error: error.toString()
                 });
+            } else {
+
+                db.collection('Courses').aggregate([{
+                    $lookup: {
+                        from: "Professors",
+                        localField: "_id",
+                        foreignField: "courses",
+                        as: "professor"
+                    }
+
+                }], function(error, courses) {
+                    if (error) {
+                        res.json({
+                            semesters: semesters,
+                            courses: []
+                        });
+                    } else {
+                        res.json({
+                            semesters: semesters,
+                            courses: courses
+                        });
+                    }
+
+                });
             }
-            res.json({
-                semesters: semesters
-            });
+
         });
     });
 
