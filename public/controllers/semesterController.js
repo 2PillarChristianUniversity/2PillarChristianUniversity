@@ -7,9 +7,11 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         if ($security.hasPermission('Admin')) {
             $scope.actTab = 2;
+            $scope.headPrevCourse = 'Previous Courses';
 
         } else {
             $scope.actTab = 0;
+            $scope.headPrevCourse = 'Set Grades'
         }
 
 
