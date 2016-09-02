@@ -3,11 +3,28 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
     ])
     .controller('SemesterListCtrl', function($timeout, $scope, $rootScope, $routeParams, $location,
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade, $security) {
+        $routeParams.studentID = store.get('studentID');
+
+        if ($security.hasPermission('Admin')) {
+            $scope.actTab = 2;
+            $scope.headPrevCourse = 'Previous Courses';
+
+        } else {
+            $scope.actTab = 0;
+            $scope.headPrevCourse = 'Set Grades'
+        }
+
+
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
             $scope.courseList = response.courses;
-            // console.log(response)
+
         });
+
+        Student.getStudentCourse($routeParams.studentID).success(function(response) {
+            $scope.studentCourses = response.student;
+        });
+
 
 
         $scope.checkProfessors = function(courseID) {
@@ -16,21 +33,14 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
             $scope.courseList.forEach(function(key, val) {
                 if (keepRunning) {
-
                     if (courseID === key._id) {
-
                         result = key.professor;
                         keepRunning = false;
-
                     } else {
                         result = [];
                     }
-
                 }
-
-
             });
-
 
             return result;
         }
@@ -297,9 +307,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         // create coures
         $scope.addCourse = function(semesterID, semesterName) {
-            // Semester.get(semesterID).success(function(res) {
-            //     $scope.semester = res.semester;
-            // });
+
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'templates/semesters/course.html',
@@ -342,7 +350,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     course: function() {
                         return $scope.course;
                     }
-                }
+                },
+                backdrop: 'static'
             });
 
             modalInstance.result.then(function(course) {
@@ -756,9 +765,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         // set grade for student base course ID
         $scope.addGradeForStudent = function(courseID, courseName) {
             Grade.get(courseID).success(function(res) {
-                $rootScope.grade = res.grade;
-                console.log(courseID);
-                console.log($rootScope.grade);
+                $rootScope.grade = res.grade;                
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/professors/setGrade.html',
@@ -806,7 +813,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         grade: function() {
                             return true
                         }
-                    }
+                    },
+                    backdrop: 'static'
                 });
             });
 
@@ -844,6 +852,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             }
                         });
                     });
+
+                    console.log($scope.semesters_list);
                 });
             });
 

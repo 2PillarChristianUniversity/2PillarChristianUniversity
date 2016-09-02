@@ -197,63 +197,46 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 	//	Insert professor
 	router.put('/professor', function(req, res) {
 		var colName = 'Professors';
-		db.collection(colName, {
-			strict: true
-		}, function(err, collection) { // check exists collection
-			if (err != null) { // if exists
-				req.body._id = createAutoId(1);
-				db.collection(colName).createIndex({
-					"email": 1
-				}, {
-					unique: true
-				})
-				db.collection(colName).insert(req.body, function(error, professor) {
-					if (error) {
-						return res.
-						status(400).
-						json({
-							error: "Can't insert professor..."
-						});
-					}
-					res.json({
-						professor: professor
-					});
-				});
-			}
-
-			db.collection(colName).findOne({
-				email: req.body.email
-			}, function(error, course) {
-				if (error) {
-					return res.
+		db.collection(colName).findOne({ email: req.body.email }, function (error, professor) {
+			if(error) {
+				return res.
 					status(400).
-					json({
-						error: "Can't insert professor..."
-					});
-				}
-				if (course) {
-					return res.status(403)
-						.json({
-							error: "This email is already being used"
-						});
-				} else {
-					autoIncrement.getNextSequence(db, colName, function(err, autoIndex) {
-						req.body._id = createAutoId(autoIndex);
-						db.collection(colName).insert(req.body, function(error, professor) {
+					json({ error: "Can't insert professor..." });
+			}
+			if(professor) {
+				return res.status(403)
+          				.json({ error: "This email is already being used" });
+			} else {
+				db.collection(colName, {strict:true}, function(err, collection) { // check exists collection
+					if(err != null) { // if not exists
+						req.body._id = createAutoId(1);
+						db.collection(colName).createIndex( { "email": 1 }, { unique: true } )
+						db.collection(colName).insert(req.body, function (error, professor) {
 							if (error) {
 								return res.
-								status(400).
-								json({
-									error: "Can't insert professor..."
-								});
+									status(400).
+									json({ error: "Can't insert professor..." });
 							}
-							res.json({
-								professor: professor
+							res.json({ professor: professor });
+							autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
+								console.log('init auto id');
 							});
 						});
-					});
-				}
-			});
+					} else {
+						autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
+							req.body._id = createAutoId(autoIndex);
+							db.collection(colName).insert(req.body, function (error, professor) {
+								if (error) {
+									return res.
+										status(400).
+										json({ error: "Can't insert professor..." });
+								}
+								res.json({ professor: professor });
+							});
+						});
+					}
+				});
+			}
 		});
 	});
 

@@ -114,7 +114,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         })
     });
 
-    // create new 
+    // create new
     router.put('/course', function(req, res) {
         db.collection('Courses', {
             strict: true
@@ -132,25 +132,27 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     res.json({
                         course: course
                     });
-                });
-            }
-
-            autoIncrement.getNextSequence(db, 'Courses', function(err, autoIndex) {
-                req.body._id = createAutoId(autoIndex);
-                db.collection('Courses').insert(req.body, function(error, course) {
-                    if (error) {
-                        return res.
-                        status(400).
-                        json({
-                            error: "Can't insert course..."
-                        });
-                    }
-                    res.json({
-                        course: course
+                    autoIncrement.getNextSequence(db, 'Courses', function (err, autoIndex) {
+                        console.log('init auto id');
                     });
                 });
-            });
-
+            } else {
+                autoIncrement.getNextSequence(db, 'Courses', function(err, autoIndex) {
+                    req.body._id = createAutoId(autoIndex);
+                    db.collection('Courses').insert(req.body, function(error, course) {
+                        if (error) {
+                            return res.
+                            status(400).
+                            json({
+                                error: "Can't insert course..."
+                            });
+                        }
+                        res.json({
+                            course: course
+                        });
+                    });
+                });
+            }
         });
     });
 });
