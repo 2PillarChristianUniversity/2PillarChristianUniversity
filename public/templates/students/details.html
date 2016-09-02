@@ -326,6 +326,8 @@
 				<th>Course Name</th>
 				<th>Start Date</th>
 				<th>End Date</th>
+				<th>Semester</th>
+				<th>Grade</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="course in studentCourses[0].Courses">
@@ -340,6 +342,12 @@
 					</td>
 					<td>
 						<p>{{course.endDate | date}}</p>
+					</td>
+					<td>
+						<p></p>
+					</td>
+					<td>
+						<p></p>
 					</td>
 				</tr>
 			</tbody>

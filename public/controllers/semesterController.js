@@ -312,8 +312,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         // time: new Date(1970, 0, 1, 08, 00, 0)
                     }];
                     $scope.dateOff = [{
-                        // dateOffStart: new Date(),
-                        // dateOffEnd: new Date()
+                        dateOffStart: new Date(),
+                        dateOffEnd: new Date()
                     }];
 
                     $scope.courseSubmit = function() {
@@ -766,10 +766,14 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.gradeTitle = courseName
                         $scope.studentID = $rootScope.grade.studentID;
                         $scope.point = [];
+                        for (var i = 0; i < $rootScope.grade.length; i++) {
+                            
+                            $scope.point[$rootScope.grade[i].studentID] = $rootScope.grade[i].grade;
+                        }
                         $scope.addGrade = function() {
 
                             console.log($scope.point);
-                            for (var i = 0; i < $rootScope.grade.length - 1; i++) {
+                            for (var i = 0; i < $rootScope.grade.length; i++) {
                                 $scope.grade = {
                                     "_id": $rootScope.grade[i]._id,
                                     "studentID": $rootScope.grade[i].studentID,

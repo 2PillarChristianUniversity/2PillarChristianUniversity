@@ -38,8 +38,9 @@
                             <th>Course Name</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th ng-if-permission="Admin,Student">Actions</th>
                             <th>Professor Owner </th>
+                            <th ng-if-permission="Admin,Student">Actions</th>
+                            
                             
                         </thead>
                         <tr ng-repeat="course in semester.Courses">
@@ -47,17 +48,17 @@
                             <td>{{course.name}}</td>
                             <td>{{course.startDate | date}}</td>
                             <td>{{course.endDate | date}}</td>
+                            <td>
+                                <span ng-repeat="professor in checkProfessors(course._id)">
+                                    {{professor.firstName}} {{professor.lastName}}
+                                </span>
+                            </td>
                             <td ng-if-permission="Admin,Student">
                                 <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>
                                 <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>
                                 <a ng-if="coursesOfStudents.indexOf(course._id) > -1" href="javascript:void(0)" ng-if-permission="Student" ng-click="unEnRollClass(course._id)">Un-Enroll </a>
                                 <a ng-if="coursesOfStudents.indexOf(course._id) <= -1" href="javascript:void(0)" ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>
                                 <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
-                            </td>
-                            <td>
-                                <span ng-repeat="professor in checkProfessors(course._id)">
-                                    {{professor.firstName}} {{professor.lastName}}
-                                </span>
                             </td>
                         </tr>
                     </table>
