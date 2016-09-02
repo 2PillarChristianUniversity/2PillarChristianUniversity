@@ -181,32 +181,20 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 	//	Insert student
 	router.put('/student', function (req, res) {
 		var colName = 'Students';
-		db.collection(colName, {strict:true}, function(err, collection) { // check exists collection
-			if(err != null) { // if exists
-				req.body._id = createAutoId(1);
-				db.collection(colName).createIndex( { "email": 1 }, { unique: true } )
-				db.collection(colName).insert(req.body, function (error, student) {
-					if (error) {
-						return res.
-							status(400).
-							json({ error: "Can't insert student..." });
-					}
-					res.json({ student: student });
-				});
+		db.collection(colName).findOne({ email: req.body.email }, function (error, student) {
+			if(error) {
+				return res.
+					status(400).
+					json({ error: "Can't insert student..." });
 			}
-
-			db.collection(colName).findOne({ email: req.body.email }, function (error, course) {
-				if(error) {
-					return res.
-						status(400).
-						json({ error: "Can't insert student..." });
-				}
-				if(course) {
-					return res.status(403)
-	          				.json({ error: "This email is already being used" });
-				} else {
-					autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
-						req.body._id = createAutoId(autoIndex);
+			if(student) {
+				return res.status(403)
+          				.json({ error: "This email is already being used" });
+			} else {
+				db.collection(colName, {strict:true}, function(err, collection) { // check exists collection
+					if(err != null) { // if not exists
+						req.body._id = createAutoId(1);
+						db.collection(colName).createIndex( { "email": 1 }, { unique: true } )
 						db.collection(colName).insert(req.body, function (error, student) {
 							if (error) {
 								return res.
@@ -214,11 +202,27 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 									json({ error: "Can't insert student..." });
 							}
 							res.json({ student: student });
+							autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
+								console.log('init auto id');
+							});
 						});
-					});
-				}
-			});
+					} else {
+						autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
+							req.body._id = createAutoId(autoIndex);
+							db.collection(colName).insert(req.body, function (error, student) {
+								if (error) {
+									return res.
+										status(400).
+										json({ error: "Can't insert student..." });
+								}
+								res.json({ student: student });
+							});
+						});
+					}
+				});
+			}
 		});
+
 	});
 
 	//	Delete student
