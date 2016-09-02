@@ -3,13 +3,42 @@
     <br>
     <br>
     <uib-tabset active="1">
+        <uib-tab index="1" heading="History" ng-if-permission="Student">
+            <table class="table">
+                <thead>
+                    <th>ID</th>
+                    <th>Course Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>                    
+                    <th>Grade</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="grade in studentCourses">
+                    <td>
+                        <p>{{grade.courseID}}</p>
+                    </td>
+                    <td>
+                        <p>{{grade.Courses[0].name}}</p>
+                    </td>
+                    <td>
+                        <p>{{grade.Courses[0].startDate | date}}</p>
+                    </td>
+                    <td>
+                        <p>{{grade.Courses[0].endDate | date}}</p>
+                    </td>
+                    <td>
+                        {{grade.grade}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </uib-tab>
         <uib-tab index="2" select="renderCalendar()" heading="Schedule" active="true" ng-click="renderCalendar('calendar')" ng-if-permission="Student,Professor">
             <br>
             <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar" ng-if-permission="Student,Professor"></div>
-        </uib-tab> 
-
+        </uib-tab>
         <uib-tab index="1" heading="Previous Courses" ng-if-permission="Admin,Professor">
-            <semester-treeview></semester-treeview>
+            <semester-treeview ng-if-permission="Admin,Professor"></semester-treeview>
         </uib-tab>
         <uib-tab index="0" heading="Courses">
             <br>
@@ -40,7 +69,6 @@
                             <th>End Date</th>
                             <th ng-if-permission="Admin,Student">Actions</th>
                             <th>Professor Owner </th>
-                            
                         </thead>
                         <tr ng-repeat="course in semester.Courses">
                             <td>{{course._id}}</td>

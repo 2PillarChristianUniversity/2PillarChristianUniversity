@@ -13,7 +13,7 @@ function createAutoId(index) {
 }
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
-    // Update grade
+    //find grade base student id 
     router.get('/grade/student/:id', function(req, res) {
         db.collection(colName).find({
             studentID: req.params.id
@@ -31,7 +31,39 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    // get grade by id
+
+    // //find grade by student and returen object student course 
+    // router.get('/grade/studentToCourseByID/id/:id', function(req, res) {
+
+    //     db.collection(colName).aggregate(
+    //         [{
+    //             $match: {
+    //                 studentID: req.params.id
+    //             }
+    //         }, {
+    //             $lookup: {
+    //                 from: "Courses",
+    //                 localField: "courseID",
+    //                 foreignField: "_id",
+    //                 as: "courses"
+    //             }
+    //         }],
+    //         function(error, grades) {
+    //             if (error) {
+    //                 return res.
+    //                 status(500).
+    //                 json({
+    //                     error: error.toString()
+    //                 });
+    //             }
+    //             res.json({
+    //                 grades: grades
+
+    //             });
+    //         });
+    // });
+
+    // find grade by course id
     router.get('/grade/id/:id', function(req, res) {
         db.collection(colName).aggregate(
             [{

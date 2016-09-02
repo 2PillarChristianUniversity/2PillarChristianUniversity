@@ -3,11 +3,18 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
     ])
     .controller('SemesterListCtrl', function($timeout, $scope, $rootScope, $routeParams, $location,
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade, $security) {
+        $routeParams.studentID = store.get('studentID');
+
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
             $scope.courseList = response.courses;
-            // console.log(response)
+          
         });
+
+        Student.getStudentCourse($routeParams.studentID).success(function(response) {           
+            $scope.studentCourses = response.student;
+        });
+
 
 
         $scope.checkProfessors = function(courseID) {
@@ -16,21 +23,14 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
             $scope.courseList.forEach(function(key, val) {
                 if (keepRunning) {
-
                     if (courseID === key._id) {
-
                         result = key.professor;
                         keepRunning = false;
-
                     } else {
                         result = [];
                     }
-
                 }
-
-
             });
-
 
             return result;
         }
@@ -297,9 +297,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         // create coures
         $scope.addCourse = function(semesterID, semesterName) {
-            // Semester.get(semesterID).success(function(res) {
-            //     $scope.semester = res.semester;
-            // });
+
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'templates/semesters/course.html',
@@ -342,7 +340,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     course: function() {
                         return $scope.course;
                     }
-                }
+                },
+                backdrop: 'static'
             });
 
             modalInstance.result.then(function(course) {
@@ -802,7 +801,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         grade: function() {
                             return true
                         }
-                    }
+                    },
+                    backdrop: 'static'
                 });
             });
 

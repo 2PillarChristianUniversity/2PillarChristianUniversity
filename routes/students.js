@@ -128,7 +128,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
-	//	Update Student's course
+	//	 Student's course
 	router.post('/student/courses/:id', function(req, res) {
 		db.collection('Students').aggregate([
 		{
