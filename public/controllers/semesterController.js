@@ -5,13 +5,21 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade, $security) {
         $routeParams.studentID = store.get('studentID');
 
+        if ($security.hasPermission('Admin')) {
+            $scope.actTab = 2;
+
+        } else {
+            $scope.actTab = 0;
+        }
+
+
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
             $scope.courseList = response.courses;
-          
+
         });
 
-        Student.getStudentCourse($routeParams.studentID).success(function(response) {           
+        Student.getStudentCourse($routeParams.studentID).success(function(response) {
             $scope.studentCourses = response.student;
         });
 
@@ -755,9 +763,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         // set grade for student base course ID
         $scope.addGradeForStudent = function(courseID, courseName) {
             Grade.get(courseID).success(function(res) {
-                $rootScope.grade = res.grade;
-                console.log(courseID);
-                console.log($rootScope.grade);
+                $rootScope.grade = res.grade;                
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/professors/setGrade.html',
@@ -840,6 +846,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             }
                         });
                     });
+
+                    console.log($scope.semesters_list);
                 });
             });
 
