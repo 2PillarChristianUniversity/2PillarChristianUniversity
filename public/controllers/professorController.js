@@ -210,7 +210,7 @@ angular.module('smsApp-professorsList', ['ngRoute', 'datatables', 'ngResource', 
         // permission professor
         $scope.professorPermission = store.get('professorID');
         Professor.get($scope.professorPermission).success(function(response) {
-            $scope.professor = response.professor;
+            $scope.profileProfessor = response.professor;
         });
 
     });

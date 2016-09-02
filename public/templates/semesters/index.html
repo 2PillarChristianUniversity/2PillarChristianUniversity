@@ -16,7 +16,7 @@
             <br>
             <br>
             <div class="panel panel-default" ng-repeat="semester in semesters">
-                <div class="panel-heading">{{semester.name}}
+                <div class="panel-heading">{{semester.name}}   ( from: {{semester.startDate | date}}  -    to: {{semester.endDate | date}} )
                     <span style="float:right">
                         <a href="javascript:void(0)"  ng-if-permission="Admin"  ng-click="editSemester(semester._id)">
                             Edit
@@ -37,20 +37,20 @@
                             <th>Course Name</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th ng-if-permission="Admin">Actions</th>
                             <th>Professor Owner </th>
+                            <th ng-if-permission="Admin">Actions</th>                            
                         </thead>
                         <tr ng-repeat="course in semester.Courses">
                             <td>{{course._id}}</td>
                             <td>{{course.name}}</td>
                             <td>{{course.startDate | date}}</td>
                             <td>{{course.endDate | date}}</td>
-                            <td><a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>  <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>
-                            <a href="javascript:void(0)"  ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>   <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
-                            </td>
                             <td>
                                 
                             </td>
+                            <td><a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>  <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>
+                            <a href="javascript:void(0)"  ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>   <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
+                            </td>                            
                         </tr>
                     </table>
                 </div>
