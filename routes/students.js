@@ -10,7 +10,7 @@ function createAutoId(index) {
 	return Array(number-String(index).length + 1).join('0') + index;
 }
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
-	
+
 
 	//	Get student by email
 	router.get('/student/email/:email', function (req, res) {
@@ -27,7 +27,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 	//	Get list students by id (search function)
 	router.get('/students/id/:id', requiresLogin, function (req, res) {
 		db.collection('Students').find({ _id: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, students) {
-			
+
 			if (error) {
 				return res.
 					status(500).

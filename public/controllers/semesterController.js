@@ -2,11 +2,47 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         'ngSanitize', 'ui.calendar', 'ngSecurity'
     ])
     .controller('SemesterListCtrl', function($timeout, $scope, $rootScope, $routeParams, $location,
-        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade) {
+        $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade, $security) {
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
-            // console.log($scope.semesters);
+            $scope.courseList = response.courses;
+            // console.log(response)
         });
+
+
+        $scope.checkProfessors = function(courseID) {
+            var result = [];
+            var keepRunning = true;
+
+            $scope.courseList.forEach(function(key, val) {
+                if (keepRunning) {
+
+                    if (courseID === key._id) {
+
+                        result = key.professor;
+                        keepRunning = false;
+
+                    } else {
+                        result = [];
+                    }
+
+                }
+
+
+            });
+
+
+            return result;
+        }
+
+        Grade.getStudent($security.getUser()._id).success(function(response) {
+            var coursesOfStudents = [];
+            angular.forEach(response.grades, function(value, key) {
+                this.push(value.courseID);
+            }, coursesOfStudents);
+            $scope.coursesOfStudents = coursesOfStudents;
+        });
+
 
         // function CalendarCtrl($scope,$compile,uiCalendarConfig) {
         var date = new Date();
@@ -22,7 +58,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             var startDate = $filter('date')(new Date(start), "yyyy-MM-dd");
             var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
 
-            Student.studentCourse('000001', startDate, endDate).success(function(response) {
+            Student.studentCourse($security.getUser()._id, startDate, endDate).success(function(response) {
                 $scope.student = response.student;
                 var events = [];
                 if ($scope.student.length) {
@@ -589,6 +625,14 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                 size: 'sm'
             });
 
+            modalInstance.result.then(function(wr) {
+                Semester.all().success(function(response) {
+                    $scope.semesters = response.semesters;
+                    $scope.courseList = response.courses;
+                });
+
+            });
+
         };
 
         // edit course
@@ -755,20 +799,23 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
             });
         } else if ($security.hasPermission('Professor')) {
-            Semester.getTreeListByProfessor($security.getUser().courses).success(function(response) {
-                $scope.semesters_list = response.semesters;
-                var courses = response.coursesProfessors;
-                $scope.semesters_list.forEach(function(semester) {
-                    if (!semester.courses) {
-                        semester.courses = [];
-                    }
-                    semester.Courses.forEach(function(course) {
-                        if (courses.indexOf(course._id) > -1) {
-                            semester.courses.push(course);
+            Professor.get($security.getUser()._id).success(function(response) {
+                Semester.getTreeListByProfessor(response.professor.courses).success(function(response) {
+                    $scope.semesters_list = response.semesters;
+                    var courses = response.coursesProfessors;
+                    $scope.semesters_list.forEach(function(semester) {
+                        if (!semester.courses) {
+                            semester.courses = [];
                         }
+                        semester.Courses.forEach(function(course) {
+                            if (courses.indexOf(course._id) > -1) {
+                                semester.courses.push(course);
+                            }
+                        });
                     });
                 });
             });
+
 
         }
 
