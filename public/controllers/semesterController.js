@@ -357,8 +357,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             modalInstance.result.then(function(course) {
                 $scope.coures = course;
                 $scope.coures.semesters = semesterID;
-
-                console.log($scope.coures);
                 Course.insert($scope.coures)
                     .then(
                         function(response) {

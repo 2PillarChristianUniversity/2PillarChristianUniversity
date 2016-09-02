@@ -205,6 +205,8 @@ angular.module('smsApp', [
 	$rootScope.logout = function() {
 		auth.signout();
 		store.set('token', null);
+		store.set('studentID', null);
+		store.set('professorID', null);
 		$security.logout();
 		auth = null;
 		window.location = '/';
