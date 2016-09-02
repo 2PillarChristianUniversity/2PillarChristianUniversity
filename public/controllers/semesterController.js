@@ -562,6 +562,14 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                                     $scope.courseList = response.courses;
                                 });
 
+                                Grade.getStudent($security.getUser()._id).success(function(response) {
+                                    var coursesOfStudents = [];
+                                    angular.forEach(response.grades, function(value, key) {
+                                        this.push(value.courseID);
+                                    }, coursesOfStudents);
+                                    $scope.coursesOfStudents = coursesOfStudents;
+                                });
+
                             },
                             function(response) {
                                 console.log(response.data.error);
@@ -591,6 +599,14 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     Semester.all().success(function(response) {
                         $scope.semesters = response.semesters;
                         $scope.courseList = response.courses;
+                    });
+
+                    Grade.getStudent($security.getUser()._id).success(function(response) {
+                        var coursesOfStudents = [];
+                        angular.forEach(response.grades, function(value, key) {
+                            this.push(value.courseID);
+                        }, coursesOfStudents);
+                        $scope.coursesOfStudents = coursesOfStudents;
                     });
 
                 }, function function_name(error) {
