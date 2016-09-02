@@ -26,9 +26,9 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                       localField: "semester",
                       foreignField: "_id",
                       as: "Semesters"
-                    }        
+                    }
                },
-               { 
+               {
                     $lookup:
                     {
                       from: "Students",
@@ -80,9 +80,9 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                       localField: "semester",
                       foreignField: "_id",
                       as: "Semesters"
-                    }        
+                    }
                },
-               { 
+               {
                     $lookup:
                     {
                       from: "Students",
@@ -106,8 +106,8 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
-    router.put('/financial', function(req, res) {  
-   
+    router.put('/financial', function(req, res) {
+
         db.collection('Financials', {
             strict: true
         }, function(err, collection) { // check exists collection
@@ -124,25 +124,27 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     res.json({
                         financial: financial
                     });
-                });
-            }
-
-            autoIncrement.getNextSequence(db, 'Financials', function(err, autoIndex) {
-                req.body._id = createAutoId(autoIndex);
-                db.collection('Financials').insert(req.body, function(error, financial) {
-                    if (error) {
-                        return res.
-                        status(400).
-                        json({
-                            error: "Can't insert financial..."
-                        });
-                    }
-                    res.json({
-                        financial: financial
+                    autoIncrement.getNextSequence(db, 'Financials', function (err, autoIndex) {
+                        console.log('init auto id');
                     });
                 });
-            });
-
+            } else {
+                autoIncrement.getNextSequence(db, 'Financials', function(err, autoIndex) {
+                    req.body._id = createAutoId(autoIndex);
+                    db.collection('Financials').insert(req.body, function(error, financial) {
+                        if (error) {
+                            return res.
+                            status(400).
+                            json({
+                                error: "Can't insert financial..."
+                            });
+                        }
+                        res.json({
+                            financial: financial
+                        });
+                    });
+                });
+            }
         });
     });
 
@@ -167,7 +169,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                 res.json({ msg: "Delete success." });
             });
     });
-    
+
 });
 
 module.exports = router;

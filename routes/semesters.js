@@ -177,24 +177,27 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     res.json({
                         semester: semester
                     });
-                });
-            }
-
-            autoIncrement.getNextSequence(db, colName, function(err, autoIndex) {
-                req.body._id = createAutoId(autoIndex);
-                db.collection(colName).insert(req.body, function(error, semester) {
-                    if (error) {
-                        return res.
-                        status(400).
-                        json({
-                            error: "Can't insert semester..."
-                        });
-                    }
-                    res.json({
-                        semester: semester
+                    autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
+                        console.log('init auto id');
                     });
                 });
-            });
+            } else {
+                autoIncrement.getNextSequence(db, colName, function(err, autoIndex) {
+                    req.body._id = createAutoId(autoIndex);
+                    db.collection(colName).insert(req.body, function(error, semester) {
+                        if (error) {
+                            return res.
+                            status(400).
+                            json({
+                                error: "Can't insert semester..."
+                            });
+                        }
+                        res.json({
+                            semester: semester
+                        });
+                    });
+                });
+            }
 
         });
     });
