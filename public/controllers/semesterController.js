@@ -5,13 +5,23 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade, $security) {
         $routeParams.studentID = store.get('studentID');
 
+        if ($security.hasPermission('Admin')) {
+            $scope.actTab = 2;
+            $scope.headPrevCourse = 'Previous Courses';
+
+        } else {
+            $scope.actTab = 0;
+            $scope.headPrevCourse = 'Set Grades'
+        }
+
+
         Semester.all().success(function(response) {
             $scope.semesters = response.semesters;
             $scope.courseList = response.courses;
-          
+
         });
 
-        Student.getStudentCourse($routeParams.studentID).success(function(response) {           
+        Student.getStudentCourse($routeParams.studentID).success(function(response) {
             $scope.studentCourses = response.student;
         });
 
@@ -310,8 +320,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         // time: new Date(1970, 0, 1, 08, 00, 0)
                     }];
                     $scope.dateOff = [{
-                        // dateOffStart: new Date(),
-                        // dateOffEnd: new Date()
+                        dateOffStart: new Date(),
+                        dateOffEnd: new Date()
                     }];
 
                     $scope.courseSubmit = function() {
@@ -755,9 +765,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         // set grade for student base course ID
         $scope.addGradeForStudent = function(courseID, courseName) {
             Grade.get(courseID).success(function(res) {
-                $rootScope.grade = res.grade;
-                console.log(courseID);
-                console.log($rootScope.grade);
+                $rootScope.grade = res.grade;                
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/professors/setGrade.html',
@@ -765,10 +773,14 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.gradeTitle = courseName
                         $scope.studentID = $rootScope.grade.studentID;
                         $scope.point = [];
+                        for (var i = 0; i < $rootScope.grade.length; i++) {
+                            
+                            $scope.point[$rootScope.grade[i].studentID] = $rootScope.grade[i].grade;
+                        }
                         $scope.addGrade = function() {
 
                             console.log($scope.point);
-                            for (var i = 0; i < $rootScope.grade.length - 1; i++) {
+                            for (var i = 0; i < $rootScope.grade.length; i++) {
                                 $scope.grade = {
                                     "_id": $rootScope.grade[i]._id,
                                     "studentID": $rootScope.grade[i].studentID,
@@ -840,6 +852,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             }
                         });
                     });
+
+                    console.log($scope.semesters_list);
                 });
             });
 

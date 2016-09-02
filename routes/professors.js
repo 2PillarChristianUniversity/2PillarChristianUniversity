@@ -138,6 +138,43 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
+	// Get course by professor id
+	router.get('/professor/courses/:id', function(req, res) {
+		db.collection('Professors').aggregate(
+            [
+            	{
+			        $match:
+			        {
+			            _id: req.params.id
+			        }
+			     },
+			    {
+			      $lookup:
+			        {
+			          from: "Courses",
+			          localField: "courses",
+			          foreignField: "_id",
+			          as: "Courses"
+			        }
+			   },
+			   
+            ],
+        function(error, professor) {
+            if (error) {
+                return res.
+                status(500).
+                json({
+                    error: error.toString()
+                });
+            }
+            res.json({
+                professor: professor
+
+            });
+        });
+	});
+
+
 	//	Update professor
 	router.post('/professor/id/:id', function(req, res) {
 		db.collection(colName).update({
