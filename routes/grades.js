@@ -13,6 +13,22 @@ function createAutoId(index) {
 }
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
+    // Update grade
+    router.get('/grade/student/:id', function(req, res) {
+        db.collection(colName).find({ studentID: req.params.id }).toArray(function(error, grades) {
+            if (error) {
+                return res.
+                status(500).
+                json({
+                    error: error.toString()
+                });
+            }
+            res.json({
+                grades: grades
+            });
+        });
+    });
+
     // get grade by id
     router.get('/grade/id/:id', function(req, res) {
         db.collection(colName).aggregate(
@@ -107,7 +123,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         }, function(err, collection) { // check exists collection
             if (err != null) { // if exists
                 req.body._id = createAutoId(1);
-                                                
+
                 db.collection(colName).insert(req.body, function(error, grade) {
                     if (error) {
                         return res.

@@ -7,7 +7,7 @@
             <br>
             <div id="calendar" ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" calendar="calendar" ng-if-permission="Student,Professor"></div>
         </uib-tab>
-        <uib-tab index="1" heading="Previous Courses"  ng-if-permission="Admin,Professor"  >
+        <uib-tab index="1" heading="Previous Courses" ng-if-permission="Admin,Professor">
             <semester-treeview></semester-treeview>
         </uib-tab>
         <uib-tab index="0" heading="Courses">
@@ -28,7 +28,7 @@
                     </span>
                 </div>
                 <div class="panel-body">
-                    <button ng-if-permission="Admin"   ng-click="addCourse(semester._id, semester.name)">Add Course</button>
+                    <button ng-if-permission="Admin" ng-click="addCourse(semester._id, semester.name)">Add Course</button>
                     <br>
                     <br>
                     <table class="table">
@@ -45,8 +45,12 @@
                             <td>{{course.name}}</td>
                             <td>{{course.startDate | date}}</td>
                             <td>{{course.endDate | date}}</td>
-                            <td ng-if-permission="Admin,Student"><a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>  <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>
-                            <a href="javascript:void(0)"  ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>   <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
+                            <td ng-if-permission="Admin,Student">
+                                <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>
+                                <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>
+                                <a ng-if="coursesOfStudents.indexOf(course._id) > -1" href="javascript:void(0)" ng-if-permission="Student" ng-click="enRollClass(course._id)">Un-Enroll </a>
+                                <a href="javascript:void(0)" ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>
+                                <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
                             </td>
                             <td>
                                 <span ng-repeat="professor in checkProfessors(course._id)">
