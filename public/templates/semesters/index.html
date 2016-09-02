@@ -50,7 +50,7 @@
                                 <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="editCourse(semester.name ,course._id)">Edit</a>
                                 <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="deleteCourse(course._id)">Delete</a>
                                 <a ng-if="coursesOfStudents.indexOf(course._id) > -1" href="javascript:void(0)" ng-if-permission="Student" ng-click="enRollClass(course._id)">Un-Enroll </a>
-                                <a href="javascript:void(0)" ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>
+                                <a ng-if="coursesOfStudents.indexOf(course._id) <= -1" href="javascript:void(0)" ng-if-permission="Student" ng-click="enRollClass(course._id)">Enroll </a>
                                 <a href="javascript:void(0)" ng-if-permission="Admin" ng-click="assignCourse(course._id)">Assign </a>
                             </td>
                             <td>
