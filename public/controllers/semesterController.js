@@ -67,48 +67,52 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             // getting the events and feeding the calendar
             var startDate = $filter('date')(new Date(start), "yyyy-MM-dd");
             var endDate = $filter('date')(new Date(end), "yyyy-MM-dd");
+            if ($security.hasPermission('Student')) {
+                Student.studentCourse($security.getUser()._id, startDate, endDate).success(function(response) {
+                    $scope.student = response.student;
+                    var events = [];
+                    if ($scope.student.length) {
+                        angular.forEach(response.student, function(student, key) {
+                            var value = student.Courses;
+                            var count = value.scheduleDate.length;
+                            value.startDate = value.startDate.split('T')[0];
+                            value.endDate = value.endDate.split('T')[0];
 
-            Student.studentCourse($security.getUser()._id, startDate, endDate).success(function(response) {
-                $scope.student = response.student;
-                var events = [];
-                if ($scope.student.length) {
-                    angular.forEach(response.student[0].Courses, function(value, key) {
-                        var count = value.scheduleDate.length;
-                        value.startDate = value.startDate.split('T')[0];
-                        value.endDate = value.endDate.split('T')[0];
-
-                        var dateOfStartDate = new Date(value.startDate).getTime();
-                        var inputDate = new Date(value.startDate);
-                        if (new Date(start).getTime() > dateOfStartDate) {
-                            inputDate = new Date(start);
-                        }
-                        var startDate = $filter('date')(inputDate, "yyyy-MM-dd");
-                        for (var i = 0; i < count; i++) {
-                            var d = $filter('filter')($rootScope.weekdays, {
-                                id: value.scheduleDate[i].day
-                            });
-                            var time = new Date(value.scheduleDate[i].time);
-                            var hour = time.getHours();
-                            var minutes = time.getMinutes();
-
-                            var date = moment(startDate + ' ' + hour + ':' + minutes, "YYYY-MM-DD h:mm").day(d[0].name);
-                            var endTime = new Date(value.endDate).getTime();
-                            while (endTime >= date.valueOf()) {
-                                var data = {
-                                    title: value.name,
-                                    start: new Date(date),
-                                    allDay: false
-                                };
-                                this.push(data);
-
-                                date = date.weekday(parseInt(d[0].id) - 1 + 7);
+                            var dateOfStartDate = new Date(value.startDate).getTime();
+                            var inputDate = new Date(value.startDate);
+                            if (new Date(start).getTime() > dateOfStartDate) {
+                                inputDate = new Date(start);
                             }
-                        }
-                    }, events);
-                }
+                            var startDate = $filter('date')(inputDate, "yyyy-MM-dd");
+                            for (var i = 0; i < count; i++) {
+                                var d = $filter('filter')($rootScope.weekdays, {
+                                    id: value.scheduleDate[i].day
+                                });
+                                var time = new Date(value.scheduleDate[i].time);
+                                var hour = time.getHours();
+                                var minutes = time.getMinutes();
 
-                callback(events);
-            });
+                                var date = moment(startDate + ' ' + hour + ':' + minutes, "YYYY-MM-DD h:mm").day(d[0].name);
+                                var endTime = new Date(value.endDate).getTime();
+                                while (endTime >= date.valueOf()) {
+                                    var data = {
+                                        title: value.name,
+                                        start: new Date(date),
+                                        allDay: false
+                                    };
+                                    this.push(data);
+
+                                    date = date.weekday(parseInt(d[0].id) - 1 + 7);
+                                }
+                            }
+                        }, events);
+                    }
+
+                    callback(events);
+                });
+            } else if ($security.hasPermission('Professor')) {
+
+            }
         };
 
         /* Change View */
@@ -338,7 +342,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             dateOff: $scope.dateOff
 
                         };
-                        
+
                         $uibModalInstance.close($scope.course);
                     };
 
@@ -782,7 +786,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         // set grade for student base course ID
         $scope.addGradeForStudent = function(courseID, courseName) {
             Grade.get(courseID).success(function(res) {
-                $rootScope.grade = res.grade;                
+                $rootScope.grade = res.grade;
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'templates/professors/setGrade.html',
@@ -791,7 +795,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.studentID = $rootScope.grade.studentID;
                         $scope.point = [];
                         for (var i = 0; i < $rootScope.grade.length; i++) {
-                            
+
                             $scope.point[$rootScope.grade[i].studentID] = $rootScope.grade[i].grade;
                         }
                         $scope.addGrade = function() {
@@ -807,7 +811,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                                 Grade.update($scope.grade._id, $scope.grade)
                                 .then(
                                     function(response) {
-                                        
+
                                     },
                                     function(response) {
                                         console.log(response);
@@ -868,7 +872,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             }
                         });
                     });
-
                     console.log($scope.semesters_list);
                 });
             });
