@@ -39,20 +39,19 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                         course.students = [];
                     }
                     db.collection('Grades').aggregate([{
-                        $match: {'courseID': course._id}
-                    },
-                    {
+                        $match: {
+                            'courseID': course._id
+                        }
+                    }, {
                         $lookup: {
                             from: "Students",
                             localField: "studentID",
                             foreignField: "_id",
                             as: "Students"
                         }
-                    },
-                    {
+                    }, {
                         $unwind: "$Students"
-                    }
-                    ]).toArray(function(error, grades) {
+                    }]).toArray(function(error, grades) {
                         if (error) {
                             return res.
                             status(400).
@@ -66,11 +65,15 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                         callback2();
                     });
                 }, function(err2) {
-                    if( err2 ) { return console.log(err2); }
+                    if (err2) {
+                        return console.log(err2);
+                    }
                     callback();
                 });
             }, function(err) {
-                if( err ) { return console.log(err); }
+                if (err) {
+                    return console.log(err);
+                }
                 res.json({
                     semesters: semesters,
                     coursesProfessors: req.params.id.split(',')
@@ -92,20 +95,19 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                         course.students = [];
                     }
                     db.collection('Grades').aggregate([{
-                        $match: {'courseID': course._id}
-                    },
-                    {
+                        $match: {
+                            'courseID': course._id
+                        }
+                    }, {
                         $lookup: {
                             from: "Students",
                             localField: "studentID",
                             foreignField: "_id",
                             as: "Students"
                         }
-                    },
-                    {
+                    }, {
                         $unwind: "$Students"
-                    }
-                    ]).toArray(function(error, grades) {
+                    }]).toArray(function(error, grades) {
                         if (error) {
                             return res.
                             status(400).
@@ -119,7 +121,9 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                         callback();
                     });
                 }, function(err) {
-                    if( err ) { return console.log(err); }
+                    if (err) {
+                        return console.log(err);
+                    }
                     res.json({
                         semesters: semesters,
                         courses: courses
@@ -176,6 +180,11 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
     router.get('/semesters/', function(req, res) {
 
         db.collection(colName).aggregate([{
+            $sort: {
+                startDate: -1,
+                endDate: -1
+            }
+        }, {
             $match: {
                 is_deleted: "false",
             }
@@ -259,7 +268,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                     res.json({
                         semester: semester
                     });
-                    autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
+                    autoIncrement.getNextSequence(db, colName, function(err, autoIndex) {
                         console.log('init auto id');
                     });
                 });
