@@ -21,11 +21,13 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         });
 
-        Student.getStudentCourse($routeParams.studentID).success(function(response) {
-            $scope.studentCourses = response.student;
-        });
-
-
+        $scope.loadHistoriesStudent = function()
+        {
+            Student.getStudentCourse($routeParams.studentID).success(function(response) {
+                $scope.studentCourses = response.student;
+            });
+        }
+        $scope.loadHistoriesStudent();
 
         $scope.checkProfessors = function(courseID) {
             var result = [];
@@ -169,6 +171,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             $timeout(function() {
                 $('#calendar').fullCalendar('render');
                 $('#calendar').fullCalendar('rerenderEvents');
+                $('#calendar').fullCalendar('refetchEvents');
             }, 0);
         };
         /* Render Tooltip */
