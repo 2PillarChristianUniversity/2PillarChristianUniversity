@@ -21,12 +21,14 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         });
 
+
+
         $scope.loadHistoriesStudent = function()
         {
             Student.getStudentCourse($routeParams.studentID).success(function(response) {
                 $scope.studentCourses = response.student;
             });
-        }
+        };
         $scope.loadHistoriesStudent();
 
         $scope.checkProfessors = function(courseID) {
@@ -739,6 +741,23 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                 });
             };
 
+        };
+
+        $scope.checkShowEnroll = function(course) {
+            var startDate = moment(new Date(course.startDate));
+            var startDate = startDate.add(auth0Cfg.course_date_closed, 'days');
+            var startDateTime = startDate.valueOf();
+            var coursesOfStudents = $scope.coursesOfStudents;
+
+            var currentDate = moment(new Date());
+            var currentDateTime = currentDate.valueOf();
+            if(startDateTime < currentDateTime) {
+                return 0;
+            } else if(typeof(coursesOfStudents) != 'undefined' && coursesOfStudents.indexOf(course._id) > -1) {
+                return 1;
+            } else {
+                return 2;
+            }
         };
         // Assign course for  professor
         $scope.assignCourse = function(courseID) {
