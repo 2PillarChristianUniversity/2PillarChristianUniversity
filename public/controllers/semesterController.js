@@ -5,7 +5,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade, $security) {
         $routeParams.studentID = store.get('studentID');
 
-        if ($security.hasPermission('Admin')) {
+        if ($security.hasPermission('Admin') || $security.hasPermission('OfficerAdmin')) {
             $scope.actTab = 1;
             $scope.headPrevCourse = 'Previous Courses';
 
