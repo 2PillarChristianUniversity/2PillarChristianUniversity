@@ -39,6 +39,18 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         });
     });
 
+    // get officer admin by email
+    router.get('/officerAdmin/email/:email', function (req, res) {
+        db.collection(colName).findOne({ email: req.params.email }, function (error, officerAdmin) {
+            if (error) {
+                return res.
+                    status(500).
+                    json({ error: error.toString() });
+            }
+            res.json({ officerAdmin: officerAdmin });
+        });
+    });
+
     // create officerAdmin
     router.put('/officerAdmin', function(req, res) {
         db.collection(colName, {

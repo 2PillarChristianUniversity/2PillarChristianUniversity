@@ -5,7 +5,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $uibModal, Semester, notifications, Course, $compile, $filter, uiCalendarConfig, Student, Professor, store, Grade, $security) {
         $routeParams.studentID = store.get('studentID');
 
-        if ($security.hasPermission('Admin')) {
+        if ($security.hasPermission('Admin') || $security.hasPermission('OfficerAdmin')) {
             $scope.actTab = 1;
             $scope.headPrevCourse = 'Previous Courses';
 
@@ -367,10 +367,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         day: "2",
                         // time: new Date(1970, 0, 1, 08, 00, 0)
                     }];
-                    $scope.dateOff = [{
-                        dateOffStart: new Date(),
-                        dateOffEnd: new Date()
-                    }];
+                    $scope.dateOff = [];
 
                     $scope.courseSubmit = function() {
                         $scope.course = {
@@ -429,7 +426,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             });
                         } else {
                             notifications.showError({
-                                        message: 'Fail Add Course successfully.'
+                                        message: 'Course\'s time should be belong semester.'
                                     });
                         }
                     }
@@ -965,7 +962,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         };
 
         $scope.loadTreeView = function() {
-            if ($security.hasPermission('Admin')) {
+            if ($security.hasPermission('Admin') || $security.hasPermission('OfficerAdmin')) {
                 Semester.getTreeList().success(function(response) {
                     $scope.semesters_list = response.semesters;
                     $scope.courses_list = response.courses;

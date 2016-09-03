@@ -20,14 +20,14 @@
         </div>
         <div class="form-group">
             <label for="monthly_payment">Monthly payment</label>
-            <input type="text" class="form-control" id="monthly_payment" ng-model='monthlyPayment' required placeholder="Field">
+            <input type="number" class="form-control" id="monthly_payment" ng-model='monthlyPayment' required placeholder="Field">
         </div>
         <div class="form-group">
             <label for="student_comment">Student Comment</label>
             <textarea rows="4" class="form-control" id="student_comment" ng-model='studentComment' required placeholder="Description">
             </textarea>
         </div>
-        <div class="form-group" ng-if-permission="Admin">
+        <div class="form-group" ng-if-permission="Admin,OfficerAdmin">
             <label for="admin_comment">Admin Comment</label>
             <textarea rows="4" class="form-control" id="admin_comment" ng-model='adminComment' placeholder="Description">
             </textarea>

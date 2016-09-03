@@ -1,7 +1,7 @@
 angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 'ngNotificationsBar', 'ngSanitize', 'ngSecurity'])
     .controller('FinancialListCtrl', function($scope, $location, $security, Financial, $uibModal, $routeParams, $rootScope,
         notifications, Student, Semester) {
-        if (!$security.hasPermission('Admin')) {
+        if (!$security.hasPermission('Admin') && !$security.hasPermission('OfficerAdmin')) {
             $location.path('/404_page/');
         }
         Financial.all().success(function(response) {

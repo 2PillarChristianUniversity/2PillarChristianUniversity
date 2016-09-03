@@ -237,12 +237,14 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 } else {
                     $scope.degreeTitle = 'Add Undergraduate Degree';
                 }
+                $scope.time = new Date().getTime();
                 $scope.ok = function() {
                     $scope.degree = {
                         "institutionName": $scope.institutionName,
                         "degree": $scope.degree,
                         "field": $scope.field,
-                        "graduationDate": $scope.graduationDate
+                        "graduationDate": $scope.graduationDate,
+                        "time" : $scope.time
                     };
                     $uibModalInstance.close($scope.degree);
                 };
@@ -283,7 +285,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // edit degree
-    $scope.editDegree = function(studentID, degreeID, isGraduate) {
+    $scope.editDegree = function(studentID, checkTime, isGraduate) {
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -293,45 +295,49 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             controller: function($scope, $uibModalInstance, degree, Student) {
                 Institution.all().success(function(response) {
                     $scope.institutions = response.institutions;
-                });
-                $rootScope.degree = null;
-                $scope.graduateDegrees = [];
-                $scope.undergraduateDegrees = [];
-                if (isGraduate) {
-                    $scope.graduateDegrees = $rootScope.student.graduateDegrees;
-                    for (var i = 0; i < $scope.graduateDegrees.length; i++) {
-                        if ($scope.graduateDegrees[i]._id == degreeID) {
-                            $rootScope.degree = $scope.graduateDegrees[i];
-                            $rootScope.index = i;
-                        }
-                    }
-                } else {
-                    $scope.undergraduateDegrees = $rootScope.student.undergraduateDegrees;
-                    for (var i = 0; i < $scope.undergraduateDegrees.length; i++) {
-                        if ($scope.undergraduateDegrees[i]._id == degreeID) {
-                            $rootScope.degree = $scope.undergraduateDegrees[i];
-                            $rootScope.index = i;
-                        }
-                    }
-                }
-                $scope.degreeTitle = 'Edit Degree';
-                $scope.institutionName = $rootScope.degree.institutionName;
-                $scope.degree = $rootScope.degree.degree;
-                $scope.field = $rootScope.degree.field;
-                $scope.graduationDate = new Date($rootScope.degree.graduationDate);
 
-                $scope.ok = function() {
-                    $scope.degree = {
-                        "institutionName": $scope.institutionName,
-                        "degree": $scope.degree,
-                        "field": $scope.field,
-                        "graduationDate": $scope.graduationDate
+                    $rootScope.degree = null;
+                    $scope.graduateDegrees = [];
+                    $scope.undergraduateDegrees = [];
+                    if (isGraduate) {
+                        $scope.graduateDegrees = $rootScope.student.graduateDegrees;
+                        for (var i = 0; i < $scope.graduateDegrees.length; i++) {
+                            if ($scope.graduateDegrees[i].time == checkTime) {
+                                $rootScope.degree = $scope.graduateDegrees[i];
+                                $rootScope.index = i;
+                            }
+                        }
+                    } else {
+                        $scope.undergraduateDegrees = $rootScope.student.undergraduateDegrees;
+                        for (var i = 0; i < $scope.undergraduateDegrees.length; i++) {
+                            if ($scope.undergraduateDegrees[i].time == checkTime) {
+                                $rootScope.degree = $scope.undergraduateDegrees[i];
+                                $rootScope.index = i;
+                            }
+                        }
+                    }
+                    $scope.degreeTitle = 'Edit Degree';
+                    $scope.institutionName = $rootScope.degree.institutionName;
+                    $scope.degree = $rootScope.degree.degree;
+                    $scope.field = $rootScope.degree.field;
+                    $scope.graduationDate = new Date($rootScope.degree.graduationDate);
+                    $scope.time = $rootScope.degree.time;
+
+                    $scope.ok = function() {
+                        $scope.degree = {
+                            "institutionName": $scope.institutionName,
+                            "degree": $scope.degree,
+                            "field": $scope.field,
+                            "graduationDate": $scope.graduationDate,
+                            "time": $scope.time
+                        };
+                        $uibModalInstance.close($scope.degree);
                     };
-                    $uibModalInstance.close($scope.degree);
-                };
-                $scope.cancel = function() {
-                    $uibModalInstance.dismiss('cancel');
-                };
+                    $scope.cancel = function() {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                });
+                
             },
             size: 'md',
             resolve: {
@@ -366,7 +372,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // delete degree
-    $scope.deleteDegree = function(studentID, degreeID, isGraduate) {
+    $scope.deleteDegree = function(studentID, checkTime, isGraduate) {
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -381,7 +387,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 if (isGraduate) {
                     $scope.graduateDegrees = $rootScope.student.graduateDegrees;
                     for (var i = 0; i < $scope.graduateDegrees.length; i++) {
-                        if ($scope.graduateDegrees[i]._id == degreeID) {
+                        if ($scope.graduateDegrees[i].time == checkTime) {
                             $scope.degree = $scope.graduateDegrees[i];
                             $rootScope.index = i;
                         }
@@ -389,7 +395,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 } else {
                     $scope.undergraduateDegrees = $rootScope.student.undergraduateDegrees;
                     for (var i = 0; i < $scope.undergraduateDegrees.length; i++) {
-                        if ($scope.undergraduateDegrees[i]._id == degreeID) {
+                        if ($scope.undergraduateDegrees[i].time == checkTime) {
                             $scope.degree = $scope.undergraduateDegrees[i];
                             $rootScope.index = i;
                         }
@@ -443,13 +449,15 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 Institution.all().success(function(response) {
                     $scope.institutions = response.institutions;
                 });
+                $scope.time = new Date().getTime();
                 $scope.ok = function() {
                     $scope.ministry = {
                         "ministryName": $scope.institutionName,
                         "ministrySupervisor": $scope.ministrySupervisor,
                         "ministrySupervisorTitle": $scope.ministrySupervisorTitle,
                         "ministrySupervisorPhoneNumber": $scope.ministrySupervisorPhoneNumber,
-                        "ministryDescription": $scope.ministryDescription
+                        "ministryDescription": $scope.ministryDescription,
+                        "time": $scope.time
                     };
                     $uibModalInstance.close($scope.ministry);
                 };
@@ -484,7 +492,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // edit ministry
-    $scope.editMinistry = function(studentID, ministryID) {
+    $scope.editMinistry = function(studentID, checkTime) {
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -494,37 +502,40 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             controller: function($scope, $uibModalInstance, Ministry, Student) {
                 Institution.all().success(function(response) {
                     $scope.institutions = response.institutions;
-                });
-                $scope.ministries = [];
-                $scope.ministries = $rootScope.student.ministries;
-                $scope.ministry = null;
+                    $scope.ministries = [];
+                    $scope.ministries = $rootScope.student.ministries;
+                    $scope.ministry = null;
 
-                for (var i = 0; i < $scope.ministries.length; i++) {
-                    if ($scope.ministries[i]._id == ministryID) {
-                        $scope.ministry = $scope.ministries[i];
-                        $rootScope.index = i;
+                    for (var i = 0; i < $scope.ministries.length; i++) {
+                        if ($scope.ministries[i].time == checkTime) {
+                            $scope.ministry = $scope.ministries[i];
+                            $rootScope.index = i;
+                        }
                     }
-                }
-                $scope.ministryTitle = 'Edit Ministry';
-                $scope.institutionName = $scope.ministry.ministryName;
-                $scope.ministrySupervisor = $scope.ministry.ministrySupervisor;
-                $scope.ministrySupervisorTitle = $scope.ministry.ministrySupervisorTitle;
-                $scope.ministrySupervisorPhoneNumber = $scope.ministry.ministrySupervisorPhoneNumber;
-                $scope.ministryDescription = $scope.ministry.ministryDescription;
+                    $scope.ministryTitle = 'Edit Ministry';
+                    $scope.institutionName = $scope.ministry.ministryName;
+                    $scope.ministrySupervisor = $scope.ministry.ministrySupervisor;
+                    $scope.ministrySupervisorTitle = $scope.ministry.ministrySupervisorTitle;
+                    $scope.ministrySupervisorPhoneNumber = $scope.ministry.ministrySupervisorPhoneNumber;
+                    $scope.ministryDescription = $scope.ministry.ministryDescription;
+                    $scope.time = $scope.ministry.time;
 
-                $scope.ok = function() {
-                    $scope.ministry = {
-                        "ministryName": $scope.institutionName,
-                        "ministrySupervisor": $scope.ministrySupervisor,
-                        "ministrySupervisorTitle": $scope.ministrySupervisorTitle,
-                        "ministrySupervisorPhoneNumber": $scope.ministrySupervisorPhoneNumber,
-                        "ministryDescription": $scope.ministryDescription
+                    $scope.ok = function() {
+                        $scope.ministry = {
+                            "ministryName": $scope.institutionName,
+                            "ministrySupervisor": $scope.ministrySupervisor,
+                            "ministrySupervisorTitle": $scope.ministrySupervisorTitle,
+                            "ministrySupervisorPhoneNumber": $scope.ministrySupervisorPhoneNumber,
+                            "ministryDescription": $scope.ministryDescription,
+                            "time": $scope.time
+                        };
+                        $uibModalInstance.close($scope.ministry);
                     };
-                    $uibModalInstance.close($scope.ministry);
-                };
-                $scope.cancel = function() {
-                    $uibModalInstance.dismiss('cancel');
-                };
+                    $scope.cancel = function() {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                });
+                
             },
             size: 'md',
             resolve: {
@@ -552,7 +563,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // delete ministry
-    $scope.deleteMinistry = function(studentID, ministryID) {
+    $scope.deleteMinistry = function(studentID, checkTime) {
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -566,7 +577,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 $scope.ministry = null;
 
                 for (var i = 0; i < $scope.ministries.length; i++) {
-                    if ($scope.ministries[i]._id == ministryID) {
+                    if ($scope.ministries[i].time == checkTime) {
                         $scope.ministry = $scope.ministries[i];
                         $rootScope.index = i;
                     }
@@ -613,6 +624,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 } else {
                     $scope.contactTitle = 'Add Reference';
                 }
+                $scope.time = new Date().getTime();
                 $scope.ok = function() {
                     $scope.contact = {
                         "firstName": $scope.firstName,
@@ -620,7 +632,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         "lastName": $scope.lastName,
                         "email": $scope.email,
                         "phoneNumber": $scope.phoneNumber,
-                        "relationship": $scope.relationship
+                        "relationship": $scope.relationship,
+                        "time": $scope.time
                     };
                     $uibModalInstance.close($scope.contact);
                 };
@@ -661,7 +674,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // edit contact
-    $scope.editContact = function(studentID, contactID, isContact) {
+    $scope.editContact = function(studentID, checkTime, isContact) {
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -671,51 +684,54 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             controller: function($scope, $uibModalInstance, contact, Student) {
                 Institution.all().success(function(response) {
                     $scope.institutions = response.institutions;
-                });
-                $scope.contact = null;
-                $scope.emergencyContacts = [];
-                $scope.references = [];
-                if (isContact) {
-                    $scope.emergencyContacts = $rootScope.student.emergencyContacts;
-                    $scope.contactTitle = 'Edit Emergency Contact';
-                    for (var i = 0; i < $scope.emergencyContacts.length; i++) {
-                        if ($scope.emergencyContacts[i]._id == contactID) {
-                            $scope.contact = $scope.emergencyContacts[i];
-                            $rootScope.index = i;
+                    $scope.contact = null;
+                    $scope.emergencyContacts = [];
+                    $scope.references = [];
+                    if (isContact) {
+                        $scope.emergencyContacts = $rootScope.student.emergencyContacts;
+                        $scope.contactTitle = 'Edit Emergency Contact';
+                        for (var i = 0; i < $scope.emergencyContacts.length; i++) {
+                            if ($scope.emergencyContacts[i].time == checkTime) {
+                                $scope.contact = $scope.emergencyContacts[i];
+                                $rootScope.index = i;
+                            }
+                        }
+                    } else {
+                        $scope.references = $rootScope.student.references;
+                        $scope.contactTitle = 'Edit Reference';
+                        for (var i = 0; i < $scope.references.length; i++) {
+                            if ($scope.references[i].time == checkTime) {
+                                $scope.contact = $scope.references[i];
+                                $rootScope.index = i;
+                            }
                         }
                     }
-                } else {
-                    $scope.references = $rootScope.student.references;
-                    $scope.contactTitle = 'Edit Reference';
-                    for (var i = 0; i < $scope.references.length; i++) {
-                        if ($scope.references[i]._id == contactID) {
-                            $scope.contact = $scope.references[i];
-                            $rootScope.index = i;
-                        }
-                    }
-                }
-                $scope.degreeTitle = 'Edit Graduate Degree';
-                $scope.firstName = $scope.contact.firstName;
-                $scope.middleName = $scope.contact.middleName;
-                $scope.lastName = $scope.contact.lastName;
-                $scope.email = $scope.contact.email;
-                $scope.phoneNumber = $scope.contact.phoneNumber;
-                $scope.relationship = $scope.contact.relationship;
+                    $scope.degreeTitle = 'Edit Graduate Degree';
+                    $scope.firstName = $scope.contact.firstName;
+                    $scope.middleName = $scope.contact.middleName;
+                    $scope.lastName = $scope.contact.lastName;
+                    $scope.email = $scope.contact.email;
+                    $scope.phoneNumber = $scope.contact.phoneNumber;
+                    $scope.relationship = $scope.contact.relationship;
+                    $scope.time = $scope.contact.time;
 
-                $scope.ok = function() {
-                    $scope.contact = {
-                        "firstName": $scope.firstName,
-                        "middleName": $scope.middleName,
-                        "lastName": $scope.lastName,
-                        "email": $scope.email,
-                        "phoneNumber": $scope.phoneNumber,
-                        "relationship": $scope.relationship
+                    $scope.ok = function() {
+                        $scope.contact = {
+                            "firstName": $scope.firstName,
+                            "middleName": $scope.middleName,
+                            "lastName": $scope.lastName,
+                            "email": $scope.email,
+                            "phoneNumber": $scope.phoneNumber,
+                            "relationship": $scope.relationship,
+                            "time": $scope.time
+                        };
+                        $uibModalInstance.close($scope.contact);
                     };
-                    $uibModalInstance.close($scope.contact);
-                };
-                $scope.cancel = function() {
-                    $uibModalInstance.dismiss('cancel');
-                };
+                    $scope.cancel = function() {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                });
+                
             },
             size: 'md',
             resolve: {
@@ -750,7 +766,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // delete contact
-    $scope.deleteContact = function(studentID, contactID, isContact) {
+    $scope.deleteContact = function(studentID, checkTime, isContact) {
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -765,7 +781,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 if (isContact) {
                     $scope.emergencyContacts = $rootScope.student.emergencyContacts;
                     for (var i = 0; i < $scope.emergencyContacts.length; i++) {
-                        if ($scope.emergencyContacts[i]._id == contactID) {
+                        if ($scope.emergencyContacts[i].time == checkTime) {
                             $scope.contact = $scope.emergencyContacts[i];
                             $rootScope.index = i;
                         }
@@ -773,7 +789,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 } else {
                     $scope.references = $rootScope.student.references;
                     for (var i = 0; i < $scope.references.length; i++) {
-                        if ($scope.references[i]._id == contactID) {
+                        if ($scope.references[i].time == checkTime) {
                             $scope.contact = $scope.references[i];
                             $rootScope.index = i;
                         }

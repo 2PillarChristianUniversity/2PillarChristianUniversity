@@ -21,6 +21,9 @@ angular.module('smsApp-officerAdminsList')
             },
             delete: function (id) {
                 return $http({ method: "DELETE", url: "/api/officerAdmin/id/" + id });
-            },           
+            },
+            getAdminByEmail: function (email) {
+                return $http({ method: "GET", url: "/api/officerAdmin/email/" + email });
+            }           
         };
     });
