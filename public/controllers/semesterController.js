@@ -426,7 +426,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             });
                         } else {
                             notifications.showError({
-                                        message: 'Fail Add Course successfully.'
+                                        message: 'Course\'s time should be belong semester.'
                                     });
                         }
                     }

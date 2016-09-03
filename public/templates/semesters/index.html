@@ -31,8 +31,8 @@
                 </div>
                 <div class="panel-body">
                     <button ng-if-permission="Admin,OfficerAdmin" ng-click="addCourse(semester._id, semester.name)">Add Course</button>
-                    <br>
-                    <br>
+                    <br ng-if-permission="Admin,OfficerAdmin">
+                    <br ng-if-permission="Admin,OfficerAdmin">
                     <table class="table">
                         <thead>
                             <th>ID</th>
