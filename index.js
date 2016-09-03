@@ -18,6 +18,7 @@ var courses = require('./routes/courses'),
     semesters = require('./routes/semesters');
     financials = require('./routes/financials');
     grades = require('./routes/grades');
+    admins = require('./routes/admins');
 
 var port = Number(process.env.PORT || 3000);
 var app = express();
@@ -48,7 +49,7 @@ app.use('/api', students);
 app.use('/api', professors);
 app.use('/api', financials);
 app.use('/api', grades);
-
+app.use('/api', admins);
 
 app.use(express.static(__dirname + '/public'));
 
