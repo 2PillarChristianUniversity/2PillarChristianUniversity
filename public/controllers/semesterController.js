@@ -609,39 +609,54 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     "studentID": studentID,
                     "courseID": courseID
                 }
+                Course.get(courseID).success(function(resCourse) {
 
-                Grade.getStudentCourse($scope.grade).success(function(res) {
-                    if (res.grade.length > 0) {
+                    var course = resCourse.course;
+                    if(typeof(course.membersJoined) == 'undefined') {
+                        course.membersJoined = 0;
+                    }
+                    if(course.noMember <= course.membersJoined) {
                         notifications.showError({
-                            message: 'You already enroll this course!'
+                            message: 'You can not enroll this course'
                         });
                     } else {
-                        Grade.create($scope.grade).then(
-                            function(response) {
-                                notifications.showSuccess({
-                                    message: 'Enroll successfully.'
-                                });
 
-                                Semester.all().success(function(response) {
-                                    $scope.semesters = response.semesters;
-                                    $scope.courseList = response.courses;
+                        Grade.getStudentCourse($scope.grade).success(function(res) {
+                            if (res.grade.length > 0) {
+                                notifications.showError({
+                                    message: 'You already enroll this course!'
                                 });
+                            } else {
+                                Grade.create($scope.grade).then(
+                                    function(response) {
+                                        notifications.showSuccess({
+                                            message: 'Enroll successfully.'
+                                        });
 
-                                Grade.getStudent($security.getUser()._id).success(function(response) {
-                                    var coursesOfStudents = [];
-                                    angular.forEach(response.grades, function(value, key) {
-                                        this.push(value.courseID);
-                                    }, coursesOfStudents);
-                                    $scope.coursesOfStudents = coursesOfStudents;
-                                });
+                                        Semester.all().success(function(response) {
+                                            $scope.semesters = response.semesters;
+                                            $scope.courseList = response.courses;
+                                        });
 
-                            },
-                            function(response) {
-                                console.log(response.data.error);
-                            });
+                                        Grade.getStudent($security.getUser()._id).success(function(response) {
+                                            var coursesOfStudents = [];
+                                            angular.forEach(response.grades, function(value, key) {
+                                                this.push(value.courseID);
+                                            }, coursesOfStudents);
+                                            $scope.coursesOfStudents = coursesOfStudents;
+                                        });
+                                        course.membersJoined++;
+                                        Course.update(courseID, course).success(function(response) {});
+                                    },
+                                    function(response) {
+                                        console.log(response.data.error);
+                                    });
+                            }
+                        });
                     }
 
                 });
+
             };
 
 
@@ -673,6 +688,19 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         }, coursesOfStudents);
                         $scope.coursesOfStudents = coursesOfStudents;
                     });
+
+                    Course.get(courseID).success(function(resCourse) {
+                        var course = resCourse.course;
+                        if(typeof(course.membersJoined) == 'undefined') {
+                            course.membersJoined = 0;
+                        }
+                        course.membersJoined--;
+                        if(course.membersJoined < 0) {
+                            course.membersJoined = 0;
+                        }
+                        Course.update(courseID, course).success(function(response) {});
+                    });
+
 
                 }, function function_name(error) {
 
