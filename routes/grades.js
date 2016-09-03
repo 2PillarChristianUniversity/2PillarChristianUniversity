@@ -13,11 +13,25 @@ function createAutoId(index) {
 }
 
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
-    //find grade base student id 
+    //find grade base student id
     router.get('/grade/student/:id', function(req, res) {
-        db.collection(colName).find({
-            studentID: req.params.id
-        }).toArray(function(error, grades) {
+        db.collection(colName).aggregate(
+        [{
+            $match: {
+                studentID: req.params.id
+            }
+        }, {
+            $lookup: {
+                from: "Courses",
+                localField: "courseID",
+                foreignField: "_id",
+                as: "courses"
+            }
+        },
+        {
+            $unwind: "$courses"
+        }
+        ]).toArray(function(error, grades) {
             if (error) {
                 return res.
                 status(500).
@@ -32,22 +46,22 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
     });
 
 
-    // //find grade by student and returen object student course 
+    // //find grade by student and returen object student course
     // router.get('/grade/studentToCourseByID/id/:id', function(req, res) {
 
-    //     db.collection(colName).aggregate(
-    //         [{
-    //             $match: {
-    //                 studentID: req.params.id
-    //             }
-    //         }, {
-    //             $lookup: {
-    //                 from: "Courses",
-    //                 localField: "courseID",
-    //                 foreignField: "_id",
-    //                 as: "courses"
-    //             }
-    //         }],
+        // db.collection(colName).aggregate(
+        //     [{
+        //         $match: {
+        //             studentID: req.params.id
+        //         }
+        //     }, {
+        //         $lookup: {
+        //             from: "Courses",
+        //             localField: "courseID",
+        //             foreignField: "_id",
+        //             as: "courses"
+        //         }
+        //     }],
     //         function(error, grades) {
     //             if (error) {
     //                 return res.
@@ -117,7 +131,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
             });
     });
 
-    //delete grade by course id and student id 
+    //delete grade by course id and student id
     router.put('/grade/unEnroll/', function(req, res) {
         db.collection(colName).remove({
             studentID: req.body.studentID,

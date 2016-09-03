@@ -172,7 +172,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 					}
 				}
 			}
-			   
+
             ],
         function(error, professor) {
             if (error) {
@@ -270,6 +270,56 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 			res.json({
 				msg: "Delete success."
 			});
+		});
+	});
+
+	//	 Professor's course
+	router.post('/professor/courses/:id', function(req, res) {
+		db.collection('Professors').aggregate([
+		{
+				$match: {
+					_id: req.params.id
+					// $or: [
+					// 	{ startDate: { $gt: req.body.start_date, $lt: req.body.end_date }} ,
+					// 	{ endDate: { $gt: req.body.start_date, $lt: req.body.end_date }}
+					// ]
+
+				}
+			},
+			// Unwind the source
+			{
+				"$unwind": "$courses"
+			},
+			// Do the lookup matching
+			{
+				"$lookup": {
+					"from": "Courses",
+					"localField": "courses",
+					"foreignField": "_id",
+					"as": "productObjects"
+				}
+			},
+			// Unwind the result arrays ( likely one or none )
+			{
+				"$unwind": "$productObjects"
+			},
+			// Group back to arrays
+			{
+				"$group": {
+					"_id": "$_id",
+					//         "products": { "$push": "$courses" },
+					"Courses": {
+						"$push": "$productObjects"
+					}
+				}
+			}
+		], function(error, professor) {
+			if (error) {
+				return res.
+					status(500).
+					json({ error: error.toString() });
+			}
+			res.json({ professor: professor });
 		});
 	});
 });

@@ -39,9 +39,9 @@
                 </tr>
                 <tr ng-repeat="day in scheduleDates">
                     <td>
-                        
-                        <select ng-model="day.day" required>
-                            <option value="2" selected>Monday</option>
+
+                        <select ng-model="day.day" ng-init="day.day='2'" required>
+                            <option value="2">Monday</option>
                             <option value="3">Tuesday</option>
                             <option value="4">Wednesday</option>
                             <option value="5">Thursday</option>
@@ -71,10 +71,10 @@
                 </tr>
                 <tr ng-repeat="dOff in dateOff">
                     <td>
-                        <input type="date" id="dateOffStart" name="dateOffStart" ng-model="dOff.dateOffStart" />
+                        <input type="date" id="dateOffStart" name="dateOffStart" ng-model="dOff.dateOffStart" required />
                     </td>
                     <td>
-                        <input type="date" id="dateOffEnd" name="dateOffEnd" ng-model="dOff.dateOffEnd" />
+                        <input type="date" id="dateOffEnd" name="dateOffEnd" ng-model="dOff.dateOffEnd" required />
                     </td>
                     <td><a href="javascript:void(0)" ng-click="dateOff.splice($index, 1)" aria-label="Remove">remove</a></td>
                 </tr>
