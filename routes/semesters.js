@@ -3,6 +3,7 @@ var mongo = require('mongodb').MongoClient,
 var express = require('express');
 var router = express.Router();
 var autoIncrement = require("mongodb-autoincrement");
+var async = require('async');
 
 var mongoCfg = require('../mongo_cfg');
 var colName = 'Semesters';
@@ -32,9 +33,48 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
                 }
             }
         }]).toArray(function(error, semesters) {
-            res.json({
-                semesters: semesters,
-                coursesProfessors: req.params.id.split(',')
+            async.each(semesters, function(semester, callback) {
+                async.each(semester.Courses, function(course, callback2) {
+                    if (!course.students) {
+                        course.students = [];
+                    }
+                    db.collection('Grades').aggregate([{
+                        $match: {'courseID': course._id}
+                    },
+                    {
+                        $lookup: {
+                            from: "Students",
+                            localField: "studentID",
+                            foreignField: "_id",
+                            as: "Students"
+                        }
+                    },
+                    {
+                        $unwind: "$Students"
+                    }
+                    ]).toArray(function(error, grades) {
+                        if (error) {
+                            return res.
+                            status(400).
+                            json({
+                                error: error
+                            });
+                        }
+                        grades.forEach(function(grade) {
+                            course.students.push(grade.Students);
+                        });
+                        callback2();
+                    });
+                }, function(err2) {
+                    if( err2 ) { return console.log(err2); }
+                    callback();
+                });
+            }, function(err) {
+                if( err ) { return console.log(err); }
+                res.json({
+                    semesters: semesters,
+                    coursesProfessors: req.params.id.split(',')
+                });
             });
 
         });
@@ -46,30 +86,72 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
         db.collection(colName).find({
             "is_deleted": "false"
         }).toArray(function(error, semesters) {
-
-            db.collection('Courses').aggregate([{
-                $lookup: {
-                    from: "Students",
-                    localField: "_id",
-                    foreignField: "courses",
-                    as: "students"
-                }
-            }]).toArray(function(error, courses) {
-
-                if (error) {
-                    return res.
-                    status(400).
-                    json({
-                        error: error
+            db.collection('Courses').find({}).toArray(function(error, courses) {
+                async.each(courses, function(course, callback) {
+                    if (!course.students) {
+                        course.students = [];
+                    }
+                    db.collection('Grades').aggregate([{
+                        $match: {'courseID': course._id}
+                    },
+                    {
+                        $lookup: {
+                            from: "Students",
+                            localField: "studentID",
+                            foreignField: "_id",
+                            as: "Students"
+                        }
+                    },
+                    {
+                        $unwind: "$Students"
+                    }
+                    ]).toArray(function(error, grades) {
+                        if (error) {
+                            return res.
+                            status(400).
+                            json({
+                                error: error
+                            });
+                        }
+                        grades.forEach(function(grade) {
+                            course.students.push(grade.Students);
+                        });
+                        callback();
                     });
-                }
-
-                res.json({
-                    semesters: semesters,
-                    courses: courses
+                }, function(err) {
+                    if( err ) { return console.log(err); }
+                    res.json({
+                        semesters: semesters,
+                        courses: courses
+                    });
                 });
-
             });
+
+
+
+            // db.collection('Courses').aggregate([{
+            //     $lookup: {
+            //         from: "Students",
+            //         localField: "_id",
+            //         foreignField: "courses",
+            //         as: "students"
+            //     }
+            // }]).toArray(function(error, courses) {
+
+            //     if (error) {
+            //         return res.
+            //         status(400).
+            //         json({
+            //             error: error
+            //         });
+            //     }
+
+            //     res.json({
+            //         semesters: semesters,
+            //         courses: courses
+            //     });
+
+            // });
         });
 
     });

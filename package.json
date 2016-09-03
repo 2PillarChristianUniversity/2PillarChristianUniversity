@@ -20,7 +20,8 @@
     "mongoose": "*",
     "morgan": "~1.5.3",
     "ngsecurity": "^1.6.0",
-    "serve-favicon": "~2.2.1"
+    "serve-favicon": "~2.2.1",
+    "async": "^2.0.1"
   },
   "devDependencies": {
     "express-validation": "^1.0.0",
