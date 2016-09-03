@@ -21,11 +21,13 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         });
 
-        Student.getStudentCourse($routeParams.studentID).success(function(response) {
-            $scope.studentCourses = response.student;
-        });
-
-
+        $scope.loadHistoriesStudent = function()
+        {
+            Student.getStudentCourse($routeParams.studentID).success(function(response) {
+                $scope.studentCourses = response.student;
+            });
+        }
+        $scope.loadHistoriesStudent();
 
         $scope.checkProfessors = function(courseID) {
             var result = [];
@@ -169,6 +171,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             $timeout(function() {
                 $('#calendar').fullCalendar('render');
                 $('#calendar').fullCalendar('rerenderEvents');
+                $('#calendar').fullCalendar('refetchEvents');
             }, 0);
         };
         /* Render Tooltip */
@@ -402,19 +405,38 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             modalInstance.result.then(function(course) {
                 $scope.coures = course;
                 $scope.coures.semesters = semesterID;
-                Course.insert($scope.coures)
-                    .then(
-                        function(response) {
-                            notifications.showSuccess({
-                                message: 'Add Course successfully.'
+                $scope.semesters.forEach(function(semester) {
+                    if (semester._id == semesterID) {
+                        var startTimeSemester = new Date(semester.startDate).getTime();
+                        var endTimeSemester = new Date(semester.endDate).getTime();
+
+                        var startTimeCourse = new Date(course.startDate).getTime();
+                        var endTimeCourse = new Date(course.endDate).getTime();
+                        if(startTimeSemester <= startTimeCourse
+                            && startTimeCourse < endTimeCourse && endTimeCourse <= endTimeSemester) {
+                            Course.insert($scope.coures)
+                            .then(
+                                function(response) {
+                                    notifications.showSuccess({
+                                        message: 'Add Course successfully.'
+                                    });
+                                    Semester.all().success(function(response) {
+                                        $scope.semesters = response.semesters;
+                                    });
+                                },
+                                function(response) {
+                                    console.log(response);
                             });
-                            Semester.all().success(function(response) {
-                                $scope.semesters = response.semesters;
-                            });
-                        },
-                        function(response) {
-                            console.log(response);
-                        });
+                        } else {
+                            notifications.showError({
+                                        message: 'Fail Add Course successfully.'
+                                    });
+                        }
+                    }
+                });
+
+
+
             });
 
         };
@@ -879,44 +901,45 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
 
         };
 
-        if ($security.hasPermission('Admin')) {
-            Semester.getTreeList().success(function(response) {
-                $scope.semesters_list = response.semesters;
-                $scope.courses_list = response.courses;
-                $scope.semesters_list.forEach(function(semester) {
-                    $scope.courses_list.forEach(function(course) {
-                        if (semester._id == course.semesters) {
-                            if (!semester.courses) {
-                                semester.courses = [];
-                            }
-                            semester.courses.push(course);
-
-                        }
-                    });
-                });
-
-            });
-        } else if ($security.hasPermission('Professor')) {
-            Professor.get($security.getUser()._id).success(function(response) {
-                Semester.getTreeListByProfessor(response.professor.courses).success(function(response) {
+        $scope.loadTreeView = function() {
+            if ($security.hasPermission('Admin')) {
+                Semester.getTreeList().success(function(response) {
                     $scope.semesters_list = response.semesters;
-                    var courses = response.coursesProfessors;
+                    $scope.courses_list = response.courses;
                     $scope.semesters_list.forEach(function(semester) {
-                        if (!semester.courses) {
-                            semester.courses = [];
-                        }
-                        semester.Courses.forEach(function(course) {
-                            if (courses.indexOf(course._id) > -1) {
+                        $scope.courses_list.forEach(function(course) {
+                            if (semester._id == course.semesters) {
+                                if (!semester.courses) {
+                                    semester.courses = [];
+                                }
                                 semester.courses.push(course);
+
                             }
                         });
                     });
-                    console.log($scope.semesters_list);
+
                 });
-            });
-
-
+            } else if ($security.hasPermission('Professor')) {
+                Professor.get($security.getUser()._id).success(function(response) {
+                    Semester.getTreeListByProfessor(response.professor.courses).success(function(response) {
+                        $scope.semesters_list = response.semesters;
+                        var courses = response.coursesProfessors;
+                        $scope.semesters_list.forEach(function(semester) {
+                            if (!semester.courses) {
+                                semester.courses = [];
+                            }
+                            semester.Courses.forEach(function(course) {
+                                if (courses.indexOf(course._id) > -1) {
+                                    semester.courses.push(course);
+                                }
+                            });
+                        });
+                        console.log($scope.semesters_list);
+                    });
+                });
+            }
         }
+        $scope.loadTreeView();
 
         var apple_selected, tree, treedata_avm, treedata_geography;
         $scope.my_tree_handler = function(branch) {
