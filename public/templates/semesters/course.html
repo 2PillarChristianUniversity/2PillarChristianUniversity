@@ -71,10 +71,10 @@
                 </tr>
                 <tr ng-repeat="dOff in dateOff">
                     <td>
-                        <input type="date" id="dateOffStart" name="dateOffStart" ng-model="dOff.dateOffStart" />
+                        <input type="date" id="dateOffStart" name="dateOffStart" ng-model="dOff.dateOffStart" required />
                     </td>
                     <td>
-                        <input type="date" id="dateOffEnd" name="dateOffEnd" ng-model="dOff.dateOffEnd" />
+                        <input type="date" id="dateOffEnd" name="dateOffEnd" ng-model="dOff.dateOffEnd" required />
                     </td>
                     <td><a href="javascript:void(0)" ng-click="dateOff.splice($index, 1)" aria-label="Remove">remove</a></td>
                 </tr>
