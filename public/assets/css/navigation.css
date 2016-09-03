@@ -20,3 +20,8 @@
 .dataTables_filter {
     display: none  !important; 
 }
+.panel-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: rebeccapurple;
+}

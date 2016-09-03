@@ -18,7 +18,7 @@
             <br ng-if-permission="Admin,OfficerAdmin">
             <br ng-if-permission="Admin,OfficerAdmin">
             <div class="panel panel-default" ng-repeat="semester in semesters">
-                <div class="panel-heading">{{semester.name}} ( from: {{semester.startDate | date}} - to: {{semester.endDate | date}} )
+                <div class="panel-heading"><span class="panel-title">{{semester.name}}</span> <i>( from: {{semester.startDate | date}} - to: {{semester.endDate | date}} )</i>
                     <span style="float:right">
                         <a href="javascript:void(0)"  ng-if-permission="Admin,OfficerAdmin"  ng-click="editSemester(semester._id)">
                             Edit
