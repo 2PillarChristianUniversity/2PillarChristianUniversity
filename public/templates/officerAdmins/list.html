@@ -1,0 +1,34 @@
+<div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
+    <div class="col-lg-2 text-left no-padding">
+        <button type="button" class="btn btn-primary" ng-click="addOfficerAdmin()">New Officer Admin</button>
+    </div>
+    <br>
+    <br>
+    <table datatable="ng" class="table table-bordered table-hover" id="officerAdminTable" ng-show="officerAdmins.length">
+        <thead>
+            <tr>
+                <th>Officer Admin ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Birth Date</th>
+                <th>Email</th>
+                <th>Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="cursor: pointer;" ng-repeat="officerAdmin in officerAdmins">
+                <td ng-click="officerAdminDetails(officerAdmin._id)">{{officerAdmin._id}}</td>
+                <td ng-click="officerAdminDetails(officerAdmin._id)">{{officerAdmin.lastName}}, {{officerAdmin.firstName}} {{officerAdmin.middleName}}</td>
+                <td ng-click="officerAdminDetails(officerAdmin._id)">{{officerAdmin.gender}}</td>
+                <td ng-click="officerAdminDetails(officerAdmin._id)">{{officerAdmin.birthDate | date}}</td>
+                <td ng-click="officerAdminDetails(officerAdmin._id)">{{officerAdmin.email}}</td>
+                <td ng-click="officerAdminDetails(officerAdmin._id)">{{officerAdmin.phoneNumber}}</td>
+                <td>
+                    <a type="submit" title="edit" ng-click="editOfficerAdmin(officerAdmin._id)">Edit</a>
+                    <a type="submit" title="delete" ng-click="deleteOfficerAdmin(officerAdmin._id)">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

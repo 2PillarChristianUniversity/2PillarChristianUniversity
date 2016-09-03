@@ -4,9 +4,10 @@
 			<tr>
 				<th>StudentID</th>
 				<th>Student Name</th>
-				<th>Semester</th>
-				<th>Comments</th>
+				<th>Semester</th>				
 				<th>Monthly payment</th>
+				<th>Student Comment</th>
+				<th>Admin 	Comment</th>
 				<th>Status</th>
 				<th>Action</th>
 			</tr>
@@ -15,9 +16,10 @@
 			<tr style="cursor: pointer;" ng-repeat="financial in financials" >
 				<td ng-click="financialDetails(financial._id)">{{financial.studentID}}</td>
 				<td ng-click="studentDetails(financial._id)">{{financial.Students[0].lastName}}, {{financial.Students[0].firstName}} {{financial.Students[0].middleName}}</td>
-				<td ng-click="financialDetails(financial._id)">{{financial.Semesters[0].name}}</td>
-				<td ng-click="financialDetails(financial._id)">{{financial.comment}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.Semesters[0].name}}</td>			
 				<td ng-click="financialDetails(financial._id)">{{financial.monthlyPayment}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.studentComment}}</td>
+				<td ng-click="financialDetails(financial._id)">{{financial.adminComment}}</td>
 				<td ng-click="financialDetails(financial._id)">{{financial.status}}</td>
 				<td>
 					<a type="submit" title="edit" ng-click="editFinancial(financial._id)">Edit</a>

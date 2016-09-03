@@ -21,9 +21,12 @@ angular.module('smsApp-semestersList')
             },
             delete: function (id) {
                 return $http({method: "DELETE", url: "/api/semester/id/" + id });
-            }, 
+            },
             getTreeList: function () {
                 return $http({ method: "GET", url: "/api/treelist" });
+            },
+            getTreeListByProfessor: function (professorId) {
+                return $http({ method: "GET", url: "/api/treelist/id/" + professorId });
             }
         };
     });

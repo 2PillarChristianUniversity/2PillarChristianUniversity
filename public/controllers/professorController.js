@@ -129,7 +129,8 @@ angular.module('smsApp-professorsList', ['ngRoute', 'datatables', 'ngResource', 
                         isfinished: function() {
                             return true;
                         }
-                    }
+                    },
+                    backdrop: 'static'
                 });
 
                 modalInstance.result.then(function(isfinished) {
@@ -179,7 +180,8 @@ angular.module('smsApp-professorsList', ['ngRoute', 'datatables', 'ngResource', 
                     professor: function() {
                         return $scope.professor;
                     }
-                }
+                },
+                backdrop: 'static'
             });
 
             modalInstance.result.then(function(professor) {
@@ -207,10 +209,16 @@ angular.module('smsApp-professorsList', ['ngRoute', 'datatables', 'ngResource', 
             $scope.professor = response.professor;
         });
 
+        Professor.getProfessorCourse($routeParams.Id).success(function(response) {
+            $scope.professorCourses = response.professor;
+        });
+        
+
         // permission professor
         $scope.professorPermission = store.get('professorID');
         Professor.get($scope.professorPermission).success(function(response) {
-            $scope.professor = response.professor;
+            $scope.profileProfessor = response.professor;
         });
+
 
     });

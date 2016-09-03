@@ -57,7 +57,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     isfinished: function() {
                         return true
                     }
-                }
+                },
+                backdrop: 'static'
             });
             modalInstance.result.then(function(result) {
                 if (result == true) {
@@ -131,7 +132,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         isfinished: function() {
                             return true;
                         }
-                    }
+                    },
+                    backdrop: 'static'
                 });
                 modalInstance.result.then(function(isfinished) {
                     if (isfinished === true) {
@@ -187,7 +189,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
-                size: 'md'
+                size: 'md',
+                backdrop: 'static'
             });
         }
     })
@@ -201,7 +204,6 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     Financial.searchID($routeParams.Id).success(function(response) {
         $scope.financials = response.financials;
     });
-
     Student.getStudentCourse($routeParams.Id).success(function(response) {
         $scope.studentCourses = response.student;
     });
@@ -215,11 +217,12 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     Financial.searchID($scope.studentPermission).success(function(response) {
         $scope.profileFinancials = response.financials;
     });
-
+    
+    $scope.studentProfileCourses = [];
     Student.getStudentCourse($scope.studentPermission).success(function(response) {
         $scope.studentProfileCourses = response.student;
     });
-
+    
     // add degree
     $scope.addDegree = function(isGraduate) {
         var modalInstance = $uibModal.open({
@@ -252,7 +255,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 degree: function() {
                     return $scope.degree;
                 }
-            }
+            },
+            backdrop: 'static'
         });
         modalInstance.result.then(function(degree) {
             if (isGraduate) {
@@ -334,7 +338,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 degree: function() {
                     return $scope.degree;
                 }
-            }
+            },
+            backdrop: 'static'
         });
         modalInstance.result.then(function(degree) {
             if (isGraduate) {
@@ -458,7 +463,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 ministry: function() {
                     return $scope.ministry;
                 }
-            }
+            },
+            backdrop: 'static'
         });
         modalInstance.result.then(function(ministry) {
             if (!$scope.student.ministries) {
@@ -525,7 +531,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 ministry: function() {
                     return $scope.ministry;
                 }
-            }
+            },
+            backdrop: 'static'
         });
         modalInstance.result.then(function(ministry) {
             if (!$scope.student.ministries) {
@@ -626,7 +633,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 contact: function() {
                     return $scope.contact;
                 }
-            }
+            },
+            backdrop: 'static'
         });
         modalInstance.result.then(function(contact) {
             if (isContact) {
@@ -653,7 +661,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // edit contact
-    $scope.editContact = function(studentID, contactID, isGraduate) {
+    $scope.editContact = function(studentID, contactID, isContact) {
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -667,8 +675,9 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 $scope.contact = null;
                 $scope.emergencyContacts = [];
                 $scope.references = [];
-                if (isGraduate) {
+                if (isContact) {
                     $scope.emergencyContacts = $rootScope.student.emergencyContacts;
+                    $scope.contactTitle = 'Edit Emergency Contact';
                     for (var i = 0; i < $scope.emergencyContacts.length; i++) {
                         if ($scope.emergencyContacts[i]._id == contactID) {
                             $scope.contact = $scope.emergencyContacts[i];
@@ -677,6 +686,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                     }
                 } else {
                     $scope.references = $rootScope.student.references;
+                    $scope.contactTitle = 'Edit Reference';
                     for (var i = 0; i < $scope.references.length; i++) {
                         if ($scope.references[i]._id == contactID) {
                             $scope.contact = $scope.references[i];
@@ -712,10 +722,11 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 contact: function() {
                     return $scope.contact;
                 }
-            }
+            },
+            backdrop: 'static'
         });
         modalInstance.result.then(function(contact) {
-            if (isGraduate) {
+            if (isContact) {
                 if (!$scope.student.emergencyContacts) {
                     $scope.student.emergencyContacts = [];
                 }
@@ -739,7 +750,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     };
 
     // delete contact
-    $scope.deleteContact = function(studentID, contactID, isGraduate) {
+    $scope.deleteContact = function(studentID, contactID, isContact) {
         Student.get(studentID).success(function(res) {
             $rootScope.student = res.student;
         });
@@ -751,7 +762,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 $scope.contact = null;
                 $scope.emergencyContacts = [];
                 $scope.references = [];
-                if (isGraduate) {
+                if (isContact) {
                     $scope.emergencyContacts = $rootScope.student.emergencyContacts;
                     for (var i = 0; i < $scope.emergencyContacts.length; i++) {
                         if ($scope.emergencyContacts[i]._id == contactID) {
@@ -783,7 +794,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
             }
         });
         modalInstance.result.then(function(contact) {
-            if (isGraduate) {
+            if (isContact) {
                 if (!$scope.student.emergencyContacts) {
                     $scope.student.emergencyContacts = [];
                 }
@@ -829,7 +840,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         semester: $scope.semester,
                         monthlyPayment: $scope.monthlyPayment,
                         status: $scope.status,
-                        comment: $scope.comment
+                        studentComment: $scope.studentComment
                     };
                     $uibModalInstance.close($scope.financial);
                 };
@@ -842,7 +853,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 financial: function() {
                     return $scope.financial;
                 }
-            }
+            },
+            backdrop: 'static'
         });
         modalInstance.result.then(function(financial) {
             $scope.financial = financial;
@@ -892,7 +904,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 $scope.semester = $scope.request.semester;
                 $scope.monthlyPayment = $scope.request.monthlyPayment;
                 $scope.status = $scope.request.status;
-                $scope.comment = $scope.request.comment;
+                $scope.studentComment = $scope.request.studentComment;
+                $scope.adminComment = $scope.request.adminComment;
 
                 $scope.ok = function() {
                     $scope.request = {
@@ -913,7 +926,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 request: function() {
                     return $scope.request;
                 }
-            }
+            },
+            backdrop: 'static'
         });
         modalInstance.result.then(function(request) {
             if (!$scope.student.financials) {

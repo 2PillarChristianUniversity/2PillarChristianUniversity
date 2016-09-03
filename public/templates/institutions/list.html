@@ -1,11 +1,7 @@
 <div class="container" style="padding:10px 30px 10px 10px;text-align:right;">
 	<div class="col-lg-2 no-padding text-left">
 		<button type="button" class="btn btn-primary" ng-click="addInstitutions()">New Institution</button>
-	</div>
-	<div class="col-lg-10 no-padding text-right">
-		<b>Institution Name:</b> <input type="text" ng-model="searchID" class="input-medium search-query" placeholder="00000000">
-		<button class="btn btn-primary btn-sm" ng-click="search()">Search</button>
-	</div>
+	</div>	
 	<br>
 	<br>
 	<table datatable="ng" class="table table-bordered table-hover" id="institutionTable" ng-show="institutions.length" >
@@ -22,7 +18,7 @@
 		</thead>
 		<tbody>
 			<tr style="cursor: pointer;" ng-repeat="institution in institutions" >
-				<td ng-click="institutionDetails(institution._id)">{{institution._id}}</td>
+				<td ng-click="institutionDetails(institution._id)">{{institution.name}}</td>
 				<td ng-click="institutionDetails(institution._id)">{{institution.phoneNumber}}</td>
 				<td ng-click="institutionDetails(institution._id)">{{institution.addressLine1}}</td>
 				<td ng-click="institutionDetails(institution._id)">{{institution.city}}</td>

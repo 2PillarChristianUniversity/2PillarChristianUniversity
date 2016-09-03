@@ -9,6 +9,7 @@ angular.module('smsApp', [
 	'smsApp-semesters',
 	'smsApp-institutions',
 	'smsApp-financials',
+	'smsApp-officerAdmins',
 	'angular-storage',
 	'angular-jwt',
 	'ui.bootstrap',
@@ -75,6 +76,18 @@ angular.module('smsApp', [
 			requiresLogin: true
 		})
 
+	//######## OFFICERADMIN
+		.when('/officerAdmins', {
+			controller: 'OfficerAdminListCtrl',
+			templateUrl: 'templates/officerAdmins/index.html',
+			requiresLogin: true
+		})
+		.when('/officerAdmin/:Id', {
+			controller: 'OfficerAdminDetailsCtrl',
+			templateUrl: 'templates/officerAdmins/details.html',
+			requiresLogin: true
+		})
+
 	//######## INSTITUTION
 	.when('/institutions', {
 			controller: 'InstitutionListCtrl',
@@ -120,32 +133,50 @@ angular.module('smsApp', [
 		loginUrl: auth0Cfg.loginUrl
 	});
 
-	authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security, Student, Professor, $rootScope) {
+	authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security, Student, Professor, AdminService, $rootScope) {
 		profilePromise.then(function(profile) {
 			//	Check role
 			var roles = [];
 			store.set('token', idToken);
-			Student.getStudentByEmail(profile.email).success(function(response) {
-				if (response.student != null) {
-					roles.push('Student');
-					store.set('studentID', response.student._id);
+
+			AdminService.getAdminByEmail(profile.email).success(function(response) {
+				if (response.admin != null) {
+					roles.push('Admin');
+					store.set('adminID', response.admin._id);
+					profile = angular.extend(profile, response.admin);
 					$security.login(idToken, profile, roles);
 					$location.path('/home');
 				} else {
-					Professor.getProfessorByEmail(profile.email).success(function(response) {
-						if (response.professor != null) {
-							roles.push('Professor');
-							store.set('professorID', response.professor._id);
+					Student.getStudentByEmail(profile.email).success(function(response) {
+						if (response.student != null) {
+							roles.push('Student');
+							store.set('studentID', response.student._id);
+							profile = angular.extend(profile, response.student);
 							$security.login(idToken, profile, roles);
 							$location.path('/home');
 						} else {
-							roles.push('Admin');
-							$security.login(idToken, profile, roles);
-							$location.path('/home');
+							Professor.getProfessorByEmail(profile.email).success(function(response) {
+								if (response.professor != null) {
+									roles.push('Professor');
+									store.set('professorID', response.professor._id);
+									profile = angular.extend(profile, response.professor);
+
+									$security.login(idToken, profile, roles);
+									$location.path('/home');
+								} else {
+									roles.push('Admin');
+									store.set('adminID', response.admin._id);
+									$security.login(idToken, profile, roles);
+									$location.path('/home');
+								}
+							});
 						}
 					});
 				}
+
 			});
+
+			
 		});
 	});
 
@@ -202,6 +233,8 @@ angular.module('smsApp', [
 	$rootScope.logout = function() {
 		auth.signout();
 		store.set('token', null);
+		store.set('studentID', null);
+		store.set('professorID', null);
 		$security.logout();
 		auth = null;
 		window.location = '/';

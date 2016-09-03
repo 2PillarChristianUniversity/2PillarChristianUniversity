@@ -129,6 +129,34 @@
 		</table>
 	</uib-tab>
 	<uib-tab index="5" heading="Courses">
-
+		<h4>Course</h4>
+		<table class="table table-hover">
+			<thead>
+				<th>ID</th>
+				<th>Semester</th>
+				<th>Course Name</th>
+				<th>Start Date</th>
+				<th>End Date</th>				
+			</thead>
+			<tbody>
+				<tr ng-repeat="course in professorCourses[0].Courses">
+					<td>
+						<p>{{course._id}}</p>
+					</td>
+					<td>
+						<p> </p>
+					</td>
+					<td>
+						<p>{{course.name}}</p>
+					</td>
+					<td>
+						<p>{{course.startDate | date}}</p>
+					</td>
+					<td>
+						<p>{{course.endDate | date}}</p>
+					</td>					
+				</tr>
+			</tbody>
+		</table>
 	</uib-tab>
 </uib-tabset>
