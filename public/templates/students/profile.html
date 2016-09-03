@@ -136,7 +136,7 @@
 				<th>Degree</th>
 				<th>Field</th>
 				<th>Graduation Date</th>
-				<th ng-if-permission="Admin">Action</th>
+				<th ng-if-permission="Admin,OfficerAdmin">Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="degree in profileStudent.undergraduateDegrees">
@@ -152,14 +152,14 @@
 					<td>
 						<p>{{degree.graduationDate | date}}</p>
 					</td>
-					<td ng-if-permission="Admin">
+					<td ng-if-permission="Admin,OfficerAdmin">
 					<button class="btn btn-xs btn-primary" ng-click="editDegree(student._id, degree._id, false)">Edit</button>
 					<button class="btn btn-xs btn-primary" ng-click="deleteDegree(student._id, degree._id, false)">Delete</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<button class="btn btn-xs btn-primary" ng-click="addDegree(false)" ng-if-permission="Admin">Add Degree</button>
+		<button class="btn btn-xs btn-primary" ng-click="addDegree(false)" ng-if-permission="Admin,OfficerAdmin">Add Degree</button>
 		<h4>Graduate Degrees</h4>
 		<table class="table table-hover">
 			<thead>
@@ -167,7 +167,7 @@
 				<th>Degree</th>
 				<th>Field</th>
 				<th>Graduation Date</th>
-				<th ng-if-permission="Admin">Action</th>
+				<th ng-if-permission="Admin,OfficerAdmin">Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="degree in profileStudent.graduateDegrees">
@@ -183,14 +183,14 @@
 					<td>
 						<p>{{degree.graduationDate | date}}</p>
 					</td>
-					<td ng-if-permission="Admin">
+					<td ng-if-permission="Admin,OfficerAdmin">
 					<button class="btn btn-xs btn-primary" ng-click="editDegree(student._id, degree._id, true)">Edit</button>
 					<button class="btn btn-xs btn-primary" ng-click="deleteDegree(student._id, degree._id, true)">Delete</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<button class="btn btn-xs btn-primary" ng-click="addDegree(true)" ng-if-permission="Admin">Add Degree</button>
+		<button class="btn btn-xs btn-primary" ng-click="addDegree(true)" ng-if-permission="Admin,OfficerAdmin">Add Degree</button>
 	</uib-tab>
 	<uib-tab index="2" heading="Ministry">
 		<table class="table table-hover">
@@ -200,7 +200,7 @@
 				<th>Supervisor's Title</th>
 				<th>Supervisor's Phone Number</th>
 				<th>Description</th>
-				<th ng-if-permission="Admin">Action</th>
+				<th ng-if-permission="Admin,OfficerAdmin">Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="ministry in profileStudent.ministries">
@@ -219,14 +219,14 @@
 					<td>
 						<p>{{ministry.ministryDescription}}</p>
 					</td>					
-					<td ng-if-permission="Admin">
+					<td ng-if-permission="Admin,OfficerAdmin">
 					<button class="btn btn-xs btn-primary" ng-click="editMinistry(student._id, ministry._id)">Edit</button>
 					<button class="btn btn-xs btn-primary" ng-click="deleteMinistry(student._id, ministry._id)">Delete</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<button class="btn btn-xs btn-primary" ng-click="addMinistry()" ng-if-permission="Admin">Add Ministry</button>
+		<button class="btn btn-xs btn-primary" ng-click="addMinistry()" ng-if-permission="Admin,OfficerAdmin">Add Ministry</button>
 
 	</uib-tab>
 	<uib-tab index="3" heading="Contacts">
@@ -237,7 +237,7 @@
 				<th>Email</th>
 				<th>Phone</th>
 				<th>Relationship</th>
-				<th ng-if-permission="Admin">Action</th>
+				<th ng-if-permission="Admin,OfficerAdmin">Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="contact in profileStudent.emergencyContacts">
@@ -253,7 +253,7 @@
 					<td>
 						<p>{{contact.relationship}}</p>
 					</td>
-					<td ng-if-permission="Admin">
+					<td ng-if-permission="Admin,OfficerAdmin">
 						<button class="btn btn-xs btn-primary" ng-click="editContact(student._id, contact._id, true)">Edit</button>
 						<button class="btn btn-xs btn-primary" ng-click="deleteContact(student._id, contact._id, true)">Delete</button>
 					</td>
@@ -261,7 +261,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<button class="btn btn-xs btn-primary" ng-click="addContact(true)" ng-if-permission="Admin">Add Contact</button>
+		<button class="btn btn-xs btn-primary" ng-click="addContact(true)" ng-if-permission="Admin,OfficerAdmin">Add Contact</button>
 		<h4>References</h4>
 		<table class="table table-hover">
 			<thead>
@@ -269,7 +269,7 @@
 				<th>Email</th>
 				<th>Phone</th>
 				<th>Relationship</th>
-				<th ng-if-permission="Admin">Action</th>
+				<th ng-if-permission="Admin,OfficerAdmin">Action</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="reference in profileStudent.references">
@@ -285,14 +285,14 @@
 					<td>
 						<p>{{reference.relationship}}</p>
 					</td>
-					<td ng-if-permission="Admin">
+					<td ng-if-permission="Admin,OfficerAdmin">
 						<button class="btn btn-xs btn-primary" ng-click="editContact(student._id, contact._id, false)">Edit</button>
 						<button class="btn btn-xs btn-primary" ng-click="deleteContact(student._id, contact._id, false)">Delete</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<button class="btn btn-xs btn-primary" ng-click="addContact(false)" ng-if-permission="Admin">Add Reference</button>
+		<button class="btn btn-xs btn-primary" ng-click="addContact(false)" ng-if-permission="Admin,OfficerAdmin">Add Reference</button>
 	</uib-tab>
 	<uib-tab index="4" heading="Financial">
 		<h4>Financial</h4>
