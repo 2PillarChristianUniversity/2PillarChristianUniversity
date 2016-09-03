@@ -1,5 +1,5 @@
 <div ng-include="'/templates/navigation.html'"></div>
-<h3>Professor Details</h3>
+<h3>Officer Admin Details</h3>
 
 <uib-tabset active="active">
 	<uib-tab index="0" heading="Personal">
@@ -7,10 +7,10 @@
 			<tbody>
 				<tr>
 					<td>
-						Professor ID:
+						Officer Admin ID:
 					</td>
 					<td>
-						<p>{{professor._id}}</p>
+						<p>{{officerAdmin._id}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -18,7 +18,7 @@
 						Email:
 					</td>
 					<td>
-						<p>{{professor.email}}</p>
+						<p>{{officerAdmin.email}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -26,7 +26,7 @@
 						First Name:
 					</td>
 					<td>
-						<p>{{professor.firstName}}</p>
+						<p>{{officerAdmin.firstName}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -34,7 +34,7 @@
 						Middle Name:
 					</td>
 					<td>
-						<p>{{professor.middleName}}</p>
+						<p>{{officerAdmin.middleName}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -42,7 +42,7 @@
 						Last Name:
 					</td>
 					<td>
-						<p>{{professor.lastName}}</p>
+						<p>{{officerAdmin.lastName}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -50,7 +50,7 @@
 						Birth Date:
 					</td>
 					<td>
-						<p>{{professor.birthDate | date}}</p>
+						<p>{{officerAdmin.birthDate | date}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -58,7 +58,7 @@
 						Gender:
 					</td>
 					<td>
-						<p>{{professor.gender}}</p>
+						<p>{{officerAdmin.gender}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -66,7 +66,7 @@
 						Phone Number:
 					</td>
 					<td>
-						<p>{{professor.phoneNumber}}</p>
+						<p>{{officerAdmin.phoneNumber}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -74,7 +74,7 @@
 						Address:
 					</td>
 					<td>
-						<p>{{professor.addressLine1}}</p>
+						<p>{{officerAdmin.addressLine1}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -82,7 +82,7 @@
 						City:
 					</td>
 					<td>
-						<p>{{professor.city}}</p>
+						<p>{{officerAdmin.city}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -90,7 +90,7 @@
 						State:
 					</td>
 					<td>
-						<p>{{professor.state}}</p>
+						<p>{{officerAdmin.state}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -98,7 +98,7 @@
 						Zip:
 					</td>
 					<td>
-						<p>{{professor.zipCode}}</p>
+						<p>{{officerAdmin.zipCode}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -106,7 +106,7 @@
 						Application Date:
 					</td>
 					<td>
-						<p>{{professor.applicationDate | date}}</p>
+						<p>{{officerAdmin.applicationDate | date}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -114,7 +114,7 @@
 						Acceptance Notification Date:
 					</td>
 					<td>
-						<p>{{professor.acceptanceNotificationDate | date}}</p>
+						<p>{{officerAdmin.acceptanceNotificationDate | date}}</p>
 					</td>
 				</tr>
 				<tr>
@@ -122,39 +122,8 @@
 						Graduation Date:
 					</td>
 					<td>
-						<p>{{professor.graduationDate | date}}</p>
+						<p>{{officerAdmin.graduationDate | date}}</p>
 					</td>
-				</tr>
-			</tbody>
-		</table>
-	</uib-tab>
-	<uib-tab index="5" heading="Courses">
-		<h4>Course</h4>
-		<table class="table table-hover">
-			<thead>
-				<th>ID</th>
-				<th>Semester</th>
-				<th>Course Name</th>
-				<th>Start Date</th>
-				<th>End Date</th>				
-			</thead>
-			<tbody>
-				<tr ng-repeat="course in professorCourses[0].Courses">
-					<td>
-						<p>{{course._id}}</p>
-					</td>
-					<td>
-						<p> </p>
-					</td>
-					<td>
-						<p>{{course.name}}</p>
-					</td>
-					<td>
-						<p>{{course.startDate | date}}</p>
-					</td>
-					<td>
-						<p>{{course.endDate | date}}</p>
-					</td>					
 				</tr>
 			</tbody>
 		</table>

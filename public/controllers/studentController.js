@@ -204,6 +204,9 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
     Financial.searchID($routeParams.Id).success(function(response) {
         $scope.financials = response.financials;
     });
+    Student.getStudentCourse($routeParams.Id).success(function(response) {
+        $scope.studentCourses = response.student;
+    });
 
     // permission student
     $scope.studentPermission = store.get('studentID');

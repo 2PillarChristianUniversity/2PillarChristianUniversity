@@ -9,6 +9,7 @@ angular.module('smsApp', [
 	'smsApp-semesters',
 	'smsApp-institutions',
 	'smsApp-financials',
+	'smsApp-officerAdmins',
 	'angular-storage',
 	'angular-jwt',
 	'ui.bootstrap',
@@ -72,6 +73,18 @@ angular.module('smsApp', [
 		.when('/professorProfile', {
 			controller: 'ProfessorDetailsCtrl',
 			templateUrl: 'templates/professors/profile.html',
+			requiresLogin: true
+		})
+
+	//######## OFFICERADMIN
+		.when('/officerAdmins', {
+			controller: 'OfficerAdminListCtrl',
+			templateUrl: 'templates/officerAdmins/index.html',
+			requiresLogin: true
+		})
+		.when('/officerAdmin/:Id', {
+			controller: 'OfficerAdminDetailsCtrl',
+			templateUrl: 'templates/officerAdmins/details.html',
 			requiresLogin: true
 		})
 

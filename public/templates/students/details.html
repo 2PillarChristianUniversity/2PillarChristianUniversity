@@ -326,40 +326,40 @@
 		</table>
 		<button class="btn btn-xs btn-primary" ng-click="addRequest(student._id)" ng-if-permission="Student">>Send request</button>
 	</uib-tab>
-<!-- 	<uib-tab index="5" heading="Courses">
+	<uib-tab index="5" heading="Courses">
 		<h4>Course</h4>
 		<table class="table table-hover">
 			<thead>
 				<th>ID</th>
+				<th>Semester</th>
 				<th>Course Name</th>
 				<th>Start Date</th>
-				<th>End Date</th>
-				<th>Semester</th>
+				<th>End Date</th>				
 				<th>Grade</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="course in studentCourses[0].Courses">
+				<tr ng-repeat="course in studentCourses">
 					<td>
-						<p>{{course._id}}</p>
-					</td>
-					<td>
-						<p>{{course.name}}</p>
-					</td>
-					<td>
-						<p>{{course.startDate | date}}</p>
-					</td>
-					<td>
-						<p>{{course.endDate | date}}</p>
+						<p>{{course.Courses[0]._id}}</p>
 					</td>
 					<td>
 						<p></p>
 					</td>
 					<td>
-						<p></p>
+						<p>{{course.Courses[0].name}}</p>
+					</td>
+					<td>
+						<p>{{course.Courses[0].startDate | date}}</p>
+					</td>
+					<td>
+						<p>{{course.Courses[0].endDate | date}}</p>
+					</td>					
+					<td>
+						<p>{{course.grade}}</p>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-	</uib-tab> -->
+	</uib-tab>
 </uib-tabset>
 </div>

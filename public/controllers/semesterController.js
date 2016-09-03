@@ -338,6 +338,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             dateOff: $scope.dateOff
 
                         };
+                        
                         $uibModalInstance.close($scope.course);
                     };
 
