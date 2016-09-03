@@ -617,41 +617,76 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             message: 'You can not enroll this course'
                         });
                     } else {
+                        Grade.getStudent($security.getUser()._id).success(function(response) {
+                            var grades = response.grades;
+                            var ignore = true;
+                            angular.forEach(course.scheduleDate, function(value, key) {
+                                if(ignore && typeof(value.day) != 'undefined') {
+                                    var day = value.day;
+                                    var from = moment(new Date(value.time));
+                                    var fromTime = from.valueOf();
+                                    var to = from.add(course.duration, 'hours');
+                                    var toTime = to.valueOf();
 
-                        Grade.getStudentCourse($scope.grade).success(function(res) {
-                            if (res.grade.length > 0) {
-                                notifications.showError({
-                                    message: 'You already enroll this course!'
+                                    angular.forEach(grades, function(grade, key) {
+                                        angular.forEach(grade.courses.scheduleDate, function(v, k) {
+                                            if(typeof(v.day) != 'undefined') {
+                                                var fromTemp = moment(new Date(v.time));
+                                                var fromTimeTemp = fromTemp.valueOf();
+                                                var toTemp = fromTemp.add(grade.courses.duration, 'hours');
+                                                var toTimeTemp = toTemp.valueOf();
+                                                if(day == v.day) {
+                                                    if((fromTimeTemp <= fromTime && fromTime <= toTimeTemp)
+                                                        || (fromTimeTemp <= toTime && toTime <= toTimeTemp)) {
+
+                                                        ignore = false;
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    });
+                                }
+                            }, ignore);
+                            if(ignore) {
+                                Grade.getStudentCourse($scope.grade).success(function(res) {
+                                    if (res.grade.length > 0) {
+                                        notifications.showError({
+                                            message: 'You already enroll this course!'
+                                        });
+                                    } else {
+                                        Grade.create($scope.grade).then(
+                                            function(response) {
+                                                notifications.showSuccess({
+                                                    message: 'Enroll successfully.'
+                                                });
+
+                                                Semester.all().success(function(response) {
+                                                    $scope.semesters = response.semesters;
+                                                    $scope.courseList = response.courses;
+                                                });
+
+                                                Grade.getStudent($security.getUser()._id).success(function(response) {
+                                                    var coursesOfStudents = [];
+                                                    angular.forEach(response.grades, function(value, key) {
+                                                        this.push(value.courseID);
+                                                    }, coursesOfStudents);
+                                                    $scope.coursesOfStudents = coursesOfStudents;
+                                                });
+                                                course.membersJoined++;
+                                                Course.update(courseID, course).success(function(response) {});
+                                            },
+                                            function(response) {
+                                                console.log(response.data.error);
+                                            });
+                                    }
                                 });
                             } else {
-                                Grade.create($scope.grade).then(
-                                    function(response) {
-                                        notifications.showSuccess({
-                                            message: 'Enroll successfully.'
-                                        });
-
-                                        Semester.all().success(function(response) {
-                                            $scope.semesters = response.semesters;
-                                            $scope.courseList = response.courses;
-                                        });
-
-                                        Grade.getStudent($security.getUser()._id).success(function(response) {
-                                            var coursesOfStudents = [];
-                                            angular.forEach(response.grades, function(value, key) {
-                                                this.push(value.courseID);
-                                            }, coursesOfStudents);
-                                            $scope.coursesOfStudents = coursesOfStudents;
-                                        });
-                                        course.membersJoined++;
-                                        Course.update(courseID, course).success(function(response) {});
-                                    },
-                                    function(response) {
-                                        console.log(response.data.error);
-                                    });
+                                notifications.showError({
+                                    message: 'You can NOT enrol this course include that time'
+                                });
                             }
                         });
                     }
-
                 });
 
             };
