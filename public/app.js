@@ -133,50 +133,56 @@ angular.module('smsApp', [
 		loginUrl: auth0Cfg.loginUrl
 	});
 
-	authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security, Student, Professor, AdminService, $rootScope) {
+	authProvider.on('loginSuccess', function($location, profilePromise, idToken, store, $security, Student, Professor, AdminService, OfficerAdmin, $rootScope) {
 		profilePromise.then(function(profile) {
 			//	Check role
 			var roles = [];
 			store.set('token', idToken);
 
-			AdminService.getAdminByEmail(profile.email).success(function(response) {
-				if (response.admin != null) {
-					roles.push('Admin');
-					store.set('adminID', response.admin._id);
-					profile = angular.extend(profile, response.admin);
+			OfficerAdmin.getAdminByEmail(profile.email).success(function(response) {
+				if (response.officerAdmin != null) {
+					roles.push('OfficerAdmin');
+					store.set('adminID', response.officerAdmin._id);
+					profile = angular.extend(profile, response.officerAdmin);
 					$security.login(idToken, profile, roles);
 					$location.path('/home');
 				} else {
-					Student.getStudentByEmail(profile.email).success(function(response) {
-						if (response.student != null) {
-							roles.push('Student');
-							store.set('studentID', response.student._id);
-							profile = angular.extend(profile, response.student);
+					AdminService.getAdminByEmail(profile.email).success(function(response) {
+						if (response.admin != null) {
+							roles.push('Admin');
+							store.set('adminID', response.admin._id);
+							profile = angular.extend(profile, response.admin);
 							$security.login(idToken, profile, roles);
 							$location.path('/home');
 						} else {
-							Professor.getProfessorByEmail(profile.email).success(function(response) {
-								if (response.professor != null) {
-									roles.push('Professor');
-									store.set('professorID', response.professor._id);
-									profile = angular.extend(profile, response.professor);
-
+							Student.getStudentByEmail(profile.email).success(function(response) {
+								if (response.student != null) {
+									roles.push('Student');
+									store.set('studentID', response.student._id);
+									profile = angular.extend(profile, response.student);
 									$security.login(idToken, profile, roles);
 									$location.path('/home');
 								} else {
-									roles.push('Admin');
-									store.set('adminID', response.admin._id);
-									$security.login(idToken, profile, roles);
-									$location.path('/home');
+									Professor.getProfessorByEmail(profile.email).success(function(response) {
+										if (response.professor != null) {
+											roles.push('Professor');
+											store.set('professorID', response.professor._id);
+											profile = angular.extend(profile, response.professor);
+
+											$security.login(idToken, profile, roles);
+											$location.path('/home');
+										} else {
+											$location.path('/error');
+										}
+									});
 								}
 							});
 						}
+
 					});
 				}
 
 			});
-
-			
 		});
 	});
 
