@@ -29,6 +29,8 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
                         $scope.monthlyPayment = $rootScope.financial.monthlyPayment;
                         $scope.comment = $rootScope.financial.comment;
                         $scope.semesters = $rootScope.semester;
+                        $scope.studentComment = $rootScope.financial.studentComment;
+                        $scope.adminComment = $rootScope.financial.adminComment;
                         $scope.status = $rootScope.financial.status;
 
                         $scope.financialSubmit = function() {
@@ -37,7 +39,8 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
                                 "semester": $scope.semester,
                                 "monthlyPayment": $scope.monthlyPayment,
                                 "status": $scope.status,
-                                "comment": $scope.comment
+                                "studentComment": $scope.studentComment,
+                                "adminComment": $scope.adminComment
                             };
 
                             Financial.update($rootScope.financial._id, $scope.financial)

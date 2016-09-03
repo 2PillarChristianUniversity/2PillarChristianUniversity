@@ -300,15 +300,23 @@
 			<thead>
 				<th>Semester</th>
 				<th>Monthly payment</th>
+				<th>Student Comment</th>
+				<th>Admin Comment</th>
 				<th>Status</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="financial in financials">
 					<td>
-						<p>{{financial.semester}}</p>
+						<p>{{financial.Semesters[0].name}}</p>
 					</td>
 					<td>
 						<p>{{financial.monthlyPayment}}</p>
+					</td>
+					<td>
+						<p>{{financial.studentComment}}</p>
+					</td>
+					<td>
+						<p>{{financial.adminComment}}</p>
 					</td>
 					<td>
 						<p>{{financial.status}}</p>

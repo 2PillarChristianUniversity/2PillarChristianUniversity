@@ -837,7 +837,7 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                         semester: $scope.semester,
                         monthlyPayment: $scope.monthlyPayment,
                         status: $scope.status,
-                        comment: $scope.comment
+                        studentComment: $scope.studentComment
                     };
                     $uibModalInstance.close($scope.financial);
                 };
@@ -901,7 +901,8 @@ angular.module('smsApp-studentsList', ['ngRoute', 'datatables', 'ngResource', 'n
                 $scope.semester = $scope.request.semester;
                 $scope.monthlyPayment = $scope.request.monthlyPayment;
                 $scope.status = $scope.request.status;
-                $scope.comment = $scope.request.comment;
+                $scope.studentComment = $scope.request.studentComment;
+                $scope.adminComment = $scope.request.adminComment;
 
                 $scope.ok = function() {
                     $scope.request = {
