@@ -6,7 +6,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         $routeParams.studentID = store.get('studentID');
 
         if ($security.hasPermission('Admin')) {
-            $scope.actTab = 2;
+            $scope.actTab = 1;
             $scope.headPrevCourse = 'Previous Courses';
 
         } else {
@@ -230,7 +230,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                     isfinished: function() {
                         return $scope.isfinished;
                     }
-                }
+                },
+                backdrop: 'static'
             });
 
             modalInstance.result.then(function(isfinished) {
@@ -291,7 +292,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         isfinished: function() {
                             return true;
                         }
-                    }
+                    },
+                    backdrop: 'static'
                 });
 
                 modalInstance.result.then(function(isfinished) {
@@ -338,7 +340,6 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         };
                         $uibModalInstance.close($scope.course);
                     };
-
 
                     $scope.cancel = function() {
                         $uibModalInstance.dismiss('cancel');
@@ -759,7 +760,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         isfinished: function() {
                             return true;
                         }
-                    }
+                    },
+                    backdrop: 'static'
                 });
 
                 modalInstance.result.then(function(isfinished) {
@@ -804,20 +806,19 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                                     "grade": $scope.point[$rootScope.grade[i].studentID]
                                 };
                                 Grade.update($scope.grade._id, $scope.grade)
-
                                 .then(
                                     function(response) {
-                                        notifications.showSuccess({
-                                            message: 'Successfully.'
-                                        });
-                                        $uibModalInstance.close(true);
+                                        
                                     },
                                     function(response) {
                                         console.log(response);
                                     }
                                 );
-
                             }
+                            notifications.showSuccess({
+                                message: 'Successfully.'
+                            });
+                            $uibModalInstance.close(true);
 
                         }
                         $scope.cancel = function() {

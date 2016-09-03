@@ -148,15 +148,30 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 			            _id: req.params.id
 			        }
 			     },
+			     {
+					"$unwind": "$courses"
+				},
 			    {
 			      $lookup:
 			        {
 			          from: "Courses",
 			          localField: "courses",
 			          foreignField: "_id",
-			          as: "Courses"
+			          as: "productObjects"
 			        }
 			   },
+			   {
+					"$unwind": "$productObjects"
+				},
+				{
+				"$group": {
+					"_id": "$_id",
+					//         "products": { "$push": "$courses" },
+					"Courses": {
+						"$push": "$productObjects"
+					}
+				}
+			}
 			   
             ],
         function(error, professor) {

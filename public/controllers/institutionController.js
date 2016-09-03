@@ -121,7 +121,8 @@ angular.module('smsApp-institutionsList', ['ngRoute', 'datatables', 'ngResource'
                         isfinished: function() {
                             return true;
                         }
-                    }
+                    },
+                    backdrop: 'static'
                 });
 
                 modalInstance.result.then(function(isfinished) {
@@ -165,7 +166,8 @@ angular.module('smsApp-institutionsList', ['ngRoute', 'datatables', 'ngResource'
             institution: function () {
               return $scope.institution;
             }
-          }
+          },
+          backdrop: 'static'
         });
 
         modalInstance.result.then(function (institution) {

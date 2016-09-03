@@ -63,7 +63,8 @@ angular.module('smsApp-financialsList', ['ngRoute', 'datatables', 'ngResource', 
                         isfinished: function() {
                             return true;
                         }
-                    }
+                    },
+                    backdrop: 'static'
                 });
 
                 modalInstance.result.then(function(isfinished) {
