@@ -402,19 +402,38 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
             modalInstance.result.then(function(course) {
                 $scope.coures = course;
                 $scope.coures.semesters = semesterID;
-                Course.insert($scope.coures)
-                    .then(
-                        function(response) {
-                            notifications.showSuccess({
-                                message: 'Add Course successfully.'
+                $scope.semesters.forEach(function(semester) {
+                    if (semester._id == semesterID) {
+                        var startTimeSemester = new Date(semester.startDate).getTime();
+                        var endTimeSemester = new Date(semester.endDate).getTime();
+
+                        var startTimeCourse = new Date(course.startDate).getTime();
+                        var endTimeCourse = new Date(course.endDate).getTime();
+                        if(startTimeSemester <= startTimeCourse
+                            && startTimeCourse < endTimeCourse && endTimeCourse <= endTimeSemester) {
+                            Course.insert($scope.coures)
+                            .then(
+                                function(response) {
+                                    notifications.showSuccess({
+                                        message: 'Add Course successfully.'
+                                    });
+                                    Semester.all().success(function(response) {
+                                        $scope.semesters = response.semesters;
+                                    });
+                                },
+                                function(response) {
+                                    console.log(response);
                             });
-                            Semester.all().success(function(response) {
-                                $scope.semesters = response.semesters;
-                            });
-                        },
-                        function(response) {
-                            console.log(response);
-                        });
+                        } else {
+                            notifications.showError({
+                                        message: 'Fail Add Course successfully.'
+                                    });
+                        }
+                    }
+                });
+
+
+
             });
 
         };
