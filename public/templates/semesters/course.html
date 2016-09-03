@@ -39,9 +39,9 @@
                 </tr>
                 <tr ng-repeat="day in scheduleDates">
                     <td>
-                        
-                        <select ng-model="day.day" required>
-                            <option value="2" selected>Monday</option>
+
+                        <select ng-model="day.day" ng-init="day.day='2'" required>
+                            <option value="2">Monday</option>
                             <option value="3">Tuesday</option>
                             <option value="4">Wednesday</option>
                             <option value="5">Thursday</option>
