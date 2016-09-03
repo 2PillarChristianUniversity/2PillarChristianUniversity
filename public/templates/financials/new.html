@@ -23,8 +23,13 @@
             <input type="text" class="form-control" id="monthly_payment" ng-model='monthlyPayment' required placeholder="Field">
         </div>
         <div class="form-group">
-            <label for="comment">Comment</label>
-            <textarea rows="4" class="form-control" id="comment" ng-model='comment' required placeholder="Description">
+            <label for="student_comment">Student Comment</label>
+            <textarea rows="4" class="form-control" id="student_comment" ng-model='studentComment' required placeholder="Description">
+            </textarea>
+        </div>
+        <div class="form-group" ng-if-permission="Admin,OfficerAdmin">
+            <label for="admin_comment">Admin Comment</label>
+            <textarea rows="4" class="form-control" id="admin_comment" ng-model='adminComment' placeholder="Description">
             </textarea>
         </div>
         <div class="modal-footer">

@@ -12,14 +12,14 @@
 		</div>
 
 		<ul class="nav navbar-nav">
-			<li ng-if-permission="Admin"><a href="#students"><b>Students</b></a></li>
+			<li ng-if-permission="Admin,OfficerAdmin"><a href="#students"><b>Students</b></a></li>
 			<li ng-if-permission="Student"><a href="#studentProfile"><b>Profile</b></a></li>
-			<li ng-if-permission="Admin"><a href="#professors" ><b>Professors</b></a></li>
+			<li ng-if-permission="Admin,OfficerAdmin"><a href="#professors" ><b>Professors</b></a></li>
 			<li ng-if-permission="Professor"><a href="#professorProfile" ><b>Profile</b></a></li>
-			<li ng-if-permission="Admin"><a href="#institutions" ><b>Institutions</b></a></li>
-			<li ng-if-permission="Student,Professor,Admin"  ><a href="#semesters" ><b>Courses</b></a></li>
-			<li ng-if-permission="Admin"><a href="#financials" ><b>Financial</b></a></li>
-			<li ng-if-permission="Admin" ><a href="javascipt:void(0)" ><b>Reports</b></a></li>
+			<li ng-if-permission="Admin,OfficerAdmin"><a href="#institutions" ><b>Institutions</b></a></li>
+			<li ng-if-permission="Student,Professor,Admin,OfficerAdmin"  ><a href="#semesters" ><b>Courses</b></a></li>
+			<li ng-if-permission="Admin,OfficerAdmin"><a href="#financials" ><b>Financial</b></a></li>
+			<li ng-if-permission="Admin" ><a href="#officerAdmins" ><b>Officer Admin</b></a></li>
 		</ul>
 
 		<div style="position:fixed;right:50px;top:5px;cursor:pointer;" uib-dropdown>

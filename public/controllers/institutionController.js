@@ -21,6 +21,7 @@ angular.module('smsApp-institutionsList', ['ngRoute', 'datatables', 'ngResource'
 		$location.path('/institution/' + institutionID);
 	};
 
+  // delete institution
 	$scope.institutionDelete = function(id) {
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -81,7 +82,7 @@ angular.module('smsApp-institutionsList', ['ngRoute', 'datatables', 'ngResource'
                     templateUrl: 'templates/institutions/new.html',
                     controller: function($scope, $uibModalInstance, Institution) {
                         $scope.institutionTitle = 'Edit Institution';
-                        $scope._id = $rootScope.institution._id;
+                        $scope.name = $rootScope.institution.name;
                         $scope.phoneNumber = $rootScope.institution.phoneNumber;
                         $scope.addressLine1 = $rootScope.institution.addressLine1;
                         $scope.city = $rootScope.institution.city;
@@ -89,7 +90,7 @@ angular.module('smsApp-institutionsList', ['ngRoute', 'datatables', 'ngResource'
                         $scope.zipCode = $rootScope.institution.zipCode;
 
                         $scope.institutionSubmit = function() {
-                            $rootScope.institution._id = $scope._id;
+                            $rootScope.institution.name = $scope.name;
                             $rootScope.institution.phoneNumber = $scope.phoneNumber;
                             $rootScope.institution.addressLine1 = $scope.addressLine1;
                             $rootScope.institution.city = $scope.city;
@@ -120,7 +121,8 @@ angular.module('smsApp-institutionsList', ['ngRoute', 'datatables', 'ngResource'
                         isfinished: function() {
                             return true;
                         }
-                    }
+                    },
+                    backdrop: 'static'
                 });
 
                 modalInstance.result.then(function(isfinished) {
@@ -134,17 +136,17 @@ angular.module('smsApp-institutionsList', ['ngRoute', 'datatables', 'ngResource'
             });
   }; 
 
+  // add institution
   $scope.addInstitutions = function (isInstitution) {
         var modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'templates/institutions/new.html',
           controller: function ($scope, $uibModalInstance, institution) {
-            $scope.institutionTitle = 'Add Institution';
-            $scope.gender = "M";            
+            $scope.institutionTitle = 'Add Institution';         
 
             $scope.institutionSubmit = function () {
               $scope.institution = {
-                  _id: $scope._id,
+                  name: $scope.name,
                   phoneNumber: $scope.phoneNumber,
                   addressLine1: $scope.addressLine1,
                   city: $scope.city,
@@ -164,7 +166,8 @@ angular.module('smsApp-institutionsList', ['ngRoute', 'datatables', 'ngResource'
             institution: function () {
               return $scope.institution;
             }
-          }
+          },
+          backdrop: 'static'
         });
 
         modalInstance.result.then(function (institution) {

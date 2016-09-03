@@ -10,7 +10,7 @@ function createAutoId(index) {
 	return Array(number-String(index).length + 1).join('0') + index;
 }
 mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongoCfg.db_name, function(err, db) {
-	
+
 
 	//	Get student by email
 	router.get('/student/email/:email', function (req, res) {
@@ -27,7 +27,7 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 	//	Get list students by id (search function)
 	router.get('/students/id/:id', requiresLogin, function (req, res) {
 		db.collection('Students').find({ _id: { "$regex": req.params.id, "$options": "i" } }).toArray(function (error, students) {
-			
+
 			if (error) {
 				return res.
 					status(500).
@@ -43,44 +43,23 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
 	// Get course by student id
 	router.get('/student/courses/:id', function(req, res) {
-		db.collection('Students').aggregate(
+		db.collection('Grades').aggregate(
             [
             	{
-                	$match:{
-                    	_id: req.params.id
-                    }
-                },
-
-				// Unwind the source
-				{
-					$unwind: "$courses"
-				},
-
-				// Do the lookup matching
-				{
-					$lookup: {
-						from: "Courses",
-						localField: "courses",
-						foreignField: "_id",
-						as: "productObjects"
-					}
-				},
-
-				// Unwind the result arrays ( likely one or none )
-				{
-					"$unwind": "$productObjects"
-				},
-				
-				// Group back to arrays
-				{
-					"$group": {
-						"_id": "$_id",
-						//         "products": { "$push": "$courses" },
-						"Courses": {
-							"$push": "$productObjects"
-						}
-					}
-				}
+			        $match:
+			        {
+			            studentID: req.params.id
+			        }
+			     },
+			    {
+			      $lookup:
+			        {
+			          from: "Courses",
+			          localField: "courseID",
+			          foreignField: "_id",
+			          as: "Courses"
+			        }
+			   }
             ],
         function(error, student) {
             if (error) {
@@ -149,12 +128,12 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 		});
 	});
 
-	//	Update Student's course
+	//	 Student's course
 	router.post('/student/courses/:id', function(req, res) {
-		db.collection('Students').aggregate([
+		db.collection('Grades').aggregate([
 		{
 				$match: {
-					_id: req.params.id
+					'studentID': req.params.id
 					// $or: [
 					// 	{ startDate: { $gt: req.body.start_date, $lt: req.body.end_date }} ,
 					// 	{ endDate: { $gt: req.body.start_date, $lt: req.body.end_date }}
@@ -162,39 +141,24 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 
 				}
 			},
-			// Unwind the source
 			{
-				"$unwind": "$courses"
-			},
-			// Do the lookup matching
-			{
-				"$lookup": {
-					"from": "Courses",
-					"localField": "courses",
-					"foreignField": "_id",
-					"as": "productObjects"
-				}
-			},
-			// Unwind the result arrays ( likely one or none )
-			{
-				"$unwind": "$productObjects"
-			},
-			// Group back to arrays
-			{
-				"$group": {
-					"_id": "$_id",
-					//         "products": { "$push": "$courses" },
-					"Courses": {
-						"$push": "$productObjects"
-					}
-				}
-			}
+                $lookup: {
+                        from: "Courses",
+                        localField: "courseID",
+                        foreignField: "_id",
+                        as: "Courses"
+                    }
+            },
+            {
+                    "$unwind": "$Courses"
+            }
 		], function(error, student) {
 			if (error) {
 				return res.
 					status(500).
 					json({ error: error.toString() });
 			}
+			console.log(student);
 			res.json({ student: student });
 		});
 	});
@@ -202,32 +166,20 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 	//	Insert student
 	router.put('/student', function (req, res) {
 		var colName = 'Students';
-		db.collection(colName, {strict:true}, function(err, collection) { // check exists collection
-			if(err != null) { // if exists
-				req.body._id = createAutoId(1);
-				db.collection(colName).createIndex( { "email": 1 }, { unique: true } )
-				db.collection(colName).insert(req.body, function (error, student) {
-					if (error) {
-						return res.
-							status(400).
-							json({ error: "Can't insert student..." });
-					}
-					res.json({ student: student });
-				});
+		db.collection(colName).findOne({ email: req.body.email }, function (error, student) {
+			if(error) {
+				return res.
+					status(400).
+					json({ error: "Can't insert student..." });
 			}
-
-			db.collection(colName).findOne({ email: req.body.email }, function (error, course) {
-				if(error) {
-					return res.
-						status(400).
-						json({ error: "Can't insert student..." });
-				}
-				if(course) {
-					return res.status(403)
-	          				.json({ error: "This email is already being used" });
-				} else {
-					autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
-						req.body._id = createAutoId(autoIndex);
+			if(student) {
+				return res.status(403)
+          				.json({ error: "This email is already being used" });
+			} else {
+				db.collection(colName, {strict:true}, function(err, collection) { // check exists collection
+					if(err != null) { // if not exists
+						req.body._id = createAutoId(1);
+						db.collection(colName).createIndex( { "email": 1 }, { unique: true } )
 						db.collection(colName).insert(req.body, function (error, student) {
 							if (error) {
 								return res.
@@ -235,11 +187,27 @@ mongo.connect('mongodb://' + mongoCfg.server + ':' + mongoCfg.port + '/' + mongo
 									json({ error: "Can't insert student..." });
 							}
 							res.json({ student: student });
+							autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
+								console.log('init auto id');
+							});
 						});
-					});
-				}
-			});
+					} else {
+						autoIncrement.getNextSequence(db, colName, function (err, autoIndex) {
+							req.body._id = createAutoId(autoIndex);
+							db.collection(colName).insert(req.body, function (error, student) {
+								if (error) {
+									return res.
+										status(400).
+										json({ error: "Can't insert student..." });
+								}
+								res.json({ student: student });
+							});
+						});
+					}
+				});
+			}
 		});
+
 	});
 
 	//	Delete student
