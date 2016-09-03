@@ -1,6 +1,6 @@
 angular.module('smsApp-coursesList', ['ngRoute', 'datatables', 'ngResource', 'ngSecurity'])
     .controller('CourselistCtrl', function($scope, $routeParams, $location, $uibModal, Course, $security) {
-        if (!$security.hasPermission('Admin')) {
+        if (!$security.hasPermission('Admin') && !$security.hasPermission('OfficerAdmin')) {
             $location.path('/404_page/');
         }
 

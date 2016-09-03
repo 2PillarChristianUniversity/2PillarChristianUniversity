@@ -930,7 +930,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
         };
 
         $scope.loadTreeView = function() {
-            if ($security.hasPermission('Admin')) {
+            if ($security.hasPermission('Admin') || $security.hasPermission('OfficerAdmin') ) {
                 Semester.getTreeList().success(function(response) {
                     $scope.semesters_list = response.semesters;
                     $scope.courses_list = response.courses;
