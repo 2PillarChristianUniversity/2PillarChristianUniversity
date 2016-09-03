@@ -834,8 +834,8 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                         $scope.name = $rootScope.course.name;
                         $scope.startDate = new Date($rootScope.course.startDate);
                         $scope.endDate = new Date($rootScope.course.endDate);
-                        $scope.duration = $rootScope.course.duration;
-                        $scope.noMember = $rootScope.course.noMember;
+                        $scope.duration =  parseInt($rootScope.course.duration);
+                        $scope.noMember = parseInt($rootScope.course.noMember);
                         $scope.scheduleDates = $rootScope.course.scheduleDate;
                         for (var i = 0; i < $rootScope.course.scheduleDate.length; i++) {
 
@@ -849,7 +849,7 @@ angular.module('smsApp-semestersList', ['ngRoute', 'datatables', 'ngResource', '
                             $scope.dateOff[i].dateOffStart = new Date($rootScope.course.dateOff[i].dateOffStart);
                             $scope.dateOff[i].dateOffEnd = new Date($rootScope.course.dateOff[i].dateOffEnd);
                         }
-                        console.log($scope.scheduleDates);
+                        // console.log($scope.scheduleDates);
 
                         $scope.courseSubmit = function() {
                             $rootScope.course.name = $scope.name;
